@@ -1,0 +1,49 @@
+Research the top 5 premium SaaS sites in the developer tools space (Linear, Vercel, Raycast, GitHub, Warp grade).
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Pilot, AI Coding Assistant: Pilot reads your codebase, writes the boring parts, and flags bugs before your reviewer does.
+
+Audience: developers and engineering teams.
+Hero headline: "Ship code at the speed of thought."
+Subheadline: "Pilot reads your codebase, writes the boring parts, and flags bugs before your reviewer does."
+Primary CTA: "Install free". Secondary CTA: "Watch demo".
+
+Design system:
+- Dark theme, background #0A0A0A, surfaces #141414
+- Accent gradient from #22D3EE to #6366F1
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white
+- asymmetric-hero layout
+
+Sections:
+1. Sticky glass nav with "Pilot" wordmark + 3 nav links (Features, Docs, Pricing) + primary CTA
+2. hero: headline on one side, floating code-editor UI mockup (built in CSS only, no real image) on the other, showing an inline "AI suggestion" ghost-text completion with a blinking cursor
+3. Logo wall: Trusted by engineers at — GitHub, Vercel, Linear, Supabase, railway, Netlify
+4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):
+   - Inline autocomplete (Multi-line suggestions trained on your codebase, not just public repos)
+   - Chat with your repo (Ask questions about any file, function, or PR in plain English)
+   - One-click refactors (Rename, extract, and restructure code without breaking a single test)
+   - 40+ languages (From Rust to React, Pilot speaks your entire stack)
+5. Metrics strip: 2.1M+ suggestions accepted daily | 4.8/5 average rating | 60k+ active developers
+6. Testimonial card: "Pilot cut our PR review time in half. It catches the dumb bugs so we can focus on architecture. - Dev Patel, Staff Engineer, Series B startup" with a generated SVG monogram avatar
+7. Pricing:
+      - Free: $0 — 2,000 completions / month; Community support; 1 repo connected
+      - Pro (highlighted, "Most popular"-style badge): $20/mo — Unlimited completions; Full repo chat; Priority model access; Email support
+      - Team: $45/mo — Everything in Pro; Shared team context; SSO & audit logs; Admin dashboard
+   with a monthly/annual toggle that updates prices with JS (annual = 2 months free)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

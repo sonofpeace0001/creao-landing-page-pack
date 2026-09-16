@@ -1,0 +1,49 @@
+Research the top 5 local service business sites in the premium local healthcare and dental practice sites (Tend, Parachute Health, high-end medical practice sites).
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Willow, Dental Practice: Willow blends modern care with a spa-like visit - same-week appointments, transparent pricing, zero lecture.
+
+Audience: new and returning dental patients in the neighborhood.
+Hero headline: "Dentistry that actually feels calm."
+Subheadline: "Willow blends modern care with a spa-like visit - same-week appointments, transparent pricing, zero lecture."
+Primary CTA: "Book appointment". Secondary CTA: "Call (503) 555-0198".
+
+Design system:
+- Light (warm off-white) theme, background #FAFAF7, surfaces #FFFFFF
+- Accent gradient from #0D9488 to #5EEAD4
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% black
+- centered-hero layout with a full-width dashboard mockup below the fold
+
+Sections:
+1. Sticky glass nav with "Willow" wordmark + 3 nav links (Services, Smiles, Pricing) + primary CTA
+2. hero: headline on one side, a full-width appointment-calendar dashboard mockup (built in CSS only, no real image) below the hero text, showing open and booked time slots
+3. Certifications strip: Accepted & trusted by — Delta Dental, Cigna, MetLife, Aetna, Guardian, 500+ 5&#9733; Reviews
+4. Bento grid: 4 service cards with custom inline SVG line icons (no emoji, no stock):
+   - Same-week appointments (Real openings this week, booked online in under a minute)
+   - Transparent pricing (See the price before you book. No surprise bills, ever)
+   - Gentle, modern care (Digital X-rays, sedation options, and a team that listens)
+   - Evenings & Saturdays (Appointments that fit around work and school, not the other way around)
+5. Metrics strip: 4.9★ 500+ google reviews | 18+ years in the neighborhood | 98% patients seen on time
+6. Testimonial card: "First dentist visit in years I didn't dread. They explained everything and there were zero surprise costs. - Jordan Alvarez, Patient since 2022" with a generated SVG monogram avatar
+7. Services & pricing:
+      - New Patient Exam: $89 starting — Full oral exam; Digital X-rays; Personalized care plan
+      - Cleaning & Checkup (highlighted, "Most popular"-style badge): $59 starting — Routine cleaning; Oral cancer screening; Same-day availability
+      - Cosmetic Consult: $0 — Whitening & veneer options; Custom treatment plan; No pressure, ever
+   as flat, upfront prices with no monthly/annual toggle (this is a local service business, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

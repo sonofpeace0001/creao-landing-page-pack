@@ -1,0 +1,49 @@
+Research the top 5 local service business sites in the premium restaurant and hospitality sites (Eater-featured restaurant sites, OpenTable premium pages, boutique hotel sites).
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Ember, Restaurant: A neighborhood kitchen built around a single live-fire hearth - seasonal plates, natural wine, and a room that feels like a friend's dinner party.
+
+Audience: local diners looking for a reservation-worthy night out.
+Hero headline: "Wood-fired, ember to table."
+Subheadline: "A neighborhood kitchen built around a single live-fire hearth - seasonal plates, natural wine, and a room that feels like a friend's dinner party."
+Primary CTA: "Reserve a table". Secondary CTA: "View menu".
+
+Design system:
+- Dark theme, background #0A0A0A, surfaces #141414
+- Accent gradient from #C2410C to #FBBF24
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white
+- asymmetric-hero layout
+
+Sections:
+1. Sticky glass nav with "Ember" wordmark + 3 nav links (Menu, Private Events, Reservations) + primary CTA
+2. hero: headline on one side, floating reservation UI mockup (built in CSS only, no real image) on the other, showing tonight's availability and a table-left badge
+3. Certifications strip: As seen in — Eater, Bon App&eacute;tit, The Infatuation, Food &amp; Wine, Cond&eacute; Nast Traveler, Time Out
+4. Bento grid: 4 service cards with custom inline SVG line icons (no emoji, no stock):
+   - Live-fire hearth (Every plate touches the fire - from the bread to the dessert)
+   - Natural wine list (120+ small-producer bottles, hand-picked by our sommelier)
+   - Farm-direct sourcing (Weekly deliveries from six farms within 50 miles)
+   - Private dining room (A 14-seat table for the celebration that needs its own room)
+5. Metrics strip: 4.8★ 1,100+ reviews | 6 local farms sourced weekly | 2019 open since
+6. Testimonial card: "Best new restaurant we've been to in years — the hearth-roasted carrots alone are worth the reservation wait. - City Weekly, Local food critic" with a generated SVG monogram avatar
+7. Services & pricing:
+      - Bar Seating: Walk-in — Full menu available; No reservation needed; Great for solo diners
+      - Dining Room (highlighted, "Most popular"-style badge): Reserve — Tables for 2&ndash;6; Tasting menu available; Wine pairing on request
+      - Private Room: Inquire — Dedicated 14-seat room; Custom set menu; Dedicated server
+   as flat, upfront prices with no monthly/annual toggle (this is a local service business, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

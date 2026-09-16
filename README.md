@@ -1,6 +1,8 @@
-# CREAO Premium Landing Page Pack — 51 Niches
+# CREAO Premium Landing Page Pack — 57 Niches
 
-51 production-ready premium SaaS landing pages across different niches and styles — **dark and light**, three layouts — each generated from **one master prompt framework** using [CREAO](https://agent.creao.ai). Every page ships with the exact prompt that built it, so anyone can copy, edit, and make it their own.
+57 production-ready premium landing pages across different niches and styles — **dark and light**, three layouts — each generated from **one master prompt framework** using [CREAO](https://agent.creao.ai). Every page ships with the exact prompt that built it, so anyone can copy, edit, and make it their own.
+
+51 are SaaS products; 6 are local service businesses (plumbing/HVAC, dental, restaurant) built on the same design system — proof the framework isn't just for software.
 
 ## Live demo
 
@@ -11,13 +13,17 @@ Catalog gallery with search, theme filter, and one-click "copy prompt":
 ## What's inside
 
 - **`index.html`** — the catalog gallery. Crisp screenshot thumbnails, search, dark/light filter, and copy-prompt buttons.
-- **`<slug>-landing.html`** — 51 standalone, self-contained landing pages (inline CSS + JS, Google Fonts via link). No build step.
+- **`<slug>-landing.html`** — 57 standalone, self-contained landing pages (inline CSS + JS, Google Fonts via link). No build step.
 - **`<slug>-prompt.txt`** — the exact prompt that built each page. Copy, swap the bracketed values, paste into CREAO.
 - **`<slug>-thumb.jpg`** — preview thumbnail of the page hero.
 
-## The 51 niches
+## The 57 niches
 
-AI writing, fitness, finance, productivity, courses, CRM, newsletter, e-commerce, meal planning, meditation, habits, AI video editing, podcast hosting, social scheduler, email marketing, analytics, HR onboarding, project management, design tool, notes, AI calendar, bookkeeping, invoicing, time tracking, helpdesk, live chat, knowledge base, API docs, API monitoring, error tracking, feature flags, A/B testing, user feedback, surveys, forms, page builder, website builder, web hosting, domains, VPN, password manager, cloud storage, file sharing, video hosting, image CDN, AI image generation, chatbot builder, AI meeting notes, automation, billing, portfolio.
+**SaaS (51):** AI writing, fitness, finance, productivity, courses, CRM, newsletter, e-commerce, meal planning, meditation, habits, AI video editing, podcast hosting, social scheduler, email marketing, analytics, HR onboarding, project management, design tool, notes, AI calendar, bookkeeping, invoicing, time tracking, helpdesk, live chat, knowledge base, API docs, API monitoring, error tracking, feature flags, A/B testing, user feedback, surveys, forms, page builder, website builder, web hosting, domains, VPN, password manager, cloud storage, file sharing, video hosting, image CDN, AI image generation, chatbot builder, AI meeting notes, automation, billing, portfolio.
+
+**More tech (3):** AI coding assistant, cybersecurity / attack surface monitoring, recruiting & ATS.
+
+**Local service businesses (3):** plumbing & HVAC, dental practice, restaurant — same design system, swapped for services-and-booking instead of subscription pricing.
 
 ## How to use
 

@@ -1,0 +1,49 @@
+Research the top 5 premium SaaS sites in the recruiting and HR tech space (Ashby, Notion, Linear, Ramp grade).
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Hyre, Recruiting & ATS: Hyre brings sourcing, interviews, and offers into one calm pipeline - so your best candidates never go cold.
+
+Audience: talent acquisition and HR teams.
+Hero headline: "Hire top talent, twice as fast."
+Subheadline: "Hyre brings sourcing, interviews, and offers into one calm pipeline - so your best candidates never go cold."
+Primary CTA: "Start free". Secondary CTA: "Book a demo".
+
+Design system:
+- Light (warm off-white) theme, background #FAFAF7, surfaces #FFFFFF
+- Accent gradient from #2563EB to #7C3AED
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% black
+- centered-hero layout with a full-width dashboard mockup below the fold
+
+Sections:
+1. Sticky glass nav with "Hyre" wordmark + 3 nav links (Features, Customers, Pricing) + primary CTA
+2. hero: headline on one side, a full-width candidate-pipeline dashboard mockup (built in CSS only, no real image) below the hero text, showing a sidebar and rows for candidates at different pipeline stages
+3. Logo wall: Trusted by talent teams at — Notion, Ramp, Linear, Brex, vanta, Deel
+4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):
+   - One pipeline, every role (Track every candidate from application to offer without spreadsheets)
+   - Automated scheduling (Candidates book interview slots straight off your team's real calendars)
+   - AI screening summaries (Get a one-paragraph read on every resume and call transcript)
+   - Offer letters in one click (Generate, e-sign, and track offers without leaving Hyre)
+5. Metrics strip: 3.4x faster time-to-hire | 92% candidate satisfaction | 8,000+ teams hiring on hyre
+6. Testimonial card: "We went from a 45-day hiring cycle to 14. Candidates actually compliment our process now. - Marcus Webb, Head of Talent" with a generated SVG monogram avatar
+7. Pricing:
+      - Starter: $0 — Up to 3 open roles; Unlimited candidates; Basic scheduling
+      - Growth (highlighted, "Most popular"-style badge): $89/mo — Unlimited open roles; AI screening summaries; Interview scorecards; Slack integration
+      - Scale: $249/mo — Everything in Growth; Custom pipelines; SSO & permissions; Dedicated support
+   with a monthly/annual toggle that updates prices with JS (annual = 2 months free)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.
