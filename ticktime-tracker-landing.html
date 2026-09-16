@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TickTime | Time Tracking for Consultants</title>
+    <meta name="description" content="TickTime tracks time across projects, generates timesheets, and turns them into invoices in one click. Built for consultants and agencies.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Colors */
+            --bg-base: #0A0A0A;
+            --bg-surface: #141414;
+            --bg-surface-hover: #1A1A1A;
+            --text-primary: #EDEDED;
+            --text-secondary: #A1A1AA;
+            --text-muted: #71717A;
+            --accent-1: #0EA5E9;
+            --accent-2: #6366F1;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+            
+            /* Typography */
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-serif: 'Instrument Serif', Georgia, serif;
+            
+            /* Spacing */
+            --section-padding-y: clamp(4rem, 10vw, 7.5rem); /* ~64px to 120px */
+            --container-padding: clamp(1rem, 5vw, 2rem);
+            --max-width: 1200px;
+            
+            /* Effects */
+            --glass-bg: rgba(10, 10, 10, 0.6);
+            --glass-blur: blur(12px);
+            --glow: 0 0 40px rgba(99, 102, 241, 0.15);
+            --transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Reset & Base */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Noise Texture */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        /* Mesh Gradient Background for Hero */
+        .mesh-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            overflow: hidden;
+            z-index: -1;
+            opacity: 0.4;
+            mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
+        }
+
+        .mesh-blob {
+            position: absolute;
+            filter: blur(80px);
+            border-radius: 50%;
+            animation: float 20s ease-in-out infinite alternate;
+        }
+
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: rgba(14, 165, 233, 0.15); }
+        .blob-2 { top: 20%; right: -20%; width: 60vw; height: 60vw; background: rgba(99, 102, 241, 0.15); animation-delay: -5s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(5%, 10%) scale(1.1); }
+        }
+
+        /* Layout & Typography */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+        }
+
+        section {
+            padding: var(--section-padding-y) 0;
+            position: relative;
+        }
+
+        h1, h2, h3, .serif {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        h1 { font-size: clamp(3rem, 8vw, 5.5rem); }
+        h2 { font-size: clamp(2.5rem, 5vw, 4rem); }
+        h3 { font-size: clamp(1.5rem, 3vw, 2rem); font-family: var(--font-sans); font-weight: 500; letter-spacing: -0.01em;}
+        
+        p { color: var(--text-secondary); font-size: clamp(1rem, 1.5vw, 1.125rem); }
+
+        a { color: inherit; text-decoration: none; transition: color var(--transition); }
+        a:hover { color: #fff; }
+
+        .text-gradient {
+            background: linear-gradient(to right, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 4rem auto;
+        }
+        
+        .section-header h2 { margin-bottom: 1rem; }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 99px;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            transition: all var(--transition);
+            cursor: pointer;
+            text-decoration: none;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            color: #fff;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 99px;
+            background: linear-gradient(135deg, #38BDF8, #818CF8);
+            opacity: 0;
+            transition: opacity var(--transition);
+            z-index: -1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--glow);
+        }
+        
+        .btn-primary:hover::before { opacity: 1; }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: var(--border-hover);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            z-index: 40;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--border-color);
+            transition: padding var(--transition);
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 4rem;
+        }
+
+        .logo {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            font-size: 1.25rem;
+            letter-spacing: -0.03em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo svg { width: 24px; height: 24px; }
+
+        .nav-links { display: none; }
+        .nav-links a { font-size: 0.875rem; color: var(--text-secondary); margin: 0 1rem; }
+        
+        @media (min-width: 768px) {
+            .nav-links { display: flex; align-items: center; }
+        }
+
+        /* Hero Section */
+        .hero {
+            padding-top: calc(4rem + var(--section-padding-y));
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        @media (min-width: 992px) {
+            .hero-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+        }
+
+        .hero-content h1 { margin-bottom: 1.5rem; }
+        .hero-content p { margin-bottom: 2.5rem; font-size: clamp(1.125rem, 2vw, 1.25rem); max-width: 480px; }
+        .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+        /* CSS Mockup */
+        .mockup-wrapper {
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .mockup {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05) inset;
+            transform: rotateY(-5deg) rotateX(2deg);
+            transition: transform 0.5s ease;
+        }
+
+        .mockup:hover { transform: rotateY(0) rotateX(0); }
+
+        .mockup-header {
+            background: #111;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .mac-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .mac-dot:nth-child(1) { background: #ED6A5E; }
+        .mac-dot:nth-child(2) { background: #F4BF4F; }
+        .mac-dot:nth-child(3) { background: #61C554; }
+
+        .mockup-body { padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+
+        .mockup-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .mockup-left { display: flex; align-items: center; gap: 1rem; }
+        .mockup-tag { 
+            width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); 
+        }
+        .mockup-tag.active { background: var(--accent-1); box-shadow: 0 0 10px var(--accent-1); }
+        
+        .mockup-text-sm { height: 8px; width: 60px; background: rgba(255,255,255,0.1); border-radius: 4px; }
+        .mockup-text-lg { height: 12px; width: 120px; background: rgba(255,255,255,0.2); border-radius: 4px; margin-bottom: 4px;}
+        
+        .mockup-timer {
+            font-variant-numeric: tabular-nums;
+            font-family: monospace;
+            color: var(--accent-1);
+            font-size: 1.125rem;
+        }
+
+        .pulse-anim { animation: pulse-opacity 2s infinite; }
+        @keyframes pulse-opacity { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* Logo Wall */
+        .logo-wall {
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 3rem 0;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.01), transparent);
+        }
+
+        .logo-wall p {
+            text-align: center;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+            color: var(--text-muted);
+        }
+
+        .logos-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(2rem, 5vw, 4rem);
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+
+        .brand-text {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+        }
+
+        /* Bento Grid */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .bento-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .bento-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all var(--transition);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .bento-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            opacity: 0;
+            transition: opacity var(--transition);
+        }
+
+        .bento-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-hover);
+            background: var(--bg-surface-hover);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+        }
+        
+        .bento-card:hover::before { opacity: 1; }
+
+        .icon-box {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+        }
+
+        .icon-box svg { width: 24px; height: 24px; stroke-width: 1.5; }
+
+        /* Metrics */
+        .metrics {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 4rem 0;
+        }
+
+        @media (min-width: 768px) {
+            .metrics { grid-template-columns: repeat(3, 1fr); gap: 0; }
+            .metric-item:not(:last-child) { border-right: 1px solid var(--border-color); }
+        }
+
+        .metric-value {
+            font-family: var(--font-serif);
+            font-size: clamp(3rem, 5vw, 4.5rem);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .metric-label { font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+        /* Testimonial */
+        .testimonial-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .quote-icon { margin-bottom: 2rem; color: var(--border-hover); display: inline-block;}
+        .quote-icon svg { width: 40px; height: 40px; fill: currentColor; }
+
+        .testimonial-text {
+            font-family: var(--font-serif);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-style: italic;
+            line-height: 1.2;
+            color: #fff;
+            margin-bottom: 3rem;
+        }
+
+        .author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .avatar {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--bg-surface), #222);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-sans);
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .author-info { text-align: left; }
+        .author-name { font-weight: 500; color: #fff; font-size: 0.9375rem; }
+        .author-title { font-size: 0.8125rem; color: var(--text-muted); }
+
+        /* Pricing */
+        .billing-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 4rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            transition: .3s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--text-primary);
+            border-radius: 50%;
+            transition: .3s;
+        }
+
+        input:checked + .slider { background-color: var(--accent-2); border-color: transparent;}
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        .toggle-label { font-size: 0.9375rem; color: var(--text-secondary); cursor: pointer; }
+        .toggle-label.active { color: #fff; }
+        .badge-discount {
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--accent-1);
+            padding: 0.25rem 0.5rem;
+            border-radius: 99px;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        @media (min-width: 992px) {
+            .pricing-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .price-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .price-card.popular {
+            background: #111;
+            padding: 2px; /* For gradient border */
+            border: none;
+            position: relative;
+            z-index: 1;
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        @media(max-width: 991px){
+            .price-card.popular { transform: scale(1); }
+        }
+
+        .price-card.popular::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            z-index: -1;
+        }
+
+        .price-card-inner {
+            background: var(--bg-surface);
+            border-radius: 22px;
+            padding: 2.5rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            color: #fff;
+            padding: 0.25rem 1rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .plan-name { font-size: 1.25rem; font-weight: 500; margin-bottom: 1rem; color: #fff; }
+        .plan-price { font-family: var(--font-serif); font-size: 3rem; color: #fff; line-height: 1; margin-bottom: 0.5rem; }
+        .plan-period { font-size: 0.875rem; color: var(--text-muted); }
+        .plan-desc { color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 2rem; min-height: 40px;}
+
+        .feature-list { list-style: none; margin-bottom: 2rem; flex-grow: 1; }
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-list li svg {
+            width: 18px; height: 18px;
+            stroke: var(--accent-1);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .price-card .btn { width: 100%; }
+
+        /* CTA Band */
+        .cta-band {
+            background: radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+        
+        .cta-band h2 { margin-bottom: 1.5rem; font-size: clamp(2.5rem, 5vw, 4.5rem); }
+        .cta-band p { margin: 0 auto 2.5rem auto; max-width: 500px; }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .footer-logo { justify-content: center; margin-bottom: 2rem; color: var(--text-muted);}
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a { color: var(--text-muted); font-size: 0.875rem; }
+        .footer-links a:hover { color: #fff; }
+        .copyright { color: var(--text-muted); font-size: 0.75rem; }
+
+        /* Mobile Sticky CTA */
+        .mobile-cta {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%;
+            padding: 1rem;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-top: 1px solid var(--border-color);
+            z-index: 40;
+            display: flex;
+            gap: 1rem;
+            transform: translateY(100%);
+            transition: transform var(--transition);
+        }
+        
+        @media (min-width: 768px) { .mobile-cta { display: none; } }
+        .mobile-cta.visible { transform: translateY(0); }
+        .mobile-cta .btn { flex: 1; }
+
+        /* Scroll Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+
+        /* Accessibility & Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            .mesh-bg { display: none; }
+            .reveal { opacity: 1; transform: none; }
+            .mockup { transform: none; }
+        }
+        
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Effects -->
+    <div class="mesh-bg" aria-hidden="true">
+        <div class="mesh-blob blob-1"></div>
+        <div class="mesh-blob blob-2"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-inner">
+            <a href="#" class="logo" aria-label="TickTime Home">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="2" y="2" width="20" height="20" rx="4" stroke="url(#logo-grad)" stroke-width="2"/>
+                    <path d="M12 6V12L16 16" stroke="url(#logo-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="logo-grad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#0EA5E9"/>
+                            <stop offset="1" stop-color="#6366F1"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                TickTime
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#customers">Customers</a>
+                <a href="#pricing">Pricing</a>
+            </div>
+            <div style="display: none;" class="desktop-cta-nav">
+                <a href="#pricing" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8125rem;">Start free</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-grid">
+            <div class="hero-content reveal">
+                <h1>Track time. <br><span class="text-gradient">Bill every minute.</span></h1>
+                <p>TickTime tracks time across projects, generates timesheets, and turns them into invoices in one click.</p>
+                <div class="hero-actions" id="hero-cta">
+                    <a href="#pricing" class="btn btn-primary">Start free</a>
+                    <a href="#features" class="btn btn-secondary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        See it track
+                    </a>
+                </div>
+            </div>
+            
+            <div class="hero-visual reveal delay-1">
+                <div class="mockup-wrapper">
+                    <div class="mockup" aria-hidden="true">
+                        <div class="mockup-header">
+                            <div class="mac-dot"></div>
+                            <div class="mac-dot"></div>
+                            <div class="mac-dot"></div>
+                        </div>
+                        <div class="mockup-body">
+                            <!-- Active Timer Row -->
+                            <div class="mockup-row" style="border-color: rgba(14, 165, 233, 0.3); background: rgba(14, 165, 233, 0.05);">
+                                <div class="mockup-left">
+                                    <div class="mockup-tag active pulse-anim"></div>
+                                    <div>
+                                        <div class="mockup-text-lg" style="background: var(--text-primary);"></div>
+                                        <div class="mockup-text-sm"></div>
+                                    </div>
+                                </div>
+                                <div class="mockup-timer pulse-anim">01:24:09</div>
+                            </div>
+                            <!-- Inactive Rows -->
+                            <div class="mockup-row">
+                                <div class="mockup-left">
+                                    <div class="mockup-tag"></div>
+                                    <div>
+                                        <div class="mockup-text-lg"></div>
+                                        <div class="mockup-text-sm"></div>
+                                    </div>
+                                </div>
+                                <div class="mockup-timer" style="color: var(--text-muted);">03:45:00</div>
+                            </div>
+                            <div class="mockup-row" style="opacity: 0.5;">
+                                <div class="mockup-left">
+                                    <div class="mockup-tag"></div>
+                                    <div>
+                                        <div class="mockup-text-lg"></div>
+                                        <div class="mockup-text-sm"></div>
+                                    </div>
+                                </div>
+                                <div class="mockup-timer" style="color: var(--text-muted);">00:30:00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Logo Wall -->
+    <section class="logo-wall reveal" id="customers">
+        <div class="container">
+            <p>Trusted by agencies migrating from</p>
+            <div class="logos-container">
+                <span class="brand-text">Toggl</span>
+                <span class="brand-text">Harvest</span>
+                <span class="brand-text">Clockify</span>
+                <span class="brand-text">Timely</span>
+                <span class="brand-text">Hubstaff</span>
+                <span class="brand-text">Everhour</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Bento Grid -->
+    <section id="features" class="container">
+        <div class="section-header reveal">
+            <h2>Built for billable hours</h2>
+            <p>Everything you need to capture time, manage budgets, and get paid without the administrative overhead.</p>
+        </div>
+        
+        <div class="bento-grid">
+            <!-- Feature 1 -->
+            <div class="bento-card reveal">
+                <div class="icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div>
+                    <h3>One-click timers</h3>
+                    <p style="margin-top: 0.5rem;">Start tracking instantly from your menu bar, browser, or phone. Switch tasks without losing a second.</p>
+                </div>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="bento-card reveal delay-1">
+                <div class="icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                        <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3>Project budgets</h3>
+                    <p style="margin-top: 0.5rem;">Set retainers or fixed budgets. Get alerted before you overburn so you can negotiate scope changes early.</p>
+                </div>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="bento-card reveal">
+                <div class="icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="3" y1="9" x2="21" y2="9"></line>
+                        <line x1="9" y1="21" x2="9" y2="9"></line>
+                    </svg>
+                </div>
+                <div>
+                    <h3>Timesheets</h3>
+                    <p style="margin-top: 0.5rem;">Automated, error-free timesheets ready for review. Approve team hours with a single click before billing.</p>
+                </div>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="bento-card reveal delay-1">
+                <div class="icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="12" y1="18" x2="12" y2="12"></line>
+                        <path d="M8.5 15h3a1.5 1.5 0 0 0 0-3h-1a1.5 1.5 0 0 1 0-3h3"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3>Invoicing</h3>
+                    <p style="margin-top: 0.5rem;">Turn approved timesheets into polished, brand-aligned invoices in seconds. Connect Stripe to get paid faster.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics -->
+    <section>
+        <div class="container metrics reveal">
+            <div class="metric-item">
+                <div class="metric-value">41k+</div>
+                <div class="metric-label">Teams Tracking</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value">$120M</div>
+                <div class="metric-label">Billed Monthly</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value">4.7/5</div>
+                <div class="metric-label">Average Rating</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial -->
+    <section class="container">
+        <div class="testimonial-container reveal">
+            <div class="quote-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14.017 21L16.41 14H10V3H24V14.1L19.5 21H14.017ZM-0.003 21L2.39 14H-4V3H10V14.1L5.483 21H-0.003Z"/>
+                </svg>
+            </div>
+            <div class="testimonial-text">
+                "I stopped losing billable hours. TickTime pays for itself in the first week of every month by catching time I used to forget."
+            </div>
+            <div class="author">
+                <div class="avatar" aria-hidden="true">PA</div>
+                <div class="author-info">
+                    <div class="author-name">Priya Anand</div>
+                    <div class="author-title">Independent Consultant</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="container">
+        <div class="section-header reveal">
+            <h2>Simple, transparent pricing</h2>
+            <p>Start for free, upgrade when you need advanced reporting and team management.</p>
+        </div>
+
+        <div class="billing-toggle reveal">
+            <span class="toggle-label" id="label-monthly">Monthly</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="billing-checkbox" aria-label="Toggle Annual Billing">
+                <span class="slider"></span>
+            </label>
+            <span class="toggle-label active" id="label-annual">Annually <span class="badge-discount">2 months free</span></span>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- Free Plan -->
+            <div class="price-card reveal">
+                <h3 class="plan-name">Free</h3>
+                <div class="plan-price">$0</div>
+                <div class="plan-period">forever</div>
+                <p class="plan-desc">Perfect for freelancers just starting out.</p>
+                
+                <ul class="feature-list">
+                    <li><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Unlimited time tracking</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Up to 3 projects</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Basic reporting</li>
+                </ul>
+                <a href="#" class="btn btn-secondary">Get started</a>
+            </div>
+
+            <!-- Pro Plan -->
+            <div class="price-card popular reveal delay-1">
+                <div class="popular-badge">Most Popular</div>
+                <div class="price-card-inner">
+                    <h3 class="plan-name">Pro</h3>
+                    <div class="plan-price">$<span id="price-pro">8</span></div>
+                    <div class="plan-period">per user / month, billed <span class="period-text">annually</span></div>
+                    <p class="plan-desc">For independent consultants maximizing revenue.</p>
+                    
+                    <ul class="feature-list">
+                        <li><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Everything in Free</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Unlimited projects</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Project budgets & alerts</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> 1-click Invoicing</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary">Start 14-day trial</a>
+                </div>
+            </div>
+
+            <!-- Team Plan -->
+            <div class="price-card reveal delay-2">
+                <h3 class="plan-name">Team</h3>
+                <div class="plan-price">$<span id="price-team">16</span></div>
+                <div class="plan-period">per user / month, billed <span class="period-text">annually</span></div>
+                <p class="plan-desc">For agencies needing approval workflows.</p>
+                
+                <ul class="feature-list">
+                    <li><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Everything in Pro</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Timesheet approvals</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Team capacity planning</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><polyline points="20 6 9 17 4 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Priority support</li>
+                </ul>
+                <a href="#" class="btn btn-secondary">Get started</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Band -->
+    <section class="cta-band reveal">
+        <div class="container">
+            <h2 class="serif">Stop guessing.<br>Start billing accurately.</h2>
+            <p>Join over 41,000 teams that trust TickTime to capture every billable minute and increase their revenue.</p>
+            <a href="#pricing" class="btn btn-primary">Start your free trial</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="logo footer-logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 6V12L16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                TickTime
+            </div>
+            <div class="footer-links">
+                <a href="#">Features</a>
+                <a href="#">Pricing</a>
+                <a href="#">Blog</a>
+                <a href="#">Contact</a>
+                <a href="#">Terms</a>
+                <a href="#">Privacy</a>
+            </div>
+            <div class="copyright">
+                &copy; <script>document.write(new Date().getFullYear())</script> TickTime Inc. All rights reserved. Designed for professionals.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Sticky CTA -->
+    <div class="mobile-cta" id="mobile-cta">
+        <a href="#pricing" class="btn btn-primary">Start free</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Intersection Observer for scroll animations
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target); // Run once
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach((el) => {
+                observer.observe(el);
+            });
+
+            // Pricing Toggle Logic (Default is Annual/Checked in HTML logic visually, let's sync state)
+            const billingCheckbox = document.getElementById('billing-checkbox');
+            const pricePro = document.getElementById('price-pro');
+            const priceTeam = document.getElementById('price-team');
+            const periodTexts = document.querySelectorAll('.period-text');
+            const labelMonthly = document.getElementById('label-monthly');
+            const labelAnnual = document.getElementById('label-annual');
+            
+            // Set initial state to annual (checked)
+            billingCheckbox.checked = true;
+
+            billingCheckbox.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    // Annual
+                    pricePro.textContent = '8';
+                    priceTeam.textContent = '16';
+                    periodTexts.forEach(el => el.textContent = 'annually');
+                    labelAnnual.classList.add('active');
+                    labelMonthly.classList.remove('active');
+                } else {
+                    // Monthly
+                    pricePro.textContent = '10';
+                    priceTeam.textContent = '20';
+                    periodTexts.forEach(el => el.textContent = 'monthly');
+                    labelMonthly.classList.add('active');
+                    labelAnnual.classList.remove('active');
+                }
+            });
+
+            // Make labels clickable for the toggle
+            labelMonthly.addEventListener('click', () => {
+                if(billingCheckbox.checked) {
+                    billingCheckbox.checked = false;
+                    billingCheckbox.dispatchEvent(new Event('change'));
+                }
+            });
+            
+            labelAnnual.addEventListener('click', () => {
+                if(!billingCheckbox.checked) {
+                    billingCheckbox.checked = true;
+                    billingCheckbox.dispatchEvent(new Event('change'));
+                }
+            });
+
+            // Mobile Sticky CTA & Nav CTA visibility logic
+            const heroCta = document.getElementById('hero-cta');
+            const mobileCta = document.getElementById('mobile-cta');
+            const navCta = document.querySelector('.desktop-cta-nav');
+
+            const ctaObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        // Hero CTA is out of view
+                        mobileCta.classList.add('visible');
+                        if(window.innerWidth >= 768) {
+                            navCta.style.display = 'block';
+                            // fade in slightly
+                            navCta.style.opacity = 0;
+                            setTimeout(()=> navCta.style.opacity = 1, 10);
+                        }
+                    } else {
+                        // Hero CTA is in view
+                        mobileCta.classList.remove('visible');
+                        navCta.style.display = 'none';
+                    }
+                });
+            }, { threshold: 0 });
+
+            if (heroCta) {
+                ctaObserver.observe(heroCta);
+            }
+        });
+    </script>
+</body>
+</html>

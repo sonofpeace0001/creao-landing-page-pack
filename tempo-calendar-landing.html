@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tempo | Own your calendar again</title>
+    <meta name="description" content="Tempo auto-blocks focus time, declines low-priority meetings, and gives you a clean daily plan.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0A0A0A;
+            --surface: #141414;
+            --surface-hover: #1E1E1E;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --text-muted: rgba(255, 255, 255, 0.4);
+            
+            --accent-1: #F43F5E; /* Rose */
+            --accent-2: #F59E0B; /* Amber */
+            --gradient: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            --gradient-subtle: linear-gradient(135deg, rgba(244, 63, 94, 0.15), rgba(245, 158, 11, 0.15));
+            
+            --font-sans: 'Inter', system-ui, sans-serif;
+            --font-serif: 'Instrument Serif', Georgia, serif;
+            
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition: all 0.4s var(--ease);
+            
+            --container: 1200px;
+            --section-py: clamp(80px, 15vw, 160px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 16px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Noise Texture */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Typography */
+        h1, h2, h3 { font-weight: 400; }
+        .font-serif { font-family: var(--font-serif); }
+        .text-gradient {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Layout utilities */
+        .container {
+            width: 100%;
+            max-width: var(--container);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        .grid { display: grid; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .flex-col { flex-direction: column; }
+        
+        /* Components */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--text-primary);
+            color: var(--bg);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -10px rgba(255,255,255,0.2);
+            background: #E5E5E5;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border-color: var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--surface);
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Navigation */
+        header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            height: 72px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links { display: flex; gap: 32px; }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text-primary); }
+        
+        @media (max-width: 768px) {
+            .nav-links, .nav-cta { display: none; }
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            padding-top: calc(72px + var(--section-py));
+            padding-bottom: clamp(60px, 10vw, 120px);
+            overflow: hidden;
+        }
+
+        .mesh-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .mesh-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            animation: float 20s infinite ease-in-out alternate;
+        }
+
+        .blob-1 {
+            top: -10%; right: -5%;
+            width: 600px; height: 600px;
+            background: var(--accent-1);
+        }
+        
+        .blob-2 {
+            bottom: -20%; left: -10%;
+            width: 700px; height: 700px;
+            background: var(--accent-2);
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-50px, 50px) scale(1.05); }
+            100% { transform: translate(20px, -30px) scale(0.95); }
+        }
+
+        .hero-grid {
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(3.5rem, 7vw, 6.5rem);
+            line-height: 1;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+        }
+
+        .hero-content p {
+            font-size: clamp(1.1rem, 2vw, 1.25rem);
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 480px;
+            line-height: 1.6;
+        }
+
+        .hero-ctas {
+            display: flex; gap: 16px; align-items: center;
+        }
+
+        /* CSS Product Mockup */
+        .mockup {
+            background: rgba(20, 20, 20, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 16px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            transform: perspective(1000px) rotateY(-5deg) rotateX(5deg);
+            transition: transform 0.5s var(--ease);
+        }
+        
+        .mockup:hover {
+            transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+        }
+
+        .mockup-header {
+            display: flex; gap: 8px; margin-bottom: 20px;
+        }
+        
+        .mockup-dot {
+            width: 10px; height: 10px; border-radius: 50%; background: var(--border);
+        }
+        .mockup-dot:nth-child(1) { background: #FF5F56; }
+        .mockup-dot:nth-child(2) { background: #FFBD2E; }
+        .mockup-dot:nth-child(3) { background: #27C93F; }
+
+        .mockup-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            position: relative;
+        }
+
+        .mockup-col {
+            display: flex; flex-direction: column; gap: 8px;
+        }
+
+        .event {
+            background: var(--surface-hover);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            height: 60px;
+            padding: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .event.filled {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .event-line {
+            width: 60%; height: 4px; background: var(--border); border-radius: 2px; margin-bottom: 6px;
+        }
+        .event-line.short { width: 40%; }
+
+        /* Micro-interaction: AI auto-block */
+        .ai-block {
+            background: var(--gradient-subtle);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            height: 0;
+            opacity: 0;
+            animation: aiBlockIn 4s infinite cubic-bezier(0.8, 0, 0.2, 1);
+        }
+        
+        .ai-block .event-line { background: var(--accent-2); opacity: 0.5; }
+
+        @keyframes aiBlockIn {
+            0%, 20% { height: 0; opacity: 0; padding: 0; border-width: 0; }
+            40%, 80% { height: 100px; opacity: 1; padding: 8px; border-width: 1px; }
+            100% { height: 0; opacity: 0; padding: 0; border-width: 0; }
+        }
+
+        @media (max-width: 1024px) {
+            .hero-grid { grid-template-columns: 1fr; gap: 48px; text-align: center; }
+            .hero-content p { margin: 0 auto 40px auto; }
+            .hero-ctas { justify-content: center; }
+            .mockup { transform: none; max-width: 600px; margin: 0 auto; }
+            .mockup:hover { transform: none; }
+        }
+
+        /* Logo Wall */
+        .logo-wall {
+            padding: 40px 0 80px;
+            border-bottom: 1px solid var(--border);
+        }
+        .logo-wall p {
+            text-align: center; color: var(--text-muted); font-size: 0.85rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 32px;
+        }
+        .logos {
+            display: flex; justify-content: center; align-items: center; gap: clamp(32px, 6vw, 80px); flex-wrap: wrap; opacity: 0.5;
+        }
+        .logo-item {
+            font-family: var(--font-sans); font-weight: 600; font-size: 1.25rem; letter-spacing: -0.03em; color: #fff;
+            display: flex; align-items: center; gap: 8px;
+        }
+        
+        /* Bento Grid */
+        .features { padding: var(--section-py) 0; }
+        
+        .section-header { text-align: center; margin-bottom: 80px; }
+        .section-header h2 { font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.1; margin-bottom: 16px; }
+        .section-header p { color: var(--text-secondary); max-width: 600px; margin: 0 auto; font-size: 1.1rem; }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .bento-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .bento-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+            background: var(--surface-hover);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .bento-icon {
+            width: 48px; height: 48px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+        }
+
+        .bento-card h3 { font-size: 1.5rem; font-weight: 500; margin-bottom: 12px; letter-spacing: -0.02em; }
+        .bento-card p { color: var(--text-secondary); line-height: 1.6; }
+
+        @media (max-width: 768px) {
+            .bento-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Metrics Strip */
+        .metrics {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: rgba(20, 20, 20, 0.3);
+        }
+        .metrics-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); text-align: center;
+        }
+        .metric-item {
+            padding: 64px 24px;
+            border-right: 1px solid var(--border);
+        }
+        .metric-item:last-child { border-right: none; }
+        .metric-value {
+            font-family: var(--font-serif); font-size: clamp(2.5rem, 4vw, 3.5rem); line-height: 1; margin-bottom: 8px;
+        }
+        .metric-label { color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        @media (max-width: 768px) {
+            .metrics-grid { grid-template-columns: 1fr; }
+            .metric-item { border-right: none; border-bottom: 1px solid var(--border); padding: 40px 24px; }
+            .metric-item:last-child { border-bottom: none; }
+        }
+
+        /* Testimonial */
+        .testimonial { padding: var(--section-py) 0; text-align: center; }
+        .testimonial-content { max-width: 800px; margin: 0 auto; }
+        .quote { font-family: var(--font-serif); font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1.2; margin-bottom: 40px; }
+        .author { display: flex; align-items: center; justify-content: center; gap: 16px; }
+        .avatar {
+            width: 48px; height: 48px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem; color: var(--accent-2);
+        }
+        .author-info { text-align: left; }
+        .author-name { font-weight: 500; }
+        .author-title { color: var(--text-secondary); font-size: 0.9rem; }
+
+        /* Pricing */
+        .pricing { padding: var(--section-py) 0; }
+        .toggle-container {
+            display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 64px;
+        }
+        .toggle-label { font-size: 0.95rem; font-weight: 500; color: var(--text-secondary); transition: color 0.3s; }
+        .toggle-label.active { color: var(--text-primary); }
+        
+        .toggle-switch {
+            width: 52px; height: 28px; background: var(--surface); border: 1px solid var(--border); border-radius: 100px;
+            position: relative; cursor: pointer; transition: var(--transition);
+        }
+        .toggle-slider {
+            position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; background: var(--text-primary); border-radius: 50%;
+            transition: transform 0.3s var(--ease);
+        }
+        .toggle-switch[data-state="annual"] .toggle-slider { transform: translateX(24px); }
+        .badge {
+            font-size: 0.75rem; font-weight: 600; background: rgba(245, 158, 11, 0.15); color: var(--accent-2);
+            padding: 4px 8px; border-radius: 100px; margin-left: 8px;
+        }
+
+        .pricing-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: center;
+        }
+
+        .plan-card {
+            background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 48px 32px;
+            display: flex; flex-direction: column; height: 100%; transition: var(--transition);
+        }
+
+        .plan-card.highlight {
+            background: rgba(20,20,20,0.8);
+            position: relative;
+            transform: scale(1.05);
+            z-index: 2;
+        }
+
+        .plan-card.highlight::before {
+            content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px;
+            background: var(--gradient); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+        }
+        
+        .popular-tag {
+            position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+            background: var(--gradient); color: var(--bg); font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.05em; padding: 4px 12px; border-radius: 100px;
+        }
+
+        .plan-name { font-size: 1.25rem; font-weight: 500; margin-bottom: 8px; }
+        .plan-price { font-family: var(--font-serif); font-size: 3rem; margin-bottom: 24px; display: flex; align-items: baseline; gap: 4px; }
+        .plan-price span { font-family: var(--font-sans); font-size: 1rem; color: var(--text-secondary); font-weight: 400; }
+        .plan-desc { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+        
+        .plan-features { list-style: none; margin-bottom: 40px; flex-grow: 1; }
+        .plan-features li { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; font-size: 0.95rem; color: var(--text-secondary); }
+        .plan-features svg { width: 16px; height: 16px; color: var(--text-primary); flex-shrink: 0; }
+        
+        .plan-card .btn { width: 100%; }
+
+        @media (max-width: 1024px) {
+            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; gap: 32px; }
+            .plan-card.highlight { transform: none; }
+        }
+
+        /* CTA Band */
+        .cta-band {
+            padding: var(--section-py) 0; position: relative; overflow: hidden; text-align: center;
+        }
+        .cta-band::before {
+            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 600px; height: 600px; background: var(--accent-1); filter: blur(200px); opacity: 0.1; z-index: -1;
+            border-radius: 50%;
+        }
+        .cta-band h2 { font-size: clamp(3rem, 6vw, 4.5rem); margin-bottom: 24px; line-height: 1.1; }
+        .cta-band p { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 40px; max-width: 500px; margin-left: auto; margin-right: auto; }
+
+        /* Footer */
+        footer { padding: 40px 0; border-top: 1px solid var(--border); }
+        .footer-content { display: flex; justify-content: space-between; align-items: center; }
+        .footer-logo { font-family: var(--font-serif); font-size: 1.5rem; color: var(--text-primary); text-decoration: none; }
+        .footer-links { display: flex; gap: 24px; }
+        .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--text-primary); }
+        
+        @media (max-width: 600px) {
+            .footer-content { flex-direction: column; gap: 24px; text-align: center; }
+        }
+
+        /* Mobile Sticky CTA */
+        .mobile-cta {
+            position: fixed; bottom: 0; left: 0; width: 100%; padding: 16px 24px;
+            background: rgba(10, 10, 10, 0.8); backdrop-filter: blur(12px); border-top: 1px solid var(--border);
+            display: none; z-index: 100;
+        }
+        .mobile-cta .btn { width: 100%; }
+        @media (max-width: 768px) {
+            .mobile-cta { display: block; }
+            body { padding-bottom: 80px; }
+        }
+
+        /* Animations */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s var(--ease); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+            .reveal { opacity: 1; transform: none; }
+            .mesh-bg { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container flex justify-between items-center">
+            <a href="#" class="logo">Tempo</a>
+            <nav class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#customers">Customers</a>
+                <a href="#pricing">Pricing</a>
+            </nav>
+            <div class="nav-cta">
+                <a href="#" class="btn btn-primary" aria-label="Start free trial">Start free</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="mesh-bg">
+            <div class="mesh-blob blob-1"></div>
+            <div class="mesh-blob blob-2"></div>
+        </div>
+        <div class="container grid hero-grid">
+            <div class="hero-content reveal">
+                <h1 class="font-serif">Own your<br>calendar again.</h1>
+                <p>Tempo auto-blocks focus time, declines low-priority meetings, and gives you a clean daily plan.</p>
+                <div class="hero-ctas">
+                    <a href="#" class="btn btn-primary">Start free</a>
+                    <a href="#" class="btn btn-secondary">See it plan</a>
+                </div>
+            </div>
+            
+            <div class="hero-visual reveal">
+                <div class="mockup">
+                    <div class="mockup-header">
+                        <div class="mockup-dot"></div>
+                        <div class="mockup-dot"></div>
+                        <div class="mockup-dot"></div>
+                    </div>
+                    <div class="mockup-grid">
+                        <div class="mockup-col">
+                            <div class="event filled"><div class="event-line"></div><div class="event-line short"></div></div>
+                            <div class="event filled" style="height: 100px; opacity:0.5;"><div class="event-line"></div></div>
+                            <div class="event filled"><div class="event-line"></div></div>
+                        </div>
+                        <div class="mockup-col">
+                            <div class="event filled" style="height: 80px;"><div class="event-line"></div></div>
+                            <div class="event ai-block">
+                                <div class="event-line"></div>
+                                <div class="event-line short"></div>
+                            </div>
+                            <div class="event filled" style="height: 120px; opacity:0.5;"><div class="event-line"></div></div>
+                        </div>
+                        <div class="mockup-col">
+                            <div class="event filled" style="height: 140px; opacity:0.5;"><div class="event-line"></div></div>
+                            <div class="event filled"><div class="event-line"></div><div class="event-line short"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="logo-wall reveal">
+        <div class="container">
+            <p>Integrates with tools you already use</p>
+            <div class="logos">
+                <div class="logo-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Clockwise</div>
+                <div class="logo-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6"/><path d="M21 13a9 9 0 1 1-3-7.7L21 8"/></svg>Reclaim</div>
+                <div class="logo-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>Motion</div>
+                <div class="logo-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Cal.com</div>
+                <div class="logo-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>Cron</div>
+                <div class="logo-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>Vimcal</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 class="font-serif">Time is your only non-renewable resource.</h2>
+                <p>We built an engine that fiercely protects it, acting as an executive assistant that lives inside your calendar.</p>
+            </div>
+            
+            <div class="bento-grid">
+                <div class="bento-card reveal">
+                    <div class="bento-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
+                    </div>
+                    <h3>Auto focus blocks</h3>
+                    <p>Tempo analyzes your coding habits, meeting loads, and deadlines to automatically schedule 2-4 hour deep work blocks exactly when you need them.</p>
+                </div>
+                
+                <div class="bento-card reveal">
+                    <div class="bento-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="14" x2="15" y2="20"/><line x1="15" y1="14" x2="9" y2="20"/></svg>
+                    </div>
+                    <h3>Smart decline</h3>
+                    <p>Define rules for recurring "status" meetings. Tempo can gracefully decline them, requesting an async update instead, freeing up your schedule.</p>
+                </div>
+                
+                <div class="bento-card reveal">
+                    <div class="bento-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                    </div>
+                    <h3>Daily plan</h3>
+                    <p>Wake up to a curated digest. We synthesize your tasks and meetings into a single, actionable timeline delivered to your inbox or Slack.</p>
+                </div>
+                
+                <div class="bento-card reveal">
+                    <div class="bento-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                    </div>
+                    <h3>Time analytics</h3>
+                    <p>Stop wondering where the week went. Get brutal, honest breakdowns of time spent in meetings versus actual maker time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="metrics reveal">
+        <div class="container metrics-grid">
+            <div class="metric-item">
+                <div class="metric-value">1.4M</div>
+                <div class="metric-label">Hours Saved</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value">38k</div>
+                <div class="metric-label">Active Users</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value">4.9</div>
+                <div class="metric-label">App Store Rating</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="customers" class="testimonial reveal">
+        <div class="container">
+            <div class="testimonial-content">
+                <blockquote class="quote">"I used to spend my Sundays dreading the wall of meetings on my calendar. Tempo took over, and I finally got my mornings back to actually build."</blockquote>
+                <div class="author">
+                    <div class="avatar">HL</div>
+                    <div class="author-info">
+                        <div class="author-name">Hannah Lee</div>
+                        <div class="author-title">VP Engineering, Linear</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing reveal">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="font-serif">Simple pricing, no surprises.</h2>
+            </div>
+            
+            <div class="toggle-container">
+                <span class="toggle-label active" id="label-monthly">Monthly</span>
+                <div class="toggle-switch" id="billing-toggle" data-state="monthly" aria-label="Toggle billing cycle">
+                    <div class="toggle-slider"></div>
+                </div>
+                <span class="toggle-label" id="label-annual">Annually <span class="badge">2 mo free</span></span>
+            </div>
+
+            <div class="pricing-grid">
+                <!-- Free Plan -->
+                <div class="plan-card">
+                    <div class="plan-name">Free</div>
+                    <div class="plan-price">$0<span>/mo</span></div>
+                    <div class="plan-desc">For individuals wanting basic calendar defense.</div>
+                    <ul class="plan-features">
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> 1 calendar connection</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Basic auto-blocking</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Daily plan email</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary">Get started</a>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="plan-card highlight">
+                    <div class="popular-tag">Most Popular</div>
+                    <div class="plan-name">Pro</div>
+                    <div class="plan-price">$<span id="price-pro">14</span><span>/mo</span></div>
+                    <div class="plan-desc">For professionals who need their focus time back.</div>
+                    <ul class="plan-features">
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Unlimited calendars</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Smart decline AI</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Slack integration</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Advanced analytics</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary">Start 14-day trial</a>
+                </div>
+
+                <!-- Team Plan -->
+                <div class="plan-card">
+                    <div class="plan-name">Team</div>
+                    <div class="plan-price">$<span id="price-team">24</span><span>/user/mo</span></div>
+                    <div class="plan-desc">For orgs aligning schedules without the sync overhead.</div>
+                    <ul class="plan-features">
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Everything in Pro</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Team availability heatmaps</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Admin controls & SSO</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Priority support</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary">Contact sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-band reveal">
+        <div class="container">
+            <h2 class="font-serif">Ready to take control?</h2>
+            <p>Join 38,000+ professionals who have stopped living in their inbox and started doing deep work again.</p>
+            <a href="#" class="btn btn-primary">Start free trial</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <a href="#" class="footer-logo">Tempo</a>
+            <div class="footer-links">
+                <a href="#">Twitter</a>
+                <a href="#">LinkedIn</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="mobile-cta">
+        <a href="#" class="btn btn-primary">Start free trial</a>
+    </div>
+
+    <script>
+        // Scroll Reveal Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        // Optional: stop observing once revealed
+                        // observer.unobserve(entry.target); 
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach((element) => {
+                observer.observe(element);
+            });
+
+            // Pricing Toggle Logic
+            const toggle = document.getElementById('billing-toggle');
+            const pricePro = document.getElementById('price-pro');
+            const priceTeam = document.getElementById('price-team');
+            const labelMonthly = document.getElementById('label-monthly');
+            const labelAnnual = document.getElementById('label-annual');
+
+            // Values: Monthly / Annual (Monthly equivalent)
+            const pricing = {
+                pro: { monthly: 14, annual: 12 },
+                team: { monthly: 24, annual: 20 }
+            };
+
+            toggle.addEventListener('click', () => {
+                const currentState = toggle.getAttribute('data-state');
+                const newState = currentState === 'monthly' ? 'annual' : 'monthly';
+                
+                toggle.setAttribute('data-state', newState);
+                
+                if (newState === 'annual') {
+                    labelAnnual.classList.add('active');
+                    labelMonthly.classList.remove('active');
+                    animateValue(pricePro, pricing.pro.monthly, pricing.pro.annual, 300);
+                    animateValue(priceTeam, pricing.team.monthly, pricing.team.annual, 300);
+                } else {
+                    labelMonthly.classList.add('active');
+                    labelAnnual.classList.remove('active');
+                    animateValue(pricePro, pricing.pro.annual, pricing.pro.monthly, 300);
+                    animateValue(priceTeam, pricing.team.annual, pricing.team.monthly, 300);
+                }
+            });
+
+            // Helper function for smooth number transition
+            function animateValue(obj, start, end, duration) {
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                    obj.innerHTML = Math.floor(progress * (end - start) + start);
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    }
+                };
+                window.requestAnimationFrame(step);
+            }
+        });
+    </script>
+</body>
+</html>

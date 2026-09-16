@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loop | Close clients. Not tabs.</title>
+    <meta name="description" content="Loop brings your leads, proposals, and payments into one calm workflow built for freelancers.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #FAFAF7;
+            --bg-surface: #FFFFFF;
+            --bg-card: #F4F4F2;
+            --text-main: #171717;
+            --text-muted: #737373;
+            --border-light: rgba(0, 0, 0, 0.08);
+            --accent-start: #06B6D4;
+            --accent-end: #3B82F6;
+            --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-display: 'Instrument Serif', Georgia, serif;
+            --max-width: 1200px;
+            --section-padding: clamp(60px, 10vw, 120px);
+            --radius-md: 12px;
+            --radius-lg: 24px;
+            --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            :root { --transition: 0.01s linear; }
+            *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+        }
+
+        /* Reset & Base */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background-color: var(--bg-base); color: var(--text-main); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; position: relative; }
+        
+        /* Noise Overlay */
+        body::before {
+            content: ""; position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.3; mix-blend-mode: multiply;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        h1, h2, h3, h4, .font-display { font-family: var(--font-display); font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; }
+        a { color: inherit; text-decoration: none; }
+        ul { list-style: none; }
+        
+        .container { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+        
+        /* Reveal Animation */
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); will-change: opacity, transform; }
+        .reveal.is-visible { opacity: 1; transform: translateY(0); }
+        .delay-1 { transition-delay: 0.1s; } .delay-2 { transition-delay: 0.2s; }
+
+        /* Buttons */
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; border-radius: 999px; font-weight: 500; font-size: 0.95rem; transition: var(--transition); cursor: pointer; border: 1px solid transparent; }
+        .btn-primary { background: linear-gradient(135deg, var(--accent-start), var(--accent-end)); color: white; box-shadow: 0 4px 14px rgba(59, 130, 246, 0.2); position: relative; overflow: hidden; }
+        .btn-primary::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent); opacity: 0; transition: var(--transition); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3); }
+        .btn-primary:hover::before { opacity: 1; }
+        .btn-secondary { background: var(--bg-surface); border-color: var(--border-light); color: var(--text-main); box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .btn-secondary:hover { border-color: #d4d4d4; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+
+        /* Navigation */
+        .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 16px 0; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-light); transition: transform 0.3s ease; }
+        .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+        .logo { font-size: 2rem; font-family: var(--font-display); letter-spacing: -0.04em; color: var(--text-main); }
+        .nav-links { display: flex; gap: 32px; align-items: center; font-size: 0.9rem; font-weight: 500; color: var(--text-muted); }
+        .nav-links a { transition: var(--transition); }
+        .nav-links a:hover { color: var(--text-main); }
+        @media (max-width: 768px) { .nav-links { display: none; } }
+
+        /* Hero Section */
+        .hero { position: relative; padding-top: calc(80px + var(--section-padding)); padding-bottom: var(--section-padding); overflow: hidden; }
+        
+        /* Animated Mesh Background */
+        .mesh-bg { position: absolute; inset: 0; z-index: -1; overflow: hidden; mask-image: linear-gradient(to bottom, black 40%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%); }
+        .mesh-blob { position: absolute; filter: blur(90px); border-radius: 50%; opacity: 0.4; animation: float 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1); }
+        .blob-1 { top: -10%; left: 10%; width: 50vw; height: 50vw; background: var(--accent-start); }
+        .blob-2 { top: 20%; right: -10%; width: 40vw; height: 40vw; background: var(--accent-end); animation-delay: -5s; }
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(10%, 15%) scale(1.1); } }
+
+        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+        .hero-content h1 { font-size: clamp(3.5rem, 6vw, 5.5rem); margin-bottom: 24px; color: #000; letter-spacing: -0.03em; }
+        .hero-content p { font-size: clamp(1.125rem, 2vw, 1.35rem); color: var(--text-muted); margin-bottom: 40px; max-width: 480px; }
+        .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; }
+
+        /* CSS-Only Product Mockup */
+        .hero-mockup-wrapper { perspective: 1000px; }
+        .mockup { background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 16px; box-shadow: 0 24px 48px -12px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.02); overflow: hidden; transform: rotateY(-5deg) rotateX(2deg); transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        .hero-mockup-wrapper:hover .mockup { transform: rotateY(0) rotateX(0); }
+        .mockup-header { height: 48px; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; padding: 0 16px; gap: 8px; background: rgba(250,250,247,0.5); }
+        .mockup-dot { width: 10px; height: 10px; border-radius: 50%; background: #e5e5e5; }
+        .mockup-body { display: flex; height: 320px; }
+        .mockup-sidebar { width: 64px; border-right: 1px solid var(--border-light); padding: 16px; display: flex; flex-direction: column; gap: 16px; align-items: center; }
+        .mockup-icon { width: 24px; height: 24px; border-radius: 6px; background: var(--bg-card); }
+        .mockup-main { flex: 1; padding: 24px; display: flex; gap: 16px; background: #fcfcfc; }
+        .mockup-col { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+        .mockup-col-header { height: 12px; width: 60%; background: var(--border-light); border-radius: 4px; margin-bottom: 8px; }
+        .mockup-card { background: var(--bg-surface); border: 1px solid var(--border-light); border-radius: 8px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); position: relative; }
+        .mockup-card-line { height: 8px; background: var(--bg-card); border-radius: 4px; margin-bottom: 8px; }
+        .mockup-card-line:last-child { width: 70%; margin-bottom: 0; }
+        
+        /* Micro-interaction */
+        .pulse-card { animation: liftCard 4s ease-in-out infinite alternate; border-color: rgba(59, 130, 246, 0.3); }
+        .pulse-indicator { position: absolute; top: 12px; right: 12px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-end); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); animation: pulse 2s infinite; }
+        @keyframes liftCard { 0%, 100% { transform: translateY(0); box-shadow: 0 2px 4px rgba(0,0,0,0.02); } 50% { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.06); } }
+        @keyframes pulse { 70% { box-shadow: 0 0 0 6px rgba(59, 130, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); } }
+
+        @media (max-width: 992px) { .hero-grid { grid-template-columns: 1fr; } .mockup { transform: none; } .hero-content { text-align: center; } .hero-content p { margin: 0 auto 40px; } .hero-ctas { justify-content: center; } }
+
+        /* Logo Wall */
+        .logo-wall { padding: 60px 0; border-bottom: 1px solid var(--border-light); text-align: center; }
+        .logo-wall p { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 32px; font-weight: 500; }
+        .logos { display: flex; justify-content: center; gap: clamp(32px, 6vw, 64px); flex-wrap: wrap; align-items: center; opacity: 0.6; filter: grayscale(100%); }
+        .logos span { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; font-family: var(--font-body); color: var(--text-main); transition: var(--transition); }
+        .logo-wall:hover .logos { opacity: 1; filter: grayscale(0%); }
+        .logos span:hover { color: var(--accent-end); }
+
+        /* Bento Grid */
+        .features { padding: var(--section-padding) 0; }
+        .section-header { text-align: center; margin-bottom: 64px; max-width: 600px; margin-inline: auto; }
+        .section-header h2 { font-size: clamp(2.5rem, 4vw, 3.5rem); margin-bottom: 16px; }
+        .section-header p { color: var(--text-muted); font-size: 1.125rem; }
+        
+        .bento-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+        .bento-card { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 48px; transition: var(--transition); position: relative; overflow: hidden; }
+        .bento-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); }
+        .icon-wrapper { width: 56px; height: 56px; border-radius: 16px; background: var(--bg-surface); border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; position: relative; }
+        .icon-wrapper::after { content: ''; position: absolute; inset: -1px; border-radius: 16px; background: linear-gradient(135deg, var(--accent-start), var(--accent-end)); z-index: -1; opacity: 0; transition: var(--transition); }
+        .bento-card:hover .icon-wrapper::after { opacity: 1; transform: scale(1.05); filter: blur(8px); }
+        .bento-card h3 { font-size: 1.5rem; margin-bottom: 12px; font-family: var(--font-body); font-weight: 600; letter-spacing: -0.02em; }
+        .bento-card p { color: var(--text-muted); font-size: 1rem; line-height: 1.5; }
+        
+        @media (max-width: 768px) { .bento-grid { grid-template-columns: 1fr; } .bento-card { padding: 32px; } }
+
+        /* Metrics Strip */
+        .metrics { border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); background: var(--bg-surface); }
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+        .metric-item { padding: 48px 24px; text-align: center; border-right: 1px solid var(--border-light); }
+        .metric-item:last-child { border-right: none; }
+        .metric-num { font-size: clamp(2.5rem, 4vw, 3.5rem); font-family: var(--font-display); color: var(--text-main); margin-bottom: 8px; }
+        .metric-label { font-size: 0.875rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+        @media (max-width: 640px) { .metrics-grid { grid-template-columns: 1fr; } .metric-item { border-right: none; border-bottom: 1px solid var(--border-light); padding: 32px 24px; } .metric-item:last-child { border-bottom: none; } }
+
+        /* Testimonial */
+        .testimonial { padding: var(--section-padding) 0; display: flex; justify-content: center; }
+        .testimonial-content { text-align: center; max-width: 800px; }
+        .quote { font-size: clamp(1.75rem, 3vw, 2.5rem); font-family: var(--font-display); line-height: 1.3; color: var(--text-main); margin-bottom: 40px; }
+        .author { display: flex; align-items: center; justify-content: center; gap: 16px; }
+        .avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #e5e5e5, #f5f5f5); border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--text-main); font-size: 1rem; }
+        .author-info { text-align: left; }
+        .author-name { font-weight: 600; font-size: 1rem; color: var(--text-main); }
+        .author-role { font-size: 0.875rem; color: var(--text-muted); }
+
+        /* Pricing */
+        .pricing { padding: var(--section-padding) 0; background: var(--bg-surface); }
+        .toggle-wrapper { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 64px; }
+        .toggle-label { font-size: 0.95rem; font-weight: 500; color: var(--text-muted); cursor: pointer; transition: color 0.3s; }
+        .toggle-label.active { color: var(--text-main); }
+        .toggle-switch { position: relative; width: 52px; height: 28px; background: var(--bg-card); border-radius: 999px; border: 1px solid var(--border-light); cursor: pointer; transition: background 0.3s; }
+        .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 22px; height: 22px; background: white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .toggle-switch.annual::after { transform: translateX(24px); }
+        .badge-free { font-size: 0.75rem; background: rgba(59, 130, 246, 0.1); color: var(--accent-end); padding: 4px 8px; border-radius: 999px; font-weight: 600; margin-left: 8px; vertical-align: middle; }
+
+        .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: stretch; max-width: 1000px; margin: 0 auto; }
+        .price-card { background: var(--bg-base); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 40px 32px; display: flex; flex-direction: column; transition: var(--transition); }
+        .price-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.05); }
+        
+        .price-card.popular { position: relative; background: var(--bg-surface); border: none; z-index: 1; padding: 2px; border-radius: calc(var(--radius-lg) + 2px); box-shadow: 0 24px 48px -12px rgba(59, 130, 246, 0.15); }
+        .price-card.popular::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--accent-start), var(--accent-end)); border-radius: inherit; z-index: -1; }
+        .popular-inner { background: var(--bg-surface); border-radius: var(--radius-lg); padding: 40px 32px; height: 100%; display: flex; flex-direction: column; }
+        .popular-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, var(--accent-start), var(--accent-end)); color: white; font-size: 0.75rem; font-weight: 600; padding: 4px 12px; border-radius: 999px; letter-spacing: 0.05em; text-transform: uppercase; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
+
+        .tier-name { font-size: 1.25rem; font-weight: 600; margin-bottom: 8px; }
+        .tier-price { font-size: 3rem; font-family: var(--font-display); line-height: 1; margin-bottom: 8px; color: var(--text-main); display: flex; align-items:baseline; gap: 4px; }
+        .tier-period { font-size: 0.875rem; color: var(--text-muted); font-family: var(--font-body); font-weight: 400; }
+        .tier-desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 32px; min-height: 44px; }
+        .price-card ul { margin-bottom: 32px; flex: 1; display: flex; flex-direction: column; gap: 16px; }
+        .price-card li { display: flex; align-items: flex-start; gap: 12px; font-size: 0.95rem; color: var(--text-muted); }
+        .check-icon { flex-shrink: 0; width: 20px; height: 20px; color: var(--accent-end); }
+        .price-card .btn { width: 100%; }
+
+        @media (max-width: 860px) { .pricing-grid { grid-template-columns: 1fr; max-width: 400px; } .price-card.popular { transform: scale(1.02); } .price-card.popular:hover { transform: scale(1.02) translateY(-4px); } }
+
+        /* CTA Band */
+        .cta-band { padding: var(--section-padding) 0; position: relative; overflow: hidden; background: var(--bg-surface); text-align: center; }
+        .cta-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80vw; height: 80vw; max-width: 800px; max-height: 800px; background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%); pointer-events: none; }
+        .cta-band h2 { font-size: clamp(3rem, 5vw, 4.5rem); margin-bottom: 24px; position: relative; z-index: 1; }
+        .cta-band p { color: var(--text-muted); font-size: 1.125rem; margin-bottom: 40px; position: relative; z-index: 1; }
+
+        /* Footer */
+        .footer { padding: 48px 0; border-top: 1px solid var(--border-light); background: var(--bg-base); }
+        .footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 24px; }
+        .footer-logo { font-size: 1.5rem; font-family: var(--font-display); color: var(--text-muted); }
+        .footer-links { display: flex; gap: 24px; font-size: 0.875rem; color: var(--text-muted); }
+        .footer-links a:hover { color: var(--text-main); }
+        .copyright { font-size: 0.875rem; color: var(--text-muted); }
+
+        /* Mobile Sticky CTA */
+        .mobile-cta-bar { display: none; position: fixed; bottom: 0; left: 0; right: 0; padding: 16px 24px; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--border-light); z-index: 1000; }
+        .mobile-cta-bar .btn { width: 100%; }
+        @media (max-width: 768px) { .mobile-cta-bar { display: block; } body { padding-bottom: 80px; } }
+    </style>
+</head>
+<body>
+
+    <!-- Sticky Navigation -->
+    <header class="navbar" id="navbar">
+        <div class="container nav-inner">
+            <a href="#" class="logo">Loop</a>
+            <nav class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#testimonials">Testimonials</a>
+            </nav>
+            <a href="#" class="btn btn-primary nav-cta">Start free</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="mesh-bg">
+                <div class="mesh-blob blob-1"></div>
+                <div class="mesh-blob blob-2"></div>
+            </div>
+            
+            <div class="container hero-grid reveal">
+                <div class="hero-content">
+                    <h1>Close clients.<br>Not tabs.</h1>
+                    <p>Loop brings your leads, proposals, and payments into one calm workflow built for freelancers.</p>
+                    <div class="hero-ctas">
+                        <a href="#" class="btn btn-primary">Start free</a>
+                        <a href="#features" class="btn btn-secondary">See the workflow</a>
+                    </div>
+                </div>
+
+                <div class="hero-mockup-wrapper">
+                    <div class="mockup">
+                        <div class="mockup-header">
+                            <div class="mockup-dot" style="background:#ff5f56"></div>
+                            <div class="mockup-dot" style="background:#ffbd2e"></div>
+                            <div class="mockup-dot" style="background:#27c93f"></div>
+                        </div>
+                        <div class="mockup-body">
+                            <div class="mockup-sidebar">
+                                <div class="mockup-icon" style="background:var(--text-main)"></div>
+                                <div class="mockup-icon"></div>
+                                <div class="mockup-icon"></div>
+                            </div>
+                            <div class="mockup-main">
+                                <div class="mockup-col">
+                                    <div class="mockup-col-header"></div>
+                                    <div class="mockup-card">
+                                        <div class="mockup-card-line"></div>
+                                        <div class="mockup-card-line"></div>
+                                    </div>
+                                    <div class="mockup-card">
+                                        <div class="mockup-card-line" style="width: 40%"></div>
+                                        <div class="mockup-card-line"></div>
+                                    </div>
+                                </div>
+                                <div class="mockup-col">
+                                    <div class="mockup-col-header" style="width: 80%"></div>
+                                    <div class="mockup-card pulse-card">
+                                        <div class="pulse-indicator"></div>
+                                        <div class="mockup-card-line" style="width: 90%"></div>
+                                        <div class="mockup-card-line" style="width: 60%"></div>
+                                    </div>
+                                </div>
+                                <div class="mockup-col">
+                                    <div class="mockup-col-header" style="width: 50%"></div>
+                                    <div class="mockup-card">
+                                        <div class="mockup-card-line" style="width: 30%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logo Wall -->
+        <section class="logo-wall reveal">
+            <div class="container">
+                <p>Replacing the bloated giants</p>
+                <div class="logos">
+                    <span>HubSpot</span>
+                    <span>Pipedrive</span>
+                    <span>Folk</span>
+                    <span>Attio</span>
+                    <span>Copper</span>
+                    <span>Notion</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bento Grid / Features -->
+        <section id="features" class="features">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2>Everything in one flow</h2>
+                    <p>Designed for the way solo businesses actually work. No complex setups, just clear pipelines.</p>
+                </div>
+                
+                <div class="bento-grid">
+                    <!-- Feature 1 -->
+                    <div class="bento-card reveal">
+                        <div class="icon-wrapper">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="4" height="16" rx="1"></rect>
+                                <rect x="10" y="4" width="4" height="12" rx="1"></rect>
+                                <rect x="17" y="4" width="4" height="8" rx="1"></rect>
+                            </svg>
+                        </div>
+                        <h3>Lead pipeline</h3>
+                        <p>Track inquiries from first hello to signed contract. Drag and drop cards, set reminders, and never let a good lead slip through the cracks again.</p>
+                    </div>
+                    
+                    <!-- Feature 2 -->
+                    <div class="bento-card reveal delay-1">
+                        <div class="icon-wrapper">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </div>
+                        <h3>Proposals & Docs</h3>
+                        <p>Send beautiful, web-native proposals. Get notified the second a client opens them, and close faster with integrated e-signatures.</p>
+                    </div>
+                    
+                    <!-- Feature 3 -->
+                    <div class="bento-card reveal">
+                        <div class="icon-wrapper">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                                <line x1="12" y1="9" x2="12" y2="15"></line>
+                                <path d="M10 10.5c0-.8.7-1.5 1.5-1.5h1c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5h-1c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5h1c.8 0 1.5-.7 1.5-1.5"></path>
+                            </svg>
+                        </div>
+                        <h3>Invoicing</h3>
+                        <p>Generate invoices directly from approved proposals. Accept credit cards or bank transfers, and let automated follow-ups chase late payments.</p>
+                    </div>
+                    
+                    <!-- Feature 4 -->
+                    <div class="bento-card reveal delay-1">
+                        <div class="icon-wrapper">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="3" y1="9" x2="21" y2="9"></line>
+                                <path d="M9 21V9"></path>
+                                <path d="M15 15h.01"></path>
+                            </svg>
+                        </div>
+                        <h3>Client portal</h3>
+                        <p>Give your clients a single magical link where they can view project status, download files, and access all past invoices securely.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Metrics Strip -->
+        <section class="metrics reveal">
+            <div class="container">
+                <div class="metrics-grid">
+                    <div class="metric-item">
+                        <div class="metric-num">18k</div>
+                        <div class="metric-label">Solo businesses</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-num">$52M</div>
+                        <div class="metric-label">Invoiced through Loop</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-num">4.8/5</div>
+                        <div class="metric-label">Average rating</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonial -->
+        <section id="testimonials" class="testimonial reveal">
+            <div class="container testimonial-content">
+                <h2 class="quote">"Loop single-handedly replaced four bloated tools for me. It’s calm, fast, and makes my studio look incredibly professional."</h2>
+                <div class="author">
+                    <div class="avatar">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <div class="author-info">
+                        <div class="author-name">Sam Okafor</div>
+                        <div class="author-role">Independent Designer</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing -->
+        <section id="pricing" class="pricing">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2>Simple, honest pricing</h2>
+                    <p>Start for free, upgrade when your business demands it.</p>
+                </div>
+                
+                <div class="toggle-wrapper reveal">
+                    <span class="toggle-label active" id="label-monthly">Monthly</span>
+                    <div class="toggle-switch" id="billing-toggle" role="switch" aria-checked="false" aria-label="Toggle annual billing"></div>
+                    <span class="toggle-label" id="label-annual">Annually <span class="badge-free">2 mos free</span></span>
+                </div>
+
+                <div class="pricing-grid">
+                    <!-- Tier 1 -->
+                    <div class="price-card reveal">
+                        <div class="tier-name">Solo</div>
+                        <div class="tier-price">$0<span class="tier-period">/mo</span></div>
+                        <p class="tier-desc">Perfect for freelancers just getting started.</p>
+                        <ul>
+                            <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to 5 active projects</li>
+                            <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Basic proposals</li>
+                            <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Stripe integration</li>
+                        </ul>
+                        <a href="#" class="btn btn-secondary">Get started</a>
+                    </div>
+
+                    <!-- Tier 2 -->
+                    <div class="price-card popular reveal delay-1">
+                        <div class="popular-badge">Most popular</div>
+                        <div class="popular-inner">
+                            <div class="tier-name">Pro</div>
+                            <div class="tier-price">$<span class="price-val" data-monthly="14" data-annual="12">14</span><span class="tier-period">/mo</span></div>
+                            <p class="tier-desc">The sweet spot for full-time independents.</p>
+                            <ul>
+                                <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Unlimited projects</li>
+                                <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> E-signatures & tracking</li>
+                                <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Automated invoicing</li>
+                                <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Custom domain portal</li>
+                            </ul>
+                            <a href="#" class="btn btn-primary">Start Pro trial</a>
+                        </div>
+                    </div>
+
+                    <!-- Tier 3 -->
+                    <div class="price-card reveal delay-2">
+                        <div class="tier-name">Studio</div>
+                        <div class="tier-price">$<span class="price-val" data-monthly="34" data-annual="28">34</span><span class="tier-period">/mo</span></div>
+                        <p class="tier-desc">For small teams and boutique agencies.</p>
+                        <ul>
+                            <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to 5 team members</li>
+                            <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Advanced permissions</li>
+                            <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Multiple currencies</li>
+                            <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Priority support</li>
+                        </ul>
+                        <a href="#" class="btn btn-secondary">Upgrade to Studio</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="cta-band reveal">
+            <div class="cta-glow"></div>
+            <div class="container">
+                <h2>Ready to find your flow?</h2>
+                <p>Join 18,000+ freelancers running their business on Loop.</p>
+                <a href="#" class="btn btn-primary" style="padding: 16px 32px; font-size: 1.1rem;">Start for free</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-logo">Loop</div>
+            <div class="footer-links">
+                <a href="#">Twitter</a>
+                <a href="#">Changelog</a>
+                <a href="#">Support</a>
+                <a href="#">Terms</a>
+            </div>
+            <div class="copyright">&copy; <span id="year"></span> Loop CRM Inc.</div>
+        </div>
+    </footer>
+
+    <!-- Mobile Sticky CTA -->
+    <div class="mobile-cta-bar">
+        <a href="#" class="btn btn-primary">Start free</a>
+    </div>
+
+    <script>
+        // Set dynamic year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Scroll Reveal Animation (Intersection Observer)
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            });
+        }, revealOptions);
+
+        revealElements.forEach(el => {
+            revealOnScroll.observe(el);
+        });
+
+        // Hide/Show navbar slightly on scroll for polish
+        let lastScroll = 0;
+        const navbar = document.getElementById('navbar');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll <= 0) {
+                navbar.style.transform = "translateY(0)";
+                navbar.style.background = "rgba(255, 255, 255, 0.7)";
+            } else if (currentScroll > lastScroll && currentScroll > 80) {
+                // Scrolling down
+                navbar.style.transform = "translateY(-100%)";
+            } else {
+                // Scrolling up
+                navbar.style.transform = "translateY(0)";
+                navbar.style.background = "rgba(255, 255, 255, 0.9)";
+            }
+            lastScroll = currentScroll;
+        }, { passive: true });
+
+        // Pricing Toggle Logic
+        const toggle = document.getElementById('billing-toggle');
+        const labelMo = document.getElementById('label-monthly');
+        const labelYr = document.getElementById('label-annual');
+        const priceVals = document.querySelectorAll('.price-val');
+        const periods = document.querySelectorAll('.tier-period');
+        let isAnnual = false;
+
+        toggle.addEventListener('click', () => {
+            isAnnual = !isAnnual;
+            
+            // Update toggle UI
+            if (isAnnual) {
+                toggle.classList.add('annual');
+                toggle.setAttribute('aria-checked', 'true');
+                labelYr.classList.add('active');
+                labelMo.classList.remove('active');
+            } else {
+                toggle.classList.remove('annual');
+                toggle.setAttribute('aria-checked', 'false');
+                labelMo.classList.add('active');
+                labelYr.classList.remove('active');
+            }
+
+            // Update prices
+            priceVals.forEach(val => {
+                // Simple fade out/in effect
+                val.style.opacity = 0;
+                setTimeout(() => {
+                    val.textContent = isAnnual ? val.dataset.annual : val.dataset.monthly;
+                    val.style.opacity = 1;
+                }, 150);
+            });
+            
+            // Note: Keeping /mo text as standard SaaS display for annual (billed annually)
+            // If we wanted to change to /yr, we'd update periods here.
+        });
+    </script>
+</body>
+</html>

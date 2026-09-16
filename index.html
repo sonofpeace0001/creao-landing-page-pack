@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CREAO Premium Landing Page Pack &mdash; 51 Niches</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0A0A;--surface:#141414;--surface2:#1A1A1A;--text:#FAFAFA;--muted:#A1A1AA;
+  --border:rgba(255,255,255,0.08);--accent:#6366F1;--accent2:#A855F7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden;
+}
+.mesh{position:fixed;inset:0;z-index:-1;opacity:.5;pointer-events:none;
+  background:
+    radial-gradient(60% 50% at 15% 10%,rgba(99,102,241,.18),transparent 60%),
+    radial-gradient(50% 50% at 85% 20%,rgba(168,85,247,.16),transparent 60%),
+    radial-gradient(50% 60% at 50% 100%,rgba(16,185,129,.10),transparent 60%);
+  animation:shift 18s ease-in-out infinite alternate;background-size:200% 200%;}
+@keyframes shift{0%{background-position:0% 0%}100%{background-position:100% 100%}}
+.wrap{max-width:1280px;margin:0 auto;padding:0 24px}
+header{padding:120px 0 60px;text-align:center}
+header .eyebrow{display:inline-block;font-size:13px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--accent);padding:6px 14px;border:1px solid var(--border);border-radius:999px;margin-bottom:28px;
+  background:rgba(99,102,241,.08)}
+h1{font-family:'Instrument Serif',serif;font-size:clamp(48px,7vw,96px);font-weight:400;line-height:1.02;letter-spacing:-.02em}
+h1 .grad{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+header p.sub{max-width:620px;margin:28px auto 0;color:var(--muted);font-size:18px}
+header .stats{display:flex;gap:40px;justify-content:center;margin-top:48px;flex-wrap:wrap}
+header .stats div{text-align:center}
+header .stats b{display:block;font-family:'Instrument Serif',serif;font-size:40px;color:var(--text)}
+header .stats span{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.toolbar{position:sticky;top:0;z-index:10;backdrop-filter:blur(16px);
+  background:rgba(10,10,10,.72);border-bottom:1px solid var(--border);padding:16px 0;margin:40px 0 0}
+.toolbar .inner{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.toolbar input{flex:1;min-width:220px;background:var(--surface);border:var(--border);border-radius:10px;
+  padding:12px 16px;color:var(--text);font-size:14px;font-family:inherit;outline:none}
+.toolbar input:focus{border-color:rgba(99,102,241,.5)}
+.toolbar select{background:var(--surface);border:var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:inherit;font-size:14px;outline:none;cursor:pointer}
+.toolbar .count{color:var(--muted);font-size:13px;white-space:nowrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;padding:48px 0 80px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden;
+  transition:transform .3s cubic-bezier(.4,0,.2,1),border-color .3s,box-shadow .3s;opacity:0;transform:translateY(20px)}
+.card.show{opacity:1;transform:translateY(0)}
+.card:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.16);box-shadow:0 24px 60px -20px rgba(0,0,0,.7)}
+.thumb{position:relative;height:320px;overflow:hidden;background:var(--surface2);border-bottom:1px solid var(--border)}
+.thumb-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;
+  display:block;opacity:0;transition:opacity .4s,transform .5s cubic-bezier(.4,0,.2,1)}
+.thumb-img.loaded{opacity:1}
+.thumb:hover .thumb-img{transform:scale(1.04)}
+.thumb-veil{position:absolute;inset:0;background:linear-gradient(180deg,transparent 72%,rgba(10,10,10,.55));pointer-events:none}
+.thumb .theme-tag,.thumb .layout-tag{position:absolute;font-size:10px;padding:4px 9px;border-radius:999px;
+  background:rgba(0,0,0,.5);color:#fff;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);
+  letter-spacing:.04em;text-transform:uppercase;z-index:2}
+.thumb .theme-tag{top:12px;left:12px}
+.thumb .layout-tag{top:12px;right:12px}
+.card-body{padding:22px}
+.card-body h3{font-family:'Instrument Serif',serif;font-size:28px;font-weight:400;letter-spacing:-.01em}
+.card-body .niche{color:var(--muted);font-size:14px;margin-top:4px}
+.swatch{display:flex;align-items:center;gap:8px;margin:16px 0 18px}
+.swatch span{width:18px;height:18px;border-radius:6px;border:1px solid var(--border)}
+.swatch code{font-size:11px;color:var(--muted);font-family:ui-monospace,monospace}
+.actions{display:flex;gap:10px}
+.btn-view,.btn-copy{flex:1;text-align:center;font-size:13px;padding:11px 12px;border-radius:10px;cursor:pointer;
+  font-family:inherit;border:1px solid var(--border);transition:all .25s;text-decoration:none}
+.btn-view{background:rgba(255,255,255,.04);color:var(--text)}
+.btn-view:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)}
+.btn-copy{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;font-weight:500}
+.btn-copy:hover{filter:brightness(1.12)}
+.btn-copy.copied{background:#10B981}
+footer{border-top:1px solid var(--border);padding:48px 0;text-align:center;color:var(--muted);font-size:14px}
+footer a{color:var(--accent);text-decoration:none}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(120px);
+  background:var(--surface2);border:1px solid var(--border);padding:14px 22px;border-radius:12px;
+  color:var(--text);font-size:14px;z-index:100;transition:transform .35s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 20px 50px -10px rgba(0,0,0,.6)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+@media(max-width:600px){header{padding:80px 0 40px}.grid{gap:16px}}
+</style>
+</head>
+<body>
+<div class="mesh"></div>
+<header>
+  <div class="wrap">
+    <span class="eyebrow">CREAO Premium Pack</span>
+    <h1>51 Landing Pages.<br><span class="grad">One prompt framework.</span></h1>
+    <p class="sub">Every niche. Every style. Dark and light. Each page is production-ready, fully responsive, and ships with the exact prompt that built it &mdash; copy, edit, and make it yours.</p>
+    <div class="stats">
+      <div><b>51</b><span>Niches</span></div>
+      <div><b>2</b><span>Themes</span></div>
+      <div><b>3</b><span>Layouts</span></div>
+      <div><b>100%</b><span>Free to copy</span></div>
+    </div>
+  </div>
+</header>
+<div class="toolbar"><div class="wrap inner">
+  <input id="search" type="text" placeholder="Search niche or product (e.g. fitness, CRM, dark)&hellip;">
+  <select id="themeFilter"><option value="">All themes</option><option value="dark">Dark</option><option value="light">Light</option></select>
+  <span class="count" id="count">51 pages</span>
+</div></div>
+<main class="wrap"><div class="grid" id="grid">
+<article class="card" data-niche="ai writing" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="lumen-ai-writer-thumb.jpg" alt="Lumen landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">asymmetric</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Lumen</h3>
+    <p class="niche">AI Writing</p>
+    <div class="swatch"><span style="background:#6366F1"></span><span style="background:#A855F7"></span><code>#6366F1 &rarr; #A855F7</code></div>
+    <div class="actions">
+      <a class="btn-view" href="lumen-ai-writer-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="lumen-ai-writer">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="fitness" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="forge-fitness-thumb.jpg" alt="Forge landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">asymmetric</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Forge</h3>
+    <p class="niche">Fitness</p>
+    <div class="swatch"><span style="background:#FF4D2E"></span><span style="background:#FF8A3D"></span><code>#FF4D2E &rarr; #FF8A3D</code></div>
+    <div class="actions">
+      <a class="btn-view" href="forge-fitness-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="forge-fitness">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="personal finance" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="pivot-finance-thumb.jpg" alt="Pivot landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">split</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Pivot</h3>
+    <p class="niche">Personal Finance</p>
+    <div class="swatch"><span style="background:#10B981"></span><span style="background:#34D399"></span><code>#10B981 &rarr; #34D399</code></div>
+    <div class="actions">
+      <a class="btn-view" href="pivot-finance-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="pivot-finance">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="productivity" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="cadence-tasks-thumb.jpg" alt="Cadence landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">centered</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Cadence</h3>
+    <p class="niche">Productivity</p>
+    <div class="swatch"><span style="background:#F59E0B"></span><span style="background:#F43F5E"></span><code>#F59E0B &rarr; #F43F5E</code></div>
+    <div class="actions">
+      <a class="btn-view" href="cadence-tasks-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="cadence-tasks">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="course platform" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="studio-courses-thumb.jpg" alt="Studio landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">asymmetric</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Studio</h3>
+    <p class="niche">Course Platform</p>
+    <div class="swatch"><span style="background:#8B5CF6"></span><span style="background:#EC4899"></span><code>#8B5CF6 &rarr; #EC4899</code></div>
+    <div class="actions">
+      <a class="btn-view" href="studio-courses-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="studio-courses">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="crm" data-theme="light">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="loop-crm-thumb.jpg" alt="Loop landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Light</span>
+    <span class="layout-tag">split</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Loop</h3>
+    <p class="niche">CRM</p>
+    <div class="swatch"><span style="background:#06B6D4"></span><span style="background:#3B82F6"></span><code>#06B6D4 &rarr; #3B82F6</code></div>
+    <div class="actions">
+      <a class="btn-view" href="loop-crm-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="loop-crm">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="newsletter" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="quill-newsletter-thumb.jpg" alt="Quill landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">centered</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Quill</h3>
+    <p class="niche">Newsletter</p>
+    <div class="swatch"><span style="background:#0EA5E9"></span><span style="background:#22D3EE"></span><code>#0EA5E9 &rarr; #22D3EE</code></div>
+    <div class="actions">
+      <a class="btn-view" href="quill-newsletter-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="quill-newsletter">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="e-commerce" data-theme="light">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="shopme-store-thumb.jpg" alt="ShopMe landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Light</span>
+    <span class="layout-tag">asymmetric</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>ShopMe</h3>
+    <p class="niche">E-commerce</p>
+    <div class="swatch"><span style="background:#111827"></span><span style="background:#6366F1"></span><code>#111827 &rarr; #6366F1</code></div>
+    <div class="actions">
+      <a class="btn-view" href="shopme-store-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="shopme-store">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="meal planning" data-theme="light">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="plated-meals-thumb.jpg" alt="Plated landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Light</span>
+    <span class="layout-tag">split</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Plated</h3>
+    <p class="niche">Meal Planning</p>
+    <div class="swatch"><span style="background:#16A34A"></span><span style="background:#84CC16"></span><code>#16A34A &rarr; #84CC16</code></div>
+    <div class="actions">
+      <a class="btn-view" href="plated-meals-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="plated-meals">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="meditation" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="bloom-meditation-thumb.jpg" alt="Bloom landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">centered</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Bloom</h3>
+    <p class="niche">Meditation</p>
+    <div class="swatch"><span style="background:#7C3AED"></span><span style="background:#C084FC"></span><code>#7C3AED &rarr; #C084FC</code></div>
+    <div class="actions">
+      <a class="btn-view" href="bloom-meditation-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="bloom-meditation">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="habit tracker" data-theme="light">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="streak-habits-thumb.jpg" alt="Streak landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Light</span>
+    <span class="layout-tag">centered</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Streak</h3>
+    <p class="niche">Habit Tracker</p>
+    <div class="swatch"><span style="background:#E11D48"></span><span style="background:#F59E0B"></span><code>#E11D48 &rarr; #F59E0B</code></div>
+    <div class="actions">
+      <a class="btn-view" href="streak-habits-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="streak-habits">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="ai video editing" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="cutaway-video-thumb.jpg" alt="Cutaway landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">split</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Cutaway</h3>
+    <p class="niche">AI Video Editing</p>
+    <div class="swatch"><span style="background:#EF4444"></span><span style="background:#F97316"></span><code>#EF4444 &rarr; #F97316</code></div>
+    <div class="actions">
+      <a class="btn-view" href="cutaway-video-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="cutaway-video">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="podcast hosting" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="wavecast-podcast-thumb.jpg" alt="Wavecast landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">asymmetric</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Wavecast</h3>
+    <p class="niche">Podcast Hosting</p>
+    <div class="swatch"><span style="background:#0F766E"></span><span style="background:#14B8A6"></span><code>#0F766E &rarr; #14B8A6</code></div>
+    <div class="actions">
+      <a class="btn-view" href="wavecast-podcast-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="wavecast-podcast">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="social scheduler" data-theme="light">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="cadence-social-thumb.jpg" alt="Drift landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Light</span>
+    <span class="layout-tag">split</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Drift</h3>
+    <p class="niche">Social Scheduler</p>
+    <div class="swatch"><span style="background:#6366F1"></span><span style="background:#0EA5E9"></span><code>#6366F1 &rarr; #0EA5E9</code></div>
+    <div class="actions">
+      <a class="btn-view" href="cadence-social-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="cadence-social">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="email marketing" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="sendpost-email-thumb.jpg" alt="Sendpost landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">centered</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Sendpost</h3>
+    <p class="niche">Email Marketing</p>
+    <div class="swatch"><span style="background:#7C3AED"></span><span style="background:#6366F1"></span><code>#7C3AED &rarr; #6366F1</code></div>
+    <div class="actions">
+      <a class="btn-view" href="sendpost-email-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="sendpost-email">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="analytics" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="pulse-analytics-thumb.jpg" alt="Pulse landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">asymmetric</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Pulse</h3>
+    <p class="niche">Analytics</p>
+    <div class="swatch"><span style="background:#10B981"></span><span style="background:#6366F1"></span><code>#10B981 &rarr; #6366F1</code></div>
+    <div class="actions">
+      <a class="btn-view" href="pulse-analytics-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="pulse-analytics">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="hr onboarding" data-theme="light">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="onboard-hr-thumb.jpg" alt="Onboard landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Light</span>
+    <span class="layout-tag">split</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Onboard</h3>
+    <p class="niche">HR Onboarding</p>
+    <div class="swatch"><span style="background:#0EA5E9"></span><span style="background:#6366F1"></span><code>#0EA5E9 &rarr; #6366F1</code></div>
+    <div class="actions">
+      <a class="btn-view" href="onboard-hr-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="onboard-hr">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="project mgmt" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="helix-projects-thumb.jpg" alt="Helix landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">centered</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Helix</h3>
+    <p class="niche">Project Mgmt</p>
+    <div class="swatch"><span style="background:#6366F1"></span><span style="background:#A855F7"></span><code>#6366F1 &rarr; #A855F7</code></div>
+    <div class="actions">
+      <a class="btn-view" href="helix-projects-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="helix-projects">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="design tool" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="frame-design-thumb.jpg" alt="Frame landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">split</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Frame</h3>
+    <p class="niche">Design Tool</p>
+    <div class="swatch"><span style="background:#EC4899"></span><span style="background:#8B5CF6"></span><code>#EC4899 &rarr; #8B5CF6</code></div>
+    <div class="actions">
+      <a class="btn-view" href="frame-design-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="frame-design">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="notes app" data-theme="light">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="scribble-notes-thumb.jpg" alt="Scribble landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Light</span>
+    <span class="layout-tag">asymmetric</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Scribble</h3>
+    <p class="niche">Notes App</p>
+    <div class="swatch"><span style="background:#0F172A"></span><span style="background:#10B981"></span><code>#0F172A &rarr; #10B981</code></div>
+    <div class="actions">
+      <a class="btn-view" href="scribble-notes-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="scribble-notes">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="ai calendar" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="tempo-calendar-thumb.jpg" alt="Tempo landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">split</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Tempo</h3>
+    <p class="niche">AI Calendar</p>
+    <div class="swatch"><span style="background:#F43F5E"></span><span style="background:#F59E0B"></span><code>#F43F5E &rarr; #F59E0B</code></div>
+    <div class="actions">
+      <a class="btn-view" href="tempo-calendar-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="tempo-calendar">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="bookkeeping" data-theme="light">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="ledger-books-thumb.jpg" alt="Ledger landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Light</span>
+    <span class="layout-tag">asymmetric</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Ledger</h3>
+    <p class="niche">Bookkeeping</p>
+    <div class="swatch"><span style="background:#0F766E"></span><span style="background:#14B8A6"></span><code>#0F766E &rarr; #14B8A6</code></div>
+    <div class="actions">
+      <a class="btn-view" href="ledger-books-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="ledger-books">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="invoicing" data-theme="light">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="invoice-ez-thumb.jpg" alt="InvoiceEZ landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Light</span>
+    <span class="layout-tag">centered</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>InvoiceEZ</h3>
+    <p class="niche">Invoicing</p>
+    <div class="swatch"><span style="background:#4F46E5"></span><span style="background:#7C3AED"></span><code>#4F46E5 &rarr; #7C3AED</code></div>
+    <div class="actions">
+      <a class="btn-view" href="invoice-ez-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="invoice-ez">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="time tracking" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="ticktime-tracker-thumb.jpg" alt="TickTime landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">split</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>TickTime</h3>
+    <p class="niche">Time Tracking</p>
+    <div class="swatch"><span style="background:#0EA5E9"></span><span style="background:#6366F1"></span><code>#0EA5E9 &rarr; #6366F1</code></div>
+    <div class="actions">
+      <a class="btn-view" href="ticktime-tracker-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="ticktime-tracker">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="helpdesk" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="helpwave-support-thumb.jpg" alt="Helpwave landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">asymmetric</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Helpwave</h3>
+    <p class="niche">Helpdesk</p>
+    <div class="swatch"><span style="background:#10B981"></span><span style="background:#6366F1"></span><code>#10B981 &rarr; #6366F1</code></div>
+    <div class="actions">
+      <a class="btn-view" href="helpwave-support-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="helpwave-support">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="live chat" data-theme="light">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="chatbeam-live-thumb.jpg" alt="Chatbeam landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Light</span>
+    <span class="layout-tag">centered</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Chatbeam</h3>
+    <p class="niche">Live Chat</p>
+    <div class="swatch"><span style="background:#6366F1"></span><span style="background:#A855F7"></span><code>#6366F1 &rarr; #A855F7</code></div>
+    <div class="actions">
+      <a class="btn-view" href="chatbeam-live-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="chatbeam-live">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="knowledge base" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="docsbase-wiki-thumb.jpg" alt="Docsbase landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">asymmetric</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Docsbase</h3>
+    <p class="niche">Knowledge Base</p>
+    <div class="swatch"><span style="background:#0F172A"></span><span style="background:#6366F1"></span><code>#0F172A &rarr; #6366F1</code></div>
+    <div class="actions">
+      <a class="btn-view" href="docsbase-wiki-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="docsbase-wiki">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="api docs" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="specwiki-docs-thumb.jpg" alt="Specwiki landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">split</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Specwiki</h3>
+    <p class="niche">API Docs</p>
+    <div class="swatch"><span style="background:#0EA5E9"></span><span style="background:#22D3EE"></span><code>#0EA5E9 &rarr; #22D3EE</code></div>
+    <div class="actions">
+      <a class="btn-view" href="specwiki-docs-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="specwiki-docs">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="api monitoring" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="pulse-api-monitor-thumb.jpg" alt="Pulse API Monitor landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">centered</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Pulse API Monitor</h3>
+    <p class="niche">API Monitoring</p>
+    <div class="swatch"><span style="background:#10B981"></span><span style="background:#F43F5E"></span><code>#10B981 &rarr; #F43F5E</code></div>
+    <div class="actions">
+      <a class="btn-view" href="pulse-api-monitor-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="pulse-api-monitor">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="error tracking" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="sentrylite-errors-thumb.jpg" alt="Sentrylite landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">asymmetric</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Sentrylite</h3>
+    <p class="niche">Error Tracking</p>
+    <div class="swatch"><span style="background:#F43F5E"></span><span style="background:#F97316"></span><code>#F43F5E &rarr; #F97316</code></div>
+    <div class="actions">
+      <a class="btn-view" href="sentrylite-errors-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="sentrylite-errors">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="feature flags" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="flagflip-flags-thumb.jpg" alt="Flagflip landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">split</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Flagflip</h3>
+    <p class="niche">Feature Flags</p>
+    <div class="swatch"><span style="background:#6366F1"></span><span style="background:#10B981"></span><code>#6366F1 &rarr; #10B981</code></div>
+    <div class="actions">
+      <a class="btn-view" href="flagflip-flags-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="flagflip-flags">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="a/b testing" data-theme="light">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="splitlab-ab-thumb.jpg" alt="Splitlab landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Light</span>
+    <span class="layout-tag">centered</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Splitlab</h3>
+    <p class="niche">A/B Testing</p>
+    <div class="swatch"><span style="background:#7C3AED"></span><span style="background:#EC4899"></span><code>#7C3AED &rarr; #EC4899</code></div>
+    <div class="actions">
+      <a class="btn-view" href="splitlab-ab-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="splitlab-ab">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="user feedback" data-theme="light">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="voices-user-feedback-thumb.jpg" alt="Voices landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Light</span>
+    <span class="layout-tag">asymmetric</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Voices</h3>
+    <p class="niche">User Feedback</p>
+    <div class="swatch"><span style="background:#F59E0B"></span><span style="background:#F43F5E"></span><code>#F59E0B &rarr; #F43F5E</code></div>
+    <div class="actions">
+      <a class="btn-view" href="voices-user-feedback-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="voices-user-feedback">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="survey tool" data-theme="light">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="surveyform-thumb.jpg" alt="Surveyform landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Light</span>
+    <span class="layout-tag">split</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Surveyform</h3>
+    <p class="niche">Survey Tool</p>
+    <div class="swatch"><span style="background:#0EA5E9"></span><span style="background:#6366F1"></span><code>#0EA5E9 &rarr; #6366F1</code></div>
+    <div class="actions">
+      <a class="btn-view" href="surveyform-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="surveyform">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="form builder" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="formflow-thumb.jpg" alt="Formflow landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">centered</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Formflow</h3>
+    <p class="niche">Form Builder</p>
+    <div class="swatch"><span style="background:#6366F1"></span><span style="background:#A855F7"></span><code>#6366F1 &rarr; #A855F7</code></div>
+    <div class="actions">
+      <a class="btn-view" href="formflow-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="formflow">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="page builder" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="pagecraft-builder-thumb.jpg" alt="Pagecraft landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">asymmetric</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Pagecraft</h3>
+    <p class="niche">Page Builder</p>
+    <div class="swatch"><span style="background:#8B5CF6"></span><span style="background:#6366F1"></span><code>#8B5CF6 &rarr; #6366F1</code></div>
+    <div class="actions">
+      <a class="btn-view" href="pagecraft-builder-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="pagecraft-builder">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="website builder" data-theme="light">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="sitebolt-web-thumb.jpg" alt="Sitebolt landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Light</span>
+    <span class="layout-tag">split</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Sitebolt</h3>
+    <p class="niche">Website Builder</p>
+    <div class="swatch"><span style="background:#0F766E"></span><span style="background:#10B981"></span><code>#0F766E &rarr; #10B981</code></div>
+    <div class="actions">
+      <a class="btn-view" href="sitebolt-web-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="sitebolt-web">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="web hosting" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="nimbus-host-thumb.jpg" alt="Nimbus landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">centered</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Nimbus</h3>
+    <p class="niche">Web Hosting</p>
+    <div class="swatch"><span style="background:#6366F1"></span><span style="background:#0EA5E9"></span><code>#6366F1 &rarr; #0EA5E9</code></div>
+    <div class="actions">
+      <a class="btn-view" href="nimbus-host-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="nimbus-host">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="domain registrar" data-theme="light">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="domainia-domains-thumb.jpg" alt="Domainia landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Light</span>
+    <span class="layout-tag">centered</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Domainia</h3>
+    <p class="niche">Domain Registrar</p>
+    <div class="swatch"><span style="background:#0F172A"></span><span style="background:#10B981"></span><code>#0F172A &rarr; #10B981</code></div>
+    <div class="actions">
+      <a class="btn-view" href="domainia-domains-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="domainia-domains">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="vpn" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="shieldpass-vpn-thumb.jpg" alt="Shieldpass landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">asymmetric</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Shieldpass</h3>
+    <p class="niche">VPN</p>
+    <div class="swatch"><span style="background:#10B981"></span><span style="background:#6366F1"></span><code>#10B981 &rarr; #6366F1</code></div>
+    <div class="actions">
+      <a class="btn-view" href="shieldpass-vpn-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="shieldpass-vpn">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="password mgr" data-theme="light">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="keyvault-passwords-thumb.jpg" alt="Keyvault landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Light</span>
+    <span class="layout-tag">split</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Keyvault</h3>
+    <p class="niche">Password Mgr</p>
+    <div class="swatch"><span style="background:#0F172A"></span><span style="background:#6366F1"></span><code>#0F172A &rarr; #6366F1</code></div>
+    <div class="actions">
+      <a class="btn-view" href="keyvault-passwords-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="keyvault-passwords">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="cloud storage" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="cloudbin-storage-thumb.jpg" alt="Cloudbin landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">centered</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Cloudbin</h3>
+    <p class="niche">Cloud Storage</p>
+    <div class="swatch"><span style="background:#0EA5E9"></span><span style="background:#6366F1"></span><code>#0EA5E9 &rarr; #6366F1</code></div>
+    <div class="actions">
+      <a class="btn-view" href="cloudbin-storage-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="cloudbin-storage">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="file sharing" data-theme="light">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="sharebeam-files-thumb.jpg" alt="Sharebeam landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Light</span>
+    <span class="layout-tag">asymmetric</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Sharebeam</h3>
+    <p class="niche">File Sharing</p>
+    <div class="swatch"><span style="background:#6366F1"></span><span style="background:#A855F7"></span><code>#6366F1 &rarr; #A855F7</code></div>
+    <div class="actions">
+      <a class="btn-view" href="sharebeam-files-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="sharebeam-files">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="video hosting" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="reelhub-video-thumb.jpg" alt="Reelhub landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">split</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Reelhub</h3>
+    <p class="niche">Video Hosting</p>
+    <div class="swatch"><span style="background:#EF4444"></span><span style="background:#A855F7"></span><code>#EF4444 &rarr; #A855F7</code></div>
+    <div class="actions">
+      <a class="btn-view" href="reelhub-video-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="reelhub-video">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="image cdn" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="imageflow-cdn-thumb.jpg" alt="Imageflow landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">centered</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Imageflow</h3>
+    <p class="niche">Image CDN</p>
+    <div class="swatch"><span style="background:#10B981"></span><span style="background:#34D399"></span><code>#10B981 &rarr; #34D399</code></div>
+    <div class="actions">
+      <a class="btn-view" href="imageflow-cdn-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="imageflow-cdn">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="ai image gen" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="lumina-ai-image-thumb.jpg" alt="Lumina landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">asymmetric</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Lumina</h3>
+    <p class="niche">AI Image Gen</p>
+    <div class="swatch"><span style="background:#8B5CF6"></span><span style="background:#EC4899"></span><code>#8B5CF6 &rarr; #EC4899</code></div>
+    <div class="actions">
+      <a class="btn-view" href="lumina-ai-image-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="lumina-ai-image">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="chatbot builder" data-theme="light">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="chatforge-bots-thumb.jpg" alt="Chatforge landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Light</span>
+    <span class="layout-tag">split</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Chatforge</h3>
+    <p class="niche">Chatbot Builder</p>
+    <div class="swatch"><span style="background:#6366F1"></span><span style="background:#10B981"></span><code>#6366F1 &rarr; #10B981</code></div>
+    <div class="actions">
+      <a class="btn-view" href="chatforge-bots-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="chatforge-bots">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="ai meeting notes" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="memo-ai-meetings-thumb.jpg" alt="Memo landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">centered</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Memo</h3>
+    <p class="niche">AI Meeting Notes</p>
+    <div class="swatch"><span style="background:#7C3AED"></span><span style="background:#6366F1"></span><code>#7C3AED &rarr; #6366F1</code></div>
+    <div class="actions">
+      <a class="btn-view" href="memo-ai-meetings-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="memo-ai-meetings">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="automation" data-theme="light">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="flowstate-automation-thumb.jpg" alt="Flowstate landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Light</span>
+    <span class="layout-tag">asymmetric</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Flowstate</h3>
+    <p class="niche">Automation</p>
+    <div class="swatch"><span style="background:#F59E0B"></span><span style="background:#EF4444"></span><code>#F59E0B &rarr; #EF4444</code></div>
+    <div class="actions">
+      <a class="btn-view" href="flowstate-automation-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="flowstate-automation">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="billing" data-theme="dark">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="vaultpay-subscriptions-thumb.jpg" alt="Vaultpay landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Dark</span>
+    <span class="layout-tag">split</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Vaultpay</h3>
+    <p class="niche">Billing</p>
+    <div class="swatch"><span style="background:#10B981"></span><span style="background:#6366F1"></span><code>#10B981 &rarr; #6366F1</code></div>
+    <div class="actions">
+      <a class="btn-view" href="vaultpay-subscriptions-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="vaultpay-subscriptions">Copy prompt</button>
+    </div>
+  </div>
+</article>
+<article class="card" data-niche="portfolio" data-theme="light">
+  <div class="thumb">
+    <img class="thumb-img loaded" src="craft-portfolio-thumb.jpg" alt="Craft landing page preview" loading="lazy" decoding="async">
+    <span class="theme-tag">Light</span>
+    <span class="layout-tag">asymmetric</span>
+    <div class="thumb-veil"></div>
+  </div>
+  <div class="card-body">
+    <h3>Craft</h3>
+    <p class="niche">Portfolio</p>
+    <div class="swatch"><span style="background:#0F172A"></span><span style="background:#A855F7"></span><code>#0F172A &rarr; #A855F7</code></div>
+    <div class="actions">
+      <a class="btn-view" href="craft-portfolio-landing.html" target="_blank">View page &#8599;</a>
+      <button class="btn-copy" data-slug="craft-portfolio">Copy prompt</button>
+    </div>
+  </div>
+</article>
+</div></main>
+<footer><div class="wrap">
+  Built with <a href="https://agent.creao.ai" target="_blank">CREAO</a> &middot; Every page generated from one master prompt framework &middot; Copy, edit, deploy.
+</div></footer>
+<div class="toast" id="toast">Prompt copied to clipboard &#10022;</div>
+<script>
+const PROMPTS = [{"slug": "lumen-ai-writer", "prompt": "Research the top 5 premium SaaS landing pages in the AI writing space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Lumen, AI writing assistant turning rough notes into polished drafts.\n\nAudience: content creators and solo founders.\nHero headline: \"Write at the speed of thought.\"\nSubheadline: \"Lumen turns your messy notes into clean, on-brand drafts in seconds.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"Watch demo\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #6366F1 to #A855F7\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- asymmetric-hero layout\n\nSections:\n1. Sticky glass nav with \"Lumen\" wordmark + 3 nav links + primary CTA\n2. asymmetric-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Notion, Substack, Medium, Ghost, Hashnode, Beehiiv in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Drafts in seconds (custom inline SVG line icon, no emoji, no stock)\n   - On-brand voice (custom inline SVG line icon, no emoji, no stock)\n   - One-click rewrite (custom inline SVG line icon, no emoji, no stock)\n   - 70+ languages (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 12M words drafted | 4.9 star rating | 38k writers\n6. Testimonial card: \"The first tool that actually sounds like me. - Maya Chen, Newsletter Writer\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $18\n      - Team $49 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "forge-fitness", "prompt": "Research the top 5 premium SaaS landing pages in the Fitness space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Forge, 12-week adaptive strength coaching app.\n\nAudience: busy professionals who want structured training.\nHero headline: \"Stronger every week. Zero guesswork.\"\nSubheadline: \"Forge builds a plan that adapts to your body, your schedule, and your goals.\"\nPrimary CTA: \"Start your first week free\". Secondary CTA: \"See the plan\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #FF4D2E to #FF8A3D\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- asymmetric-hero layout\n\nSections:\n1. Sticky glass nav with \"Forge\" wordmark + 3 nav links + primary CTA\n2. asymmetric-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Whoop, Strava, Apple Fitness+, Nike, Peloton, Fitbod in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Adaptive 12-week plan (custom inline SVG line icon, no emoji, no stock)\n   - Progress tracking (custom inline SVG line icon, no emoji, no stock)\n   - Form coaching videos (custom inline SVG line icon, no emoji, no stock)\n   - Recovery insights (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 92% finish the 12 weeks | 1.2M workouts logged | 4.8 rating\n6. Testimonial card: \"I finally stopped guessing and started progressing. - Jordan Vega, Software Engineer\" with a generated SVG monogram avatar\n7. Pricing:       - Starter $0\n      - Pro $24\n      - Coach $79 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "pivot-finance", "prompt": "Research the top 5 premium SaaS landing pages in the Personal finance space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Pivot, app that auto-categorizes spending.\n\nAudience: young professionals tired of spreadsheets.\nHero headline: \"See your money clearly. For the first time.\"\nSubheadline: \"Pivot auto-categorizes every transaction and shows your real financial picture in one dashboard.\"\nPrimary CTA: \"Connect your bank\". Secondary CTA: \"How it works\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #10B981 to #34D399\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- split-hero layout\n\nSections:\n1. Sticky glass nav with \"Pivot\" wordmark + 3 nav links + primary CTA\n2. split-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Monzo, Revolut, YNAB, Copilot, Lunch Money, Rocket Money in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Auto-categorized spending (custom inline SVG line icon, no emoji, no stock)\n   - Real-time net worth (custom inline SVG line icon, no emoji, no stock)\n   - Savings goals (custom inline SVG line icon, no emoji, no stock)\n   - Privacy-first (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: $240M tracked | 31k users | 4.9 rating\n6. Testimonial card: \"I saved $3,200 in three months just by seeing where it went. - Priya Shah, Product Designer\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Plus $8\n      - Life $59/yr with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "cadence-tasks", "prompt": "Research the top 5 premium SaaS landing pages in the Productivity space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Cadence, task manager planning your day around energy.\n\nAudience: founders and knowledge workers.\nHero headline: \"Your day, planned around your energy.\"\nSubheadline: \"Cadence sequences your tasks by focus and priority so deep work actually happens.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"Tour the app\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #F59E0B to #F43F5E\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- centered-hero layout\n\nSections:\n1. Sticky glass nav with \"Cadence\" wordmark + 3 nav links + primary CTA\n2. centered-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Linear, Notion, Things, Todoist, Sunsama, Akiflow in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Energy-aware scheduling (custom inline SVG line icon, no emoji, no stock)\n   - Focus blocks (custom inline SVG line icon, no emoji, no stock)\n   - Keyboard-first (custom inline SVG line icon, no emoji, no stock)\n   - Calendar sync (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 2.1M tasks shipped | 47k users | 4.8 rating\n6. Testimonial card: \"Deep work finally fits into my day. - Tom Becker, Founder\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $12\n      - Team $32 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "studio-courses", "prompt": "Research the top 5 premium SaaS landing pages in the Course platform space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Studio, creators launch paid courses in an afternoon.\n\nAudience: creators and educators with an audience.\nHero headline: \"Launch your course this afternoon.\"\nSubheadline: \"Studio handles payments, student access, and video hosting so you can focus on teaching.\"\nPrimary CTA: \"Start building free\". Secondary CTA: \"See a sample course\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #8B5CF6 to #EC4899\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- asymmetric-hero layout\n\nSections:\n1. Sticky glass nav with \"Studio\" wordmark + 3 nav links + primary CTA\n2. asymmetric-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Teachable, Kajabi, Podia, Thinkific, Gumroad, Skool in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Built-in payments (custom inline SVG line icon, no emoji, no stock)\n   - Student dashboards (custom inline SVG line icon, no emoji, no stock)\n   - Video hosting (custom inline SVG line icon, no emoji, no stock)\n   - Drip lessons (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 9,400 creators | $31M paid out | 4.9 rating\n6. Testimonial card: \"I launched my course in one weekend. - Dana Ruiz, Educator\" with a generated SVG monogram avatar\n7. Pricing:       - Free to start\n      - Creator $39\n      - Studio $99 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "loop-crm", "prompt": "Research the top 5 premium SaaS landing pages in the CRM space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Loop, lightweight CRM for freelancers.\n\nAudience: solo freelancers and small studios.\nHero headline: \"Close clients. Not tabs.\"\nSubheadline: \"Loop brings your leads, proposals, and payments into one calm workflow built for freelancers.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See the workflow\".\n\nDesign system:\n- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards\n- Accent gradient from #06B6D4 to #3B82F6\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- split-hero layout\n\nSections:\n1. Sticky glass nav with \"Loop\" wordmark + 3 nav links + primary CTA\n2. split-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: HubSpot, Pipedrive, Folk, Attio, Copper, Notion in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Lead pipeline (custom inline SVG line icon, no emoji, no stock)\n   - Proposals (custom inline SVG line icon, no emoji, no stock)\n   - Invoicing (custom inline SVG line icon, no emoji, no stock)\n   - Client portal (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 18k freelancers | $52M invoiced | 4.8 rating\n6. Testimonial card: \"Loop replaced four tools for me. - Sam Okafor, Designer\" with a generated SVG monogram avatar\n7. Pricing:       - Solo $0\n      - Pro $14\n      - Studio $34 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "quill-newsletter", "prompt": "Research the top 5 premium SaaS landing pages in the Newsletter space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Quill, newsletter growth and monetization platform.\n\nAudience: writers building paid newsletters.\nHero headline: \"Grow a newsletter that pays.\"\nSubheadline: \"Quill gives you the editor, audience tools, and monetization to turn readers into subscribers.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See examples\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #0EA5E9 to #22D3EE\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- centered-hero layout\n\nSections:\n1. Sticky glass nav with \"Quill\" wordmark + 3 nav links + primary CTA\n2. centered-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Substack, Beehiiv, ConvertKit, Ghost, MailerLite, Kit in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Drag-drop editor (custom inline SVG line icon, no emoji, no stock)\n   - Segmentation (custom inline SVG line icon, no emoji, no stock)\n   - Paid tiers (custom inline SVG line icon, no emoji, no stock)\n   - Referral program (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 4,200 newsletters | 61M emails sent | 4.7 rating\n6. Testimonial card: \"My list doubled in 90 days. - Lena Park, Writer\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Growth $25\n      - Scale $50 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "shopme-store", "prompt": "Research the top 5 premium SaaS landing pages in the E-commerce space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for ShopMe, store builder for creators.\n\nAudience: creators selling physical products.\nHero headline: \"Launch your store in an afternoon.\"\nSubheadline: \"ShopMe gives you a storefront, payments, and shipping tools with no code and no fees on your first 100 orders.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See a store\".\n\nDesign system:\n- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards\n- Accent gradient from #111827 to #6366F1\n- Body font: Inter (Google Fonts). Headline font: Satoshi for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- asymmetric-hero layout\n\nSections:\n1. Sticky glass nav with \"ShopMe\" wordmark + 3 nav links + primary CTA\n2. asymmetric-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Shopify, BigCartel, Gumroad, Stan, Lemon Squeezy, Payhip in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - No-code storefront (custom inline SVG line icon, no emoji, no stock)\n   - Instant payouts (custom inline SVG line icon, no emoji, no stock)\n   - Shipping labels (custom inline SVG line icon, no emoji, no stock)\n   - Inventory sync (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 14k stores | $28M sold | 4.8 rating\n6. Testimonial card: \"I made my first sale the same day. - Marcus Reed, Maker\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Standard $29\n      - Pro $79 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "plated-meals", "prompt": "Research the top 5 premium SaaS landing pages in the Meal planning space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Plated, weekly meal plans and grocery sync.\n\nAudience: busy families and home cooks.\nHero headline: \"Eat well without the mental load.\"\nSubheadline: \"Plated plans your week of meals and syncs groceries to your store in one click.\"\nPrimary CTA: \"Start your free week\". Secondary CTA: \"See the menu\".\n\nDesign system:\n- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards\n- Accent gradient from #16A34A to #84CC16\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- split-hero layout\n\nSections:\n1. Sticky glass nav with \"Plated\" wordmark + 3 nav links + primary CTA\n2. split-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: HelloFresh, Paprika, Yummly, Mealime, Eat This Much, Whisk in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - 7-day meal plans (custom inline SVG line icon, no emoji, no stock)\n   - Auto grocery lists (custom inline SVG line icon, no emoji, no stock)\n   - Diet filters (custom inline SVG line icon, no emoji, no stock)\n   - Macro tracking (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 320k meals planned | 41k households | 4.7 rating\n6. Testimonial card: \"Dinner stopped being a daily crisis. - The Alvarez Family\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Plus $9\n      - Family $14 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "bloom-meditation", "prompt": "Research the top 5 premium SaaS landing pages in the Meditation space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Bloom, guided meditation and sleep stories.\n\nAudience: stressed professionals seeking calm.\nHero headline: \"A calmer mind, ten minutes a day.\"\nSubheadline: \"Bloom delivers daily guided meditations, sleep stories, and breathwork built around your stress patterns.\"\nPrimary CTA: \"Try Bloom free\". Secondary CTA: \"Hear a sample\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #7C3AED to #C084FC\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- centered-hero layout\n\nSections:\n1. Sticky glass nav with \"Bloom\" wordmark + 3 nav links + primary CTA\n2. centered-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Calm, Headspace, Insight Timer, Waking Up, Balance, Simple Habit in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Daily 10-min sessions (custom inline SVG line icon, no emoji, no stock)\n   - Sleep stories (custom inline SVG line icon, no emoji, no stock)\n   - Breathwork (custom inline SVG line icon, no emoji, no stock)\n   - Stress tracking (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 1.8M sessions/week | 220k members | 4.9 rating\n6. Testimonial card: \"I sleep better than I have in years. - Aisha Bello, Nurse\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Plus $12\n      - Yearly $59 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "streak-habits", "prompt": "Research the top 5 premium SaaS landing pages in the Habit tracker space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Streak, habit tracker with gentle accountability.\n\nAudience: people building better routines.\nHero headline: \"Small habits, big change.\"\nSubheadline: \"Streak helps you build streaks, set reminders, and see your progress without guilt or shame.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See how it works\".\n\nDesign system:\n- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards\n- Accent gradient from #E11D48 to #F59E0B\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- centered-hero layout\n\nSections:\n1. Sticky glass nav with \"Streak\" wordmark + 3 nav links + primary CTA\n2. centered-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Streaks, Habitica, Atomic, Way of Life, Habitify, Everyday in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Streaks (custom inline SVG line icon, no emoji, no stock)\n   - Smart reminders (custom inline SVG line icon, no emoji, no stock)\n   - Mood notes (custom inline SVG line icon, no emoji, no stock)\n   - Widgets (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 6.1M habits tracked | 180k users | 4.8 rating\n6. Testimonial card: \"100 days strong. - Felipe Gomez, Teacher\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $5/mo\n      - Life $48 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "cutaway-video", "prompt": "Research the top 5 premium SaaS landing pages in the AI video editing space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Cutaway, AI video editor for short-form creators.\n\nAudience: short-form video creators.\nHero headline: \"Edit faster. Post more.\"\nSubheadline: \"Cutaway trims, captions, and restyles your videos automatically so you can post 3x more.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"Watch a demo\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #EF4444 to #F97316\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- split-hero layout\n\nSections:\n1. Sticky glass nav with \"Cutaway\" wordmark + 3 nav links + primary CTA\n2. split-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: CapCut, Descript, Veed, Opus, Premiere, Final Cut in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Auto captions (custom inline SVG line icon, no emoji, no stock)\n   - Smart trim (custom inline SVG line icon, no emoji, no stock)\n   - B-roll suggestions (custom inline SVG line icon, no emoji, no stock)\n   - Multi-platform export (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 9M clips edited | 52k creators | 4.7 rating\n6. Testimonial card: \"It cut my edit time from 2 hours to 12 minutes. - Tara Lin, YouTuber\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Creator $19\n      - Pro $49 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "wavecast-podcast", "prompt": "Research the top 5 premium SaaS landing pages in the Podcast hosting space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Wavecast, podcast hosting and distribution.\n\nAudience: podcasters growing their show.\nHero headline: \"Host your show. Grow your audience.\"\nSubheadline: \"Wavecast gives you unlimited hosting, one-click distribution, and analytics that actually help you grow.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See a demo\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #0F766E to #14B8A6\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- asymmetric-hero layout\n\nSections:\n1. Sticky glass nav with \"Wavecast\" wordmark + 3 nav links + primary CTA\n2. asymmetric-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Buzzsprout, Transistor, Podbean, Spotify, Anchor, RedCircle in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Unlimited hosting (custom inline SVG line icon, no emoji, no stock)\n   - One-click distribution (custom inline SVG line icon, no emoji, no stock)\n   - Dynamic ads (custom inline SVG line icon, no emoji, no stock)\n   - Advanced analytics (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 8,400 shows | 31M downloads | 4.8 rating\n6. Testimonial card: \"I moved my show and never looked back. - Derek Cho, Podcaster\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Growth $19\n      - Pro $49 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "cadence-social", "prompt": "Research the top 5 premium SaaS landing pages in the Social media scheduler space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Drift, social media scheduler for solo creators.\n\nAudience: solo creators managing multiple platforms.\nHero headline: \"Post everywhere. From one place.\"\nSubheadline: \"Drift schedules, recycles, and analyzes your posts across X, LinkedIn, Instagram, and TikTok from one calm dashboard.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See it work\".\n\nDesign system:\n- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards\n- Accent gradient from #6366F1 to #0EA5E9\n- Body font: Inter (Google Fonts). Headline font: Satoshi for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- split-hero layout\n\nSections:\n1. Sticky glass nav with \"Drift\" wordmark + 3 nav links + primary CTA\n2. split-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Buffer, Later, Publer, Hootsuite, Sprout, Metricool in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Cross-posting (custom inline SVG line icon, no emoji, no stock)\n   - Recycle evergreen (custom inline SVG line icon, no emoji, no stock)\n   - Best-time AI (custom inline SVG line icon, no emoji, no stock)\n   - Analytics (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 3.2M posts scheduled | 48k creators | 4.8 rating\n6. Testimonial card: \"Drift replaced my whole social stack. - Nora Fields, Creator\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $18\n      - Team $39 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "sendpost-email", "prompt": "Research the top 5 premium SaaS landing pages in the Email marketing space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Sendpost, email marketing for small teams.\n\nAudience: small teams doing lifecycle email.\nHero headline: \"Email that actually converts.\"\nSubheadline: \"Sendpost gives you visual automation, segmentation, and deliverability tools without the enterprise price.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See a demo\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #7C3AED to #6366F1\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- centered-hero layout\n\nSections:\n1. Sticky glass nav with \"Sendpost\" wordmark + 3 nav links + primary CTA\n2. centered-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Mailchimp, Klaviyo, Customer.io, Loops, Resend, Postmark in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Visual flows (custom inline SVG line icon, no emoji, no stock)\n   - Segmentation (custom inline SVG line icon, no emoji, no stock)\n   - A/B testing (custom inline SVG line icon, no emoji, no stock)\n   - Deliverability suite (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 1.1B emails sent | 9k teams | 4.7 rating\n6. Testimonial card: \"Our open rates jumped 40%. - Ian Cole, Growth Lead\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Growth $29\n      - Scale $79 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "pulse-analytics", "prompt": "Research the top 5 premium SaaS landing pages in the Analytics space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Pulse, privacy-first product analytics.\n\nAudience: product teams who ship fast.\nHero headline: \"See what users actually do.\"\nSubheadline: \"Pulse gives you event tracking, funnels, and retention without cookies, sampling, or creepy tracking.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See the dashboard\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #10B981 to #6366F1\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- asymmetric-hero layout\n\nSections:\n1. Sticky glass nav with \"Pulse\" wordmark + 3 nav links + primary CTA\n2. asymmetric-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: PostHog, Mixpanel, Amplitude, Plausible, Fathom, Heap in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Cookieless tracking (custom inline SVG line icon, no emoji, no stock)\n   - Funnels (custom inline SVG line icon, no emoji, no stock)\n   - Retention (custom inline SVG line icon, no emoji, no stock)\n   - Feature flags (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 2.6B events/month | 14k teams | 4.9 rating\n6. Testimonial card: \"Finally, analytics I trust. - Mei Tan, PM\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $29\n      - Team $99 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "onboard-hr", "prompt": "Research the top 5 premium SaaS landing pages in the HR onboarding space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Onboard, onboarding software for remote teams.\n\nAudience: people ops teams at remote companies.\nHero headline: \"First days that actually work.\"\nSubheadline: \"Onboard automates paperwork, IT setup, and team intros so new hires feel ready on day one.\"\nPrimary CTA: \"Book a demo\". Secondary CTA: \"See a tour\".\n\nDesign system:\n- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards\n- Accent gradient from #0EA5E9 to #6366F1\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- split-hero layout\n\nSections:\n1. Sticky glass nav with \"Onboard\" wordmark + 3 nav links + primary CTA\n2. split-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: BambooHR, Rippling, Gusto, Deel, Zenefits, Workday in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Paperwork automation (custom inline SVG line icon, no emoji, no stock)\n   - IT provisioning (custom inline SVG line icon, no emoji, no stock)\n   - Buddy matching (custom inline SVG line icon, no emoji, no stock)\n   - Checklists (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 180k onboarded | 1,900 companies | 4.8 rating\n6. Testimonial card: \"Our day-one no-shows dropped to zero. - Rachel Ng, People Ops\" with a generated SVG monogram avatar\n7. Pricing:       - Starter $6\n      - Growth $12\n      - Enterprise custom with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "helix-projects", "prompt": "Research the top 5 premium SaaS landing pages in the Project management space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Helix, project management for product teams.\n\nAudience: product and eng teams shipping together.\nHero headline: \"Ship work that matters.\"\nSubheadline: \"Helix gives you sprints, roadmaps, and docs in one fast workspace built for product teams.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See a project\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #6366F1 to #A855F7\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- centered-hero layout\n\nSections:\n1. Sticky glass nav with \"Helix\" wordmark + 3 nav links + primary CTA\n2. centered-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Linear, Asana, ClickUp, Jira, Notion, Monday in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Sprints (custom inline SVG line icon, no emoji, no stock)\n   - Roadmaps (custom inline SVG line icon, no emoji, no stock)\n   - Docs (custom inline SVG line icon, no emoji, no stock)\n   - Burndown (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 4.1M tasks shipped | 22k teams | 4.8 rating\n6. Testimonial card: \"Helix is the first PM tool our engineers actually like. - Vic Tran, Eng Manager\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Plus $14\n      - Pro $24 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "frame-design", "prompt": "Research the top 5 premium SaaS landing pages in the Design tool space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Frame, collaborative design tool for web.\n\nAudience: designers and developers building UI.\nHero headline: \"Design and ship, together.\"\nSubheadline: \"Frame gives you a canvas, components, and code export so design and dev finally speak the same language.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See the canvas\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #EC4899 to #8B5CF6\n- Body font: Inter (Google Fonts). Headline font: Satoshi for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- split-hero layout\n\nSections:\n1. Sticky glass nav with \"Frame\" wordmark + 3 nav links + primary CTA\n2. split-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Figma, Sketch, Framer, Penpot, Penpie, Lunacy in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Components (custom inline SVG line icon, no emoji, no stock)\n   - Code export (custom inline SVG line icon, no emoji, no stock)\n   - Real-time collab (custom inline SVG line icon, no emoji, no stock)\n   - Prototyping (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 340k designers | 19k teams | 4.9 rating\n6. Testimonial card: \"We stopped handoff arguments for good. - Sasha Kim, Design Lead\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $16\n      - Org $45 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "scribble-notes", "prompt": "Research the top 5 premium SaaS landing pages in the Notes app space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Scribble, a calm notes app for thinkers.\n\nAudience: writers, researchers, and students.\nHero headline: \"Notes that actually think with you.\"\nSubheadline: \"Scribble links your ideas, surfaces connections, and keeps your second brain calm and fast.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See a note\".\n\nDesign system:\n- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards\n- Accent gradient from #0F172A to #10B981\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- asymmetric-hero layout\n\nSections:\n1. Sticky glass nav with \"Scribble\" wordmark + 3 nav links + primary CTA\n2. asymmetric-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Obsidian, Notion, Bear, Roam, Reflect, Capacities in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Bidirectional links (custom inline SVG line icon, no emoji, no stock)\n   - Daily notes (custom inline SVG line icon, no emoji, no stock)\n   - Full-text search (custom inline SVG line icon, no emoji, no stock)\n   - Local-first (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 2.1M notes | 74k users | 4.8 rating\n6. Testimonial card: \"My second brain finally clicked. - Omar Said, Researcher\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $8\n      - Life $80 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "tempo-calendar", "prompt": "Research the top 5 premium SaaS landing pages in the Calendar space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Tempo, AI calendar that protects your time.\n\nAudience: professionals drowning in meetings.\nHero headline: \"Own your calendar again.\"\nSubheadline: \"Tempo auto-blocks focus time, declines low-priority meetings, and gives you a clean daily plan.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See it plan\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #F43F5E to #F59E0B\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- split-hero layout\n\nSections:\n1. Sticky glass nav with \"Tempo\" wordmark + 3 nav links + primary CTA\n2. split-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Clockwise, Reclaim, Motion, Cal, Cron, Vimcal in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Auto focus blocks (custom inline SVG line icon, no emoji, no stock)\n   - Smart decline (custom inline SVG line icon, no emoji, no stock)\n   - Daily plan (custom inline SVG line icon, no emoji, no stock)\n   - Time analytics (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 1.4M hours saved | 38k users | 4.9 rating\n6. Testimonial card: \"I got my mornings back. - Hannah Lee, VP Engineering\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $14\n      - Team $24 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "ledger-books", "prompt": "Research the top 5 premium SaaS landing pages in the Bookkeeping space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Ledger, bookkeeping for small businesses.\n\nAudience: small business owners doing their own books.\nHero headline: \"Bookkeeping without the dread.\"\nSubheadline: \"Ledger auto-imports transactions, categorizes them, and gives you clean reports ready for tax season.\"\nPrimary CTA: \"Start free trial\". Secondary CTA: \"See a report\".\n\nDesign system:\n- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards\n- Accent gradient from #0F766E to #14B8A6\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- asymmetric-hero layout\n\nSections:\n1. Sticky glass nav with \"Ledger\" wordmark + 3 nav links + primary CTA\n2. asymmetric-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: QuickBooks, Xero, Wave, Bench, Pilot, ZipBooks in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Auto-import (custom inline SVG line icon, no emoji, no stock)\n   - Categorization (custom inline SVG line icon, no emoji, no stock)\n   - P&L reports (custom inline SVG line icon, no emoji, no stock)\n   - Tax prep (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 62k businesses | 4.8 rating | 4.7 rating\n6. Testimonial card: \"I closed my books in an afternoon. - Greg Powell, Owner\" with a generated SVG monogram avatar\n7. Pricing:       - Solo $19\n      - Pro $49\n      - Business $99 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "invoice-ez", "prompt": "Research the top 5 premium SaaS landing pages in the Invoicing space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for InvoiceEZ, invoicing for freelancers.\n\nAudience: freelancers and contractors.\nHero headline: \"Get paid. Faster.\"\nSubheadline: \"InvoiceEZ sends beautiful invoices, chases late payments, and accepts card and bank transfers.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See an invoice\".\n\nDesign system:\n- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards\n- Accent gradient from #4F46E5 to #7C3AED\n- Body font: Inter (Google Fonts). Headline font: Satoshi for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- centered-hero layout\n\nSections:\n1. Sticky glass nav with \"InvoiceEZ\" wordmark + 3 nav links + primary CTA\n2. centered-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: FreshBooks, Bonsai, Wave, Stripe, QuickBooks, Zip in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Invoices (custom inline SVG line icon, no emoji, no stock)\n   - Auto-reminders (custom inline SVG line icon, no emoji, no stock)\n   - Online payments (custom inline SVG line icon, no emoji, no stock)\n   - Expense tracking (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 190k freelancers | $640M paid | 4.8 rating\n6. Testimonial card: \"My late payments almost disappeared. - Camille Dubois, Designer\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $12\n      - Team $29 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "ticktime-tracker", "prompt": "Research the top 5 premium SaaS landing pages in the Time tracking space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for TickTime, time tracking for consultants.\n\nAudience: consultants and agencies billing by the hour.\nHero headline: \"Track time. Bill every minute.\"\nSubheadline: \"TickTime tracks time across projects, generates timesheets, and turns them into invoices in one click.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See it track\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #0EA5E9 to #6366F1\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- split-hero layout\n\nSections:\n1. Sticky glass nav with \"TickTime\" wordmark + 3 nav links + primary CTA\n2. split-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Toggl, Harvest, Clockify, Timely, Hubstaff, Everhour in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - One-click timers (custom inline SVG line icon, no emoji, no stock)\n   - Project budgets (custom inline SVG line icon, no emoji, no stock)\n   - Timesheets (custom inline SVG line icon, no emoji, no stock)\n   - Invoicing (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 41k teams | $120M billed | 4.7 rating\n6. Testimonial card: \"I stopped losing billable hours. - Priya Anand, Consultant\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $10\n      - Team $20 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "helpwave-support", "prompt": "Research the top 5 premium SaaS landing pages in the Helpdesk space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Helpwave, customer support helpdesk for SaaS.\n\nAudience: support teams at SaaS companies.\nHero headline: \"Support that feels fast.\"\nSubheadline: \"Helpwave unifies email, chat, and social inboxes with AI replies and a shared team workspace.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See the inbox\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #10B981 to #6366F1\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- asymmetric-hero layout\n\nSections:\n1. Sticky glass nav with \"Helpwave\" wordmark + 3 nav links + primary CTA\n2. asymmetric-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Zendesk, Intercom, Help Scout, Crisp, Front, Groove in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Shared inbox (custom inline SVG line icon, no emoji, no stock)\n   - AI replies (custom inline SVG line icon, no emoji, no stock)\n   - Macros (custom inline SVG line icon, no emoji, no stock)\n   - CSAT tracking (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 3.1M tickets solved | 8k teams | 4.8 rating\n6. Testimonial card: \"Our first response time halved. - Lucas Meyer, Support Lead\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Growth $29\n      - Scale $79 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "chatbeam-live", "prompt": "Research the top 5 premium SaaS landing pages in the Live chat space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Chatbeam, live chat with AI fallback.\n\nAudience: SaaS teams adding chat to their site.\nHero headline: \"Chat with every visitor.\"\nSubheadline: \"Chatbeam routes visitors to your team or an AI assistant that answers instantly, 24/7.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See it chat\".\n\nDesign system:\n- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards\n- Accent gradient from #6366F1 to #A855F7\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- centered-hero layout\n\nSections:\n1. Sticky glass nav with \"Chatbeam\" wordmark + 3 nav links + primary CTA\n2. centered-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Intercom, Tidio, Drift, Crisp, Olark, HubSpot in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Live chat (custom inline SVG line icon, no emoji, no stock)\n   - AI assistant (custom inline SVG line icon, no emoji, no stock)\n   - Routing (custom inline SVG line icon, no emoji, no stock)\n   - Insights (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 22k sites | 48M chats | 4.7 rating\n6. Testimonial card: \"Our chat conversions doubled. - Mia Rossi, CRO\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $29\n      - Business $99 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "docsbase-wiki", "prompt": "Research the top 5 premium SaaS landing pages in the Knowledge base space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Docsbase, internal wiki for growing teams.\n\nAudience: growing teams documenting how they work.\nHero headline: \"Your team's brain, in one place.\"\nSubheadline: \"Docsbase gives you docs, wikis, and search that actually works so knowledge stops disappearing.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See a doc\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #0F172A to #6366F1\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- asymmetric-hero layout\n\nSections:\n1. Sticky glass nav with \"Docsbase\" wordmark + 3 nav links + primary CTA\n2. asymmetric-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Notion, Confluence, Slab, Guru, Tettra, Document360 in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Docs (custom inline SVG line icon, no emoji, no stock)\n   - Wikis (custom inline SVG line icon, no emoji, no stock)\n   - Search (custom inline SVG line icon, no emoji, no stock)\n   - Permissions (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 180k teams | 2.4M docs | 4.8 rating\n6. Testimonial card: \"Onboarding got 10x easier. - Arjun Patel, Ops\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $8\n      - Team $16 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "specwiki-docs", "prompt": "Research the top 5 premium SaaS landing pages in the Documentation space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Specwiki, API documentation made beautiful.\n\nAudience: developer tooling teams.\nHero headline: \"Docs developers will read.\"\nSubheadline: \"Specwiki turns your API into clean, interactive docs with live request examples and versioning.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See an example\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #0EA5E9 to #22D3EE\n- Body font: Inter (Google Fonts). Headline font: Satoshi for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- split-hero layout\n\nSections:\n1. Sticky glass nav with \"Specwiki\" wordmark + 3 nav links + primary CTA\n2. split-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Mintlify, ReadMe, Stoplight, Redocly, Sphinx, Docusaurus in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Interactive examples (custom inline SVG line icon, no emoji, no stock)\n   - Versioning (custom inline SVG line icon, no emoji, no stock)\n   - Search (custom inline SVG line icon, no emoji, no stock)\n   - AI assistant (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 9k teams | 4.9 rating | 1.8M readers\n6. Testimonial card: \"Our support tickets dropped 30%. - Devon Park, DevRel\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $40\n      - Enterprise custom with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "pulse-api-monitor", "prompt": "Research the top 5 premium SaaS landing pages in the API monitoring space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Pulse API Monitor, API uptime and performance monitoring.\n\nAudience: engineering teams running APIs.\nHero headline: \"Know before your users do.\"\nSubheadline: \"Pulse monitors your endpoints, alerts you on downtime, and tracks latency from 30 global regions.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See a monitor\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #10B981 to #F43F5E\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- centered-hero layout\n\nSections:\n1. Sticky glass nav with \"Pulse API Monitor\" wordmark + 3 nav links + primary CTA\n2. centered-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Datadog, Pingdom, Uptime Robot, Better Stack, Checkly, Statuspage in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Uptime monitoring (custom inline SVG line icon, no emoji, no stock)\n   - Latency tracking (custom inline SVG line icon, no emoji, no stock)\n   - Status pages (custom inline SVG line icon, no emoji, no stock)\n   - Alerting (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 31k teams | 99.99% uptime | 4.8 rating\n6. Testimonial card: \"Pulse caught an outage before our users did. - Hanna Berg, SRE\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $29\n      - Team $99 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "sentrylite-errors", "prompt": "Research the top 5 premium SaaS landing pages in the Error tracking space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Sentrylite, error tracking for web apps.\n\nAudience: developers shipping fast.\nHero headline: \"Errors, fixed faster.\"\nSubheadline: \"Sentrylite captures errors, shows the exact line, and groups them so you triage in minutes not hours.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See a trace\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #F43F5E to #F97316\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- asymmetric-hero layout\n\nSections:\n1. Sticky glass nav with \"Sentrylite\" wordmark + 3 nav links + primary CTA\n2. asymmetric-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Sentry, Rollbar, Bugsnag, Datadog, Raygun, Airbrake in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Error capture (custom inline SVG line icon, no emoji, no stock)\n   - Stack traces (custom inline SVG line icon, no emoji, no stock)\n   - Release tracking (custom inline SVG line icon, no emoji, no stock)\n   - Slack alerts (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 120k devs | 4.8 rating | 4.9 rating\n6. Testimonial card: \"We find bugs before users report them. - Theo Walsh, Engineer\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Team $26\n      - Business $80 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "flagflip-flags", "prompt": "Research the top 5 premium SaaS landing pages in the Feature flags space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Flagflip, feature flag platform for product teams.\n\nAudience: product teams shipping safely.\nHero headline: \"Ship safely. Roll back instantly.\"\nSubheadline: \"Flagflip lets you toggle features, target users, and roll back bad releases without redeploying.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See a flag\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #6366F1 to #10B981\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- split-hero layout\n\nSections:\n1. Sticky glass nav with \"Flagflip\" wordmark + 3 nav links + primary CTA\n2. split-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: LaunchDarkly, Flagsmith, Unleash, GrowthBook, PostHog, Statsig in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Flags (custom inline SVG line icon, no emoji, no stock)\n   - Targeting (custom inline SVG line icon, no emoji, no stock)\n   - Rollbacks (custom inline SVG line icon, no emoji, no stock)\n   - Experiments (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 18k teams | 4.8 rating | 4.9 rating\n6. Testimonial card: \"We shipped a rollback in seconds. - Ravi Menon, PM\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $29\n      - Scale $99 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "splitlab-ab", "prompt": "Research the top 5 premium SaaS landing pages in the A/B testing space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Splitlab, A/B testing for marketers.\n\nAudience: marketing teams optimizing funnels.\nHero headline: \"Test. Learn. Convert.\"\nSubheadline: \"Splitlab runs experiments on your pages, shows statistically significant winners, and auto-promotes them.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See a test\".\n\nDesign system:\n- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards\n- Accent gradient from #7C3AED to #EC4899\n- Body font: Inter (Google Fonts). Headline font: Satoshi for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- centered-hero layout\n\nSections:\n1. Sticky glass nav with \"Splitlab\" wordmark + 3 nav links + primary CTA\n2. centered-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Optimizely, VWO, AB Tasty, Convert, GrowthBook, PostHog in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Visual editor (custom inline SVG line icon, no emoji, no stock)\n   - Stats engine (custom inline SVG line icon, no emoji, no stock)\n   - Auto-promote (custom inline SVG line icon, no emoji, no stock)\n   - Audience targeting (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 12k teams | 4.8 rating | 2.1M experiments\n6. Testimonial card: \"We found a 23% lift in one week. - Elise Carter, Growth\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Growth $49\n      - Pro $149 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "voices-user-feedback", "prompt": "Research the top 5 premium SaaS landing pages in the User feedback space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Voices, user feedback boards for product teams.\n\nAudience: product teams building with users.\nHero headline: \"Build what users actually want.\"\nSubheadline: \"Voices collects feature requests, lets users vote, and turns the top ideas into your roadmap.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See a board\".\n\nDesign system:\n- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards\n- Accent gradient from #F59E0B to #F43F5E\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- asymmetric-hero layout\n\nSections:\n1. Sticky glass nav with \"Voices\" wordmark + 3 nav links + primary CTA\n2. asymmetric-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Canny, Productboard, UserVoice, Nolt, Upvoty, Featurebase in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Feature voting (custom inline SVG line icon, no emoji, no stock)\n   - Roadmap (custom inline SVG line icon, no emoji, no stock)\n   - Changelog (custom inline SVG line icon, no emoji, no stock)\n   - Status tags (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 24k teams | 4.8 rating | 3.6M votes\n6. Testimonial card: \"Our roadmap is finally community-driven. - Sam Liu, PM\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $29\n      - Team $79 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "surveyform", "prompt": "Research the top 5 premium SaaS landing pages in the Survey tool space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Surveyform, surveys that people finish.\n\nAudience: researchers and product teams.\nHero headline: \"Ask. Listen. Learn.\"\nSubheadline: \"Surveyform gives you beautiful surveys, branching logic, and analytics that do the thinking for you.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See a survey\".\n\nDesign system:\n- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards\n- Accent gradient from #0EA5E9 to #6366F1\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- split-hero layout\n\nSections:\n1. Sticky glass nav with \"Surveyform\" wordmark + 3 nav links + primary CTA\n2. split-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Typeform, SurveyMonkey, Tally, Fillout, QuestionPro, Qualtrics in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Branching logic (custom inline SVG line icon, no emoji, no stock)\n   - Analytics (custom inline SVG line icon, no emoji, no stock)\n   - NPS (custom inline SVG line icon, no emoji, no stock)\n   - Embeds (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 190k surveys | 4.7 rating | 1.2M responses\n6. Testimonial card: \"Our completion rate hit 82%. - Dana Brooks, Researcher\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Plus $25\n      - Pro $59 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "formflow", "prompt": "Research the top 5 premium SaaS landing pages in the Form builder space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Formflow, forms that feel like conversations.\n\nAudience: creators and small businesses collecting info.\nHero headline: \"Forms people actually fill out.\"\nSubheadline: \"Formflow turns boring forms into friendly, conversational flows that double your completion rate.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See a form\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #6366F1 to #A855F7\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- centered-hero layout\n\nSections:\n1. Sticky glass nav with \"Formflow\" wordmark + 3 nav links + primary CTA\n2. centered-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Typeform, Tally, Fillout, Jotform, Paperform, Fillout in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Conversational UI (custom inline SVG line icon, no emoji, no stock)\n   - Logic jumps (custom inline SVG line icon, no emoji, no stock)\n   - Payments (custom inline SVG line icon, no emoji, no stock)\n   - Analytics (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 62k forms | 4.8 rating | 1.1M responses\n6. Testimonial card: \"Our leads doubled. - Carlos Diaz, Marketer\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $29\n      - Team $59 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "pagecraft-builder", "prompt": "Research the top 5 premium SaaS landing pages in the Landing page builder space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Pagecraft, the landing page builder for marketers.\n\nAudience: marketers launching fast.\nHero headline: \"Launch pages that convert.\"\nSubheadline: \"Pagecraft gives you premium templates, AI copy, and instant publishing without a developer.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See templates\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #8B5CF6 to #6366F1\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- asymmetric-hero layout\n\nSections:\n1. Sticky glass nav with \"Pagecraft\" wordmark + 3 nav links + primary CTA\n2. asymmetric-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Webflow, Framer, Unbounce, Instapage, Carrd, Leadpages in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Premium templates (custom inline SVG line icon, no emoji, no stock)\n   - AI copy (custom inline SVG line icon, no emoji, no stock)\n   - Instant publish (custom inline SVG line icon, no emoji, no stock)\n   - A/B testing (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 48k marketers | 4.8 rating | 4.7 rating\n6. Testimonial card: \"I shipped 6 pages in a day. - Tara Smith, Marketer\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $39\n      - Team $99 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "sitebolt-web", "prompt": "Research the top 5 premium SaaS landing pages in the Website builder space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Sitebolt, no-code website builder for small business.\n\nAudience: small business owners building a site.\nHero headline: \"Your business online by tonight.\"\nSubheadline: \"Sitebolt gives you a beautiful site, booking, and payments with no code and no agency.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See a site\".\n\nDesign system:\n- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards\n- Accent gradient from #0F766E to #10B981\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- split-hero layout\n\nSections:\n1. Sticky glass nav with \"Sitebolt\" wordmark + 3 nav links + primary CTA\n2. split-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Wix, Squarespace, Webflow, Framer, Carrd, Durable in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - No-code editor (custom inline SVG line icon, no emoji, no stock)\n   - Booking (custom inline SVG line icon, no emoji, no stock)\n   - Payments (custom inline SVG line icon, no emoji, no stock)\n   - SEO tools (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 220k sites | 4.7 rating | 4.8 rating\n6. Testimonial card: \"My site was live in 2 hours. - Ben Hull, Owner\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Standard $19\n      - Pro $49 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "nimbus-host", "prompt": "Research the top 5 premium SaaS landing pages in the Web hosting space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Nimbus, fast cloud hosting for developers.\n\nAudience: developers deploying web apps.\nHero headline: \"Deploy in seconds. Scale without thinking.\"\nSubheadline: \"Nimbus gives you global edge hosting, zero-config deploys, and automatic scaling for your web apps.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See it deploy\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #6366F1 to #0EA5E9\n- Body font: Inter (Google Fonts). Headline font: Satoshi for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- centered-hero layout\n\nSections:\n1. Sticky glass nav with \"Nimbus\" wordmark + 3 nav links + primary CTA\n2. centered-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Vercel, Netlify, Render, Fly, Railway, Cloudflare in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Edge hosting (custom inline SVG line icon, no emoji, no stock)\n   - Zero-config deploys (custom inline SVG line icon, no emoji, no stock)\n   - Auto-scaling (custom inline SVG line icon, no emoji, no stock)\n   - Preview URLs (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 180k devs | 99.99% uptime | 4.9 rating\n6. Testimonial card: \"Deploys feel like magic. - Karim Hosny, Engineer\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $20\n      - Team $99 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "domainia-domains", "prompt": "Research the top 5 premium SaaS landing pages in the Domain registrar space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Domainia, domains with built-in privacy.\n\nAudience: founders buying their first domain.\nHero headline: \"Your name, claimed.\"\nSubheadline: \"Domainia gives you domain search, free privacy, and one-click DNS with honest pricing and no upsells.\"\nPrimary CTA: \"Search domains\". Secondary CTA: \"See pricing\".\n\nDesign system:\n- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards\n- Accent gradient from #0F172A to #10B981\n- Body font: Inter (Google Fonts). Headline font: Satoshi for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- centered-hero layout\n\nSections:\n1. Sticky glass nav with \"Domainia\" wordmark + 3 nav links + primary CTA\n2. centered-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Namecheap, Porkbun, Cloudflare, Google, GoDaddy, Hover in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Free WHOIS privacy (custom inline SVG line icon, no emoji, no stock)\n   - One-click DNS (custom inline SVG line icon, no emoji, no stock)\n   - Email forwarding (custom inline SVG line icon, no emoji, no stock)\n   - Honest pricing (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 1.2M domains | 4.7 rating | 4.8 rating\n6. Testimonial card: \"No upsells. Finally. - Leo Marcus, Founder\" with a generated SVG monogram avatar\n7. Pricing:       - Free to register\n      - Premium DNS $5 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "shieldpass-vpn", "prompt": "Research the top 5 premium SaaS landing pages in the VPN space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Shieldpass, a VPN that respects your privacy.\n\nAudience: people who care about privacy online.\nHero headline: \"Privacy, without the slowdown.\"\nSubheadline: \"Shieldpass encrypts your traffic across 80 regions with a strict no-logs policy and gigabit speeds.\"\nPrimary CTA: \"Get Shieldpass\". Secondary CTA: \"See features\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #10B981 to #6366F1\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- asymmetric-hero layout\n\nSections:\n1. Sticky glass nav with \"Shieldpass\" wordmark + 3 nav links + primary CTA\n2. asymmetric-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Mullvad, Proton, Nord, Express, Surfshark, IVPN in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - No-logs (custom inline SVG line icon, no emoji, no stock)\n   - 80 regions (custom inline SVG line icon, no emoji, no stock)\n   - Kill switch (custom inline SVG line icon, no emoji, no stock)\n   - WireGuard (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 1.4M users | 4.8 rating | gigabit speeds\n6. Testimonial card: \"It is fast and I trust them. - Nadia Farouk, Journalist\" with a generated SVG monogram avatar\n7. Pricing:       - Monthly $9\n      - Yearly $59\n      - 3-year $149 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "keyvault-passwords", "prompt": "Research the top 5 premium SaaS landing pages in the Password manager space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Keyvault, a password manager you will actually use.\n\nAudience: people tired of reusing passwords.\nHero headline: \"Every password, one click away.\"\nSubheadline: \"Keyvault stores, autofills, and generates passwords across every device with zero-knowledge encryption.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See it autofill\".\n\nDesign system:\n- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards\n- Accent gradient from #0F172A to #6366F1\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- split-hero layout\n\nSections:\n1. Sticky glass nav with \"Keyvault\" wordmark + 3 nav links + primary CTA\n2. split-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: 1Password, Bitwarden, Dashlane, LastPass, Keeper, Proton in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Autofill (custom inline SVG line icon, no emoji, no stock)\n   - Generator (custom inline SVG line icon, no emoji, no stock)\n   - Sharing (custom inline SVG line icon, no emoji, no stock)\n   - Watchtower (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 2.1M users | 4.8 rating | 4.9 rating\n6. Testimonial card: \"I finally stopped reusing passwords. - Wes Park, Designer\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Premium $3\n      - Family $5 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "cloudbin-storage", "prompt": "Research the top 5 premium SaaS landing pages in the Cloud storage space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Cloudbin, private cloud storage for your files.\n\nAudience: people and teams storing files.\nHero headline: \"Your files, your cloud.\"\nSubheadline: \"Cloudbin gives you end-to-end encrypted storage, sync, and sharing across every device.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See it sync\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #0EA5E9 to #6366F1\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- centered-hero layout\n\nSections:\n1. Sticky glass nav with \"Cloudbin\" wordmark + 3 nav links + primary CTA\n2. centered-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Dropbox, Google Drive, iCloud, pCloud, Sync, Tresorit in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - E2E encryption (custom inline SVG line icon, no emoji, no stock)\n   - Sync (custom inline SVG line icon, no emoji, no stock)\n   - Sharing (custom inline SVG line icon, no emoji, no stock)\n   - Version history (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 3.2M users | 4.8 rating | 4.7 rating\n6. Testimonial card: \"Finally, storage I trust. - Mia Chen, Photographer\" with a generated SVG monogram avatar\n7. Pricing:       - Free 5GB\n      - Plus $8\n      - Team $15 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "sharebeam-files", "prompt": "Research the top 5 premium SaaS landing pages in the File sharing space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Sharebeam, fast file sharing without the signups.\n\nAudience: creators sharing large files.\nHero headline: \"Share big files in seconds.\"\nSubheadline: \"Sharebeam lets you send up to 50GB with a link, no account needed, with expiry and password protection.\"\nPrimary CTA: \"Send a file\". Secondary CTA: \"See features\".\n\nDesign system:\n- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards\n- Accent gradient from #6366F1 to #A855F7\n- Body font: Inter (Google Fonts). Headline font: Satoshi for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- asymmetric-hero layout\n\nSections:\n1. Sticky glass nav with \"Sharebeam\" wordmark + 3 nav links + primary CTA\n2. asymmetric-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: WeTransfer, Smash, Send Anywhere, Dropbox, Firefox Send, Filemail in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - 50GB transfers (custom inline SVG line icon, no emoji, no stock)\n   - No account needed (custom inline SVG line icon, no emoji, no stock)\n   - Expiry (custom inline SVG line icon, no emoji, no stock)\n   - Password protection (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 9M transfers | 4.8 rating | 4.7 rating\n6. Testimonial card: \"Sending dailies got so easy. - Asha Rao, Videographer\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $12\n      - Team $29 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "reelhub-video", "prompt": "Research the top 5 premium SaaS landing pages in the Video hosting space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Reelhub, ad-free video hosting for creators.\n\nAudience: creators hosting video without ads.\nHero headline: \"Host your videos. Keep your audience.\"\nSubheadline: \"Reelhub gives you ad-free hosting, customizable players, and analytics for your videos and courses.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See a player\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #EF4444 to #A855F7\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- split-hero layout\n\nSections:\n1. Sticky glass nav with \"Reelhub\" wordmark + 3 nav links + primary CTA\n2. split-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Vimeo, Wistia, Mux, YouTube, Loom, SproutVideo in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Ad-free hosting (custom inline SVG line icon, no emoji, no stock)\n   - Custom players (custom inline SVG line icon, no emoji, no stock)\n   - Analytics (custom inline SVG line icon, no emoji, no stock)\n   - Paywalls (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 48k creators | 4.8 rating | 4.7 rating\n6. Testimonial card: \"My videos finally look professional. - Dan Cruz, Educator\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $25\n      - Team $99 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "imageflow-cdn", "prompt": "Research the top 5 premium SaaS landing pages in the Image CDN space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Imageflow, real-time image optimization at the edge.\n\nAudience: developers serving images fast.\nHero headline: \"Images that load instantly.\"\nSubheadline: \"Imageflow optimizes, resizes, and delivers your images from the edge in milliseconds.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See it optimize\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #10B981 to #34D399\n- Body font: Inter (Google Fonts). Headline font: Satoshi for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- centered-hero layout\n\nSections:\n1. Sticky glass nav with \"Imageflow\" wordmark + 3 nav links + primary CTA\n2. centered-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Cloudinary, Imgix, Fastly, Cloudflare, ImageKit, Sanity in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Real-time resize (custom inline SVG line icon, no emoji, no stock)\n   - Format conversion (custom inline SVG line icon, no emoji, no stock)\n   - Edge delivery (custom inline SVG line icon, no emoji, no stock)\n   - Watermarks (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 180k sites | 4.9 rating | 4.8 rating\n6. Testimonial card: \"Our LCP dropped 1.2 seconds. - Sara Jain, Frontend Lead\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $39\n      - Scale $149 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "lumina-ai-image", "prompt": "Research the top 5 premium SaaS landing pages in the AI image generation space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Lumina, AI image generation for brands.\n\nAudience: brands needing on-brand visuals.\nHero headline: \"On-brand images, on demand.\"\nSubheadline: \"Lumina generates images in your brand style, with consistent characters, colors, and composition.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See examples\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #8B5CF6 to #EC4899\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- asymmetric-hero layout\n\nSections:\n1. Sticky glass nav with \"Lumina\" wordmark + 3 nav links + primary CTA\n2. asymmetric-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Midjourney, DALL-E, Ideogram, Flux, Recraft, Leonardo in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Brand styles (custom inline SVG line icon, no emoji, no stock)\n   - Character lock (custom inline SVG line icon, no emoji, no stock)\n   - Batch generation (custom inline SVG line icon, no emoji, no stock)\n   - Upscaling (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 240k creators | 4.8 rating | 4.7 rating\n6. Testimonial card: \"Our content team ships 5x faster. - Tara Vance, Creative Director\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $29\n      - Team $99 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "chatforge-bots", "prompt": "Research the top 5 premium SaaS landing pages in the AI chatbot builder space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Chatforge, build AI chatbots for your site.\n\nAudience: teams adding AI assistants to their site.\nHero headline: \"An AI assistant on your site in minutes.\"\nSubheadline: \"Chatforge trains on your docs, answers visitors instantly, and hands off to your team when needed.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See a bot\".\n\nDesign system:\n- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards\n- Accent gradient from #6366F1 to #10B981\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- split-hero layout\n\nSections:\n1. Sticky glass nav with \"Chatforge\" wordmark + 3 nav links + primary CTA\n2. split-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Intercom, Voiceflow, Botpress, Chatbase, Dante, CustomGPT in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Doc training (custom inline SVG line icon, no emoji, no stock)\n   - Handoff (custom inline SVG line icon, no emoji, no stock)\n   - Analytics (custom inline SVG line icon, no emoji, no stock)\n   - Branding (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 18k sites | 4.8 rating | 4.7 rating\n6. Testimonial card: \"Our support load dropped 40%. - Eli Stone, Founder\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $49\n      - Team $149 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "memo-ai-meetings", "prompt": "Research the top 5 premium SaaS landing pages in the AI meeting notes space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Memo, AI meeting notes and action items.\n\nAudience: teams tired of taking notes.\nHero headline: \"Meetings that write themselves.\"\nSubheadline: \"Memo joins your calls, transcribes them, and sends action items to your team automatically.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See it work\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #7C3AED to #6366F1\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- centered-hero layout\n\nSections:\n1. Sticky glass nav with \"Memo\" wordmark + 3 nav links + primary CTA\n2. centered-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Otter, Fireflies, tl;dv, Fathom, Read, Grain in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Auto transcription (custom inline SVG line icon, no emoji, no stock)\n   - Action items (custom inline SVG line icon, no emoji, no stock)\n   - Search (custom inline SVG line icon, no emoji, no stock)\n   - Integrations (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 220k teams | 4.8 rating | 4.9 rating\n6. Testimonial card: \"I never take notes manually now. - Priya Rao, PM\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $18\n      - Team $29 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "flowstate-automation", "prompt": "Research the top 5 premium SaaS landing pages in the Automation space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Flowstate, no-code automation for busy teams.\n\nAudience: teams automating repetitive work.\nHero headline: \"Automate the busywork.\"\nSubheadline: \"Flowstate connects your apps and runs automations that do the repetitive work while you focus.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See a flow\".\n\nDesign system:\n- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards\n- Accent gradient from #F59E0B to #EF4444\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- asymmetric-hero layout\n\nSections:\n1. Sticky glass nav with \"Flowstate\" wordmark + 3 nav links + primary CTA\n2. asymmetric-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Zapier, Make, n8n, Workato, Pipedream, Tray in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Triggers (custom inline SVG line icon, no emoji, no stock)\n   - Actions (custom inline SVG line icon, no emoji, no stock)\n   - Logic (custom inline SVG line icon, no emoji, no stock)\n   - 500+ apps (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 190k teams | 4.8 rating | 4.7 rating\n6. Testimonial card: \"We automated our whole onboarding. - Max Adler, Ops\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $29\n      - Team $99 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "vaultpay-subscriptions", "prompt": "Research the top 5 premium SaaS landing pages in the Billing space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Vaultpay, subscription billing for SaaS.\n\nAudience: SaaS teams managing subscriptions.\nHero headline: \"Bill smarter. Retain longer.\"\nSubheadline: \"Vaultpay handles plans, trials, dunning, and upgrades so you stop leaking revenue.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See it bill\".\n\nDesign system:\n- Dark theme, background #0A0A0A, surfaces #141414\n- Accent gradient from #10B981 to #6366F1\n- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- split-hero layout\n\nSections:\n1. Sticky glass nav with \"Vaultpay\" wordmark + 3 nav links + primary CTA\n2. split-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Stripe, Chargebee, Paddle, ProfitWell, Maxio, Chargeflow in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Plans (custom inline SVG line icon, no emoji, no stock)\n   - Trials (custom inline SVG line icon, no emoji, no stock)\n   - Dunning (custom inline SVG line icon, no emoji, no stock)\n   - Analytics (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 9k SaaS teams | 4.9 rating | $1.2B collected\n6. Testimonial card: \"Our churn dropped 18%. - Olivia Park, Finance\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Growth $49\n      - Scale $199 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}, {"slug": "craft-portfolio", "prompt": "Research the top 5 premium SaaS landing pages in the Portfolio space (Linear, Vercel, Framer, Raycast, Arc grade).\nBreak down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.\nThen build me a complete, production-ready single-page landing page for Craft, a portfolio site for makers.\n\nAudience: designers, developers, and creators.\nHero headline: \"Show your work beautifully.\"\nSubheadline: \"Craft gives you a portfolio template, case study layouts, and a custom domain so your work stands out.\"\nPrimary CTA: \"Start free\". Secondary CTA: \"See templates\".\n\nDesign system:\n- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards\n- Accent gradient from #0F172A to #A855F7\n- Body font: Inter (Google Fonts). Headline font: Satoshi for elegance\n- Generous whitespace, 120px section padding, 1200px max width\n- Faint noise texture overlay + a slow animated mesh gradient behind the hero\n- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)\n- asymmetric-hero layout\n\nSections:\n1. Sticky glass nav with \"Craft\" wordmark + 3 nav links + primary CTA\n2. asymmetric-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction\n3. Logo wall: Framer, Webflow, Squarespace, Read.cv, Notion, Carbonmade in muted monochrome\n4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):\n   - Case studies (custom inline SVG line icon, no emoji, no stock)\n   - Custom domain (custom inline SVG line icon, no emoji, no stock)\n   - Contact (custom inline SVG line icon, no emoji, no stock)\n   - Analytics (custom inline SVG line icon, no emoji, no stock)\n5. Metrics strip: 62k makers | 4.8 rating | 4.7 rating\n6. Testimonial card: \"I booked 3 clients in a week. - Zoe Bennett, Designer\" with a generated SVG monogram avatar\n7. Pricing:       - Free\n      - Pro $12\n      - Studio $24 with the middle tier highlighted (gradient border + \"Most popular\" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)\n8. Final CTA band with gradient glow\n9. Minimal footer\n\nMotion:\n- Scroll-reveal fade-in-up on each section via IntersectionObserver\n- Hover glow + lift on cards and CTA buttons\n- Smooth animated gradient on the hero mesh background\n- Respect prefers-reduced-motion\n\nRules:\n- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling\n- Mobile responsive with a sticky mobile CTA bar\n- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)\n- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.\n- Use plain text, real layout. No lorem ipsum. Match the niche's tone."}];
+const grid = document.getElementById('grid');
+const cards = [...grid.querySelectorAll('.card')];
+const search = document.getElementById('search');
+const themeFilter = document.getElementById('themeFilter');
+const countEl = document.getElementById('count');
+const toast = document.getElementById('toast');
+function applyFilter(){
+  const q = search.value.trim().toLowerCase();
+  const t = themeFilter.value;
+  let n = 0;
+  cards.forEach(c=>{
+    const theme = c.dataset.theme;
+    const text = c.textContent.toLowerCase();
+    const match = (!q || text.includes(q)) && (!t || theme===t);
+    c.style.display = match ? '' : 'none';
+    if(match) n++;
+  });
+  countEl.textContent = n + ' page' + (n===1?'':'s');
+}
+search.addEventListener('input',applyFilter);
+themeFilter.addEventListener('change',applyFilter);
+grid.addEventListener('click',e=>{
+  const b = e.target.closest('.btn-copy'); if(!b) return;
+  const slug = b.dataset.slug; const p = (PROMPTS.find(x=>x.slug===slug)||{}).prompt || '';
+  navigator.clipboard.writeText(p).then(()=>{
+    b.classList.add('copied'); b.textContent='Copied!';
+    toast.classList.add('show');
+    setTimeout(()=>{toast.classList.remove('show');b.classList.remove('copied');b.textContent='Copy prompt';},1800);
+  });
+});
+const io = new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target);}}),{threshold:.08});
+cards.forEach(c=>io.observe(c));
+</script>
+</body>
+</html>

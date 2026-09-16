@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sharebeam | Share big files in seconds</title>
+    <meta name="description" content="Sharebeam lets you send up to 50GB with a link, no account needed, with expiry and password protection.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,500,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #FAFAF7;
+            --surface-color: #FFFFFF;
+            --surface-muted: #F4F4F2;
+            --text-main: #111827;
+            --text-muted: #4B5563;
+            --text-light: #9CA3AF;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --accent-start: #6366F1;
+            --accent-end: #A855F7;
+            
+            --font-body: 'Inter', sans-serif;
+            --font-display: 'Satoshi', sans-serif;
+            
+            --section-padding: clamp(4rem, 10vw, 8rem);
+            --container-width: 1200px;
+            
+            --radius-sm: 0.5rem;
+            --radius-md: 0.75rem;
+            --radius-lg: 1rem;
+            --radius-xl: 1.5rem;
+            
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.025);
+            --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.15);
+            
+            --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Reset & Base */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        h1, h2, h3, h4, .font-display {
+            font-family: var(--font-display);
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        a { color: inherit; text-decoration: none; }
+        ul { list-style: none; }
+        button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+        /* Noise Texture */
+        .noise-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.2;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Layout Utilities */
+        .container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .section {
+            padding: var(--section-padding) 0;
+            position: relative;
+        }
+
+        .flex { display: flex; }
+        .grid { display: grid; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .flex-col { flex-direction: column; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+        .gap-8 { gap: 2rem; }
+        .text-center { text-align: center; }
+
+        /* Typography Utilities */
+        .text-muted { color: var(--text-muted); }
+        .text-sm { font-size: 0.875rem; }
+        .text-lg { font-size: 1.125rem; }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            font-size: 0.9375rem;
+            transition: var(--transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            color: white;
+            box-shadow: 0 2px 10px rgba(99, 102, 241, 0.2);
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--surface-color);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-muted);
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            height: 4rem;
+        }
+
+        .nav .container {
+            height: 100%;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+                gap: 2rem;
+                font-size: 0.875rem;
+                font-weight: 500;
+                color: var(--text-muted);
+            }
+            .nav-links a:hover { color: var(--text-main); }
+        }
+
+        /* Hero Section */
+        .hero {
+            padding-top: calc(var(--section-padding) + 4rem);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-mesh {
+            position: absolute;
+            top: -20%; left: -10%; right: -10%;
+            height: 140%;
+            background: 
+                radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(168, 85, 247, 0.15), transparent 25%);
+            filter: blur(60px);
+            z-index: -1;
+            animation: mesh-float 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes mesh-float {
+            0% { transform: scale(1) translate(0, 0); }
+            50% { transform: scale(1.05) translate(2%, 2%); }
+            100% { transform: scale(1) translate(-2%, -2%); }
+        }
+
+        .hero-grid {
+            display: grid;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        @media (min-width: 1024px) {
+            .hero-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            margin-bottom: 1.5rem;
+            color: #000;
+        }
+
+        .hero-content p {
+            font-size: clamp(1.125rem, 2vw, 1.25rem);
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 500px;
+        }
+
+        /* Mockup UI */
+        .mockup-wrapper {
+            perspective: 1000px;
+        }
+
+        .ui-mockup {
+            background: var(--surface-color);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+            overflow: hidden;
+            transform: rotateY(-5deg) rotateX(2deg);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .mockup-wrapper:hover .ui-mockup {
+            transform: rotateY(0deg) rotateX(0deg);
+        }
+
+        .ui-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .ui-dot {
+            width: 10px; height: 10px; border-radius: 50%;
+            background: var(--border-color);
+        }
+
+        .ui-body { padding: 2rem; }
+
+        .ui-dropzone {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 3rem 1rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            background: var(--bg-color);
+            transition: var(--transition-base);
+        }
+        
+        .ui-dropzone:hover {
+            border-color: var(--accent-start);
+            background: rgba(99, 102, 241, 0.02);
+        }
+
+        .ui-drop-icon {
+            width: 48px; height: 48px;
+            margin: 0 auto 1rem;
+            color: var(--text-light);
+            animation: bounce-subtle 2s infinite ease-in-out;
+        }
+
+        @keyframes bounce-subtle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .ui-file {
+            background: var(--surface-muted);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .ui-file-icon {
+            width: 32px; height: 32px;
+            background: white;
+            border-radius: var(--radius-sm);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--accent-start);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .ui-file-info { flex: 1; }
+        .ui-file-name { font-size: 0.875rem; font-weight: 500; margin-bottom: 0.25rem; }
+        .ui-progress-bg { height: 4px; background: var(--border-color); border-radius: 2px; overflow: hidden;}
+        .ui-progress-bar { 
+            height: 100%; 
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end)); 
+            width: 0%;
+            animation: load-progress 3s ease-out forwards infinite;
+        }
+
+        @keyframes load-progress {
+            0% { width: 0%; }
+            70% { width: 100%; }
+            100% { width: 100%; }
+        }
+
+        /* Logo Wall */
+        .logo-wall {
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            background: var(--surface-color);
+            padding: 3rem 0;
+            overflow: hidden;
+        }
+
+        .logo-track {
+            display: flex;
+            gap: 4rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0.4;
+            filter: grayscale(100%);
+        }
+
+        .logo-item {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo-item svg { width: 24px; height: 24px; }
+
+        /* Bento Features */
+        .bento-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 768px) {
+            .bento-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .bento-card {
+            background: var(--surface-muted);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+            transition: var(--transition-base);
+            position: relative;
+            z-index: 1;
+        }
+
+        .bento-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: calc(var(--radius-xl) + 1px);
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            z-index: -1;
+            opacity: 0;
+            transition: var(--transition-base);
+        }
+
+        .bento-card:hover {
+            transform: translateY(-4px);
+            background: var(--surface-color);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .bento-card:hover::before { opacity: 0.2; }
+
+        .feature-icon {
+            width: 48px; height: 48px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .bento-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Metrics */
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 4rem 0;
+        }
+        
+        .metric-val {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Testimonial */
+        .testimonial-card {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .quote {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 500;
+            line-height: 1.3;
+            margin-bottom: 2rem;
+        }
+
+        .avatar-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .avatar {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--surface-muted), var(--border-color));
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-muted);
+            border: 1px solid var(--surface-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Pricing */
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .billing-toggle {
+            display: inline-flex;
+            align-items: center;
+            background: var(--surface-muted);
+            padding: 0.25rem;
+            border-radius: 2rem;
+            border: 1px solid var(--border-color);
+            margin-top: 2rem;
+        }
+
+        .toggle-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 1.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: var(--transition-base);
+        }
+
+        .toggle-btn.active {
+            background: var(--surface-color);
+            color: var(--text-main);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .pricing-grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 768px) {
+            .pricing-grid { grid-template-columns: repeat(3, 1fr); align-items: center;}
+        }
+
+        .price-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .price-card.popular {
+            border: 2px solid transparent;
+            background: linear-gradient(var(--surface-color), var(--surface-color)) padding-box,
+                        linear-gradient(135deg, var(--accent-start), var(--accent-end)) border-box;
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+            transform: scale(1.02);
+            z-index: 2;
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tier-name { font-family: var(--font-display); font-size: 1.25rem; margin-bottom: 1rem; }
+        .price { font-family: var(--font-display); font-size: 3rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: baseline; gap: 0.25rem;}
+        .price span { font-size: 1rem; font-weight: 400; color: var(--text-muted); font-family: var(--font-body);}
+        
+        .feature-list { margin: 2rem 0; flex: 1; }
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 0.9375rem;
+        }
+        
+        .check-icon { color: var(--text-main); width: 16px; height: 16px; flex-shrink: 0;}
+
+        /* Final CTA */
+        .cta-band {
+            background: var(--text-main);
+            color: white;
+            text-align: center;
+            border-radius: var(--radius-xl);
+            padding: 5rem 2rem;
+            position: relative;
+            overflow: hidden;
+            margin-top: 4rem;
+        }
+
+        .cta-band::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, transparent 60%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+        
+        .cta-band h2 { color: white; margin-bottom: 1.5rem; font-size: clamp(2rem, 4vw, 3rem);}
+
+        /* Footer */
+        .footer {
+            padding: 4rem 0 2rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 6rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .footer-content { flex-direction: row; justify-content: space-between; }
+        }
+
+        .footer-links { display: flex; gap: 1.5rem; font-size: 0.875rem; color: var(--text-muted); }
+
+        /* Mobile Sticky CTA */
+        .mobile-cta {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            padding: 1rem;
+            background: var(--surface-color);
+            border-top: 1px solid var(--border-color);
+            z-index: 40;
+            display: flex;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+        }
+        
+        @media (min-width: 768px) { .mobile-cta { display: none; } }
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            .reveal { opacity: 1; transform: none; }
+            .hero-mesh { animation: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise-overlay"></div>
+
+    <nav class="nav">
+        <div class="container flex items-center justify-between">
+            <a href="#" class="logo text-main">Sharebeam</a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#testimonials">Customers</a>
+                <a href="#pricing">Pricing</a>
+            </div>
+            <a href="#cta" class="btn btn-primary" style="display: none;">Send a file</a>
+            <!-- CTA hidden on smallest screens in nav, handled by mobile sticky bar -->
+            <style>@media(min-width: 768px){ .nav .btn-primary { display: inline-flex !important; } }</style>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero section text-main">
+            <div class="hero-mesh"></div>
+            <div class="container hero-grid">
+                <div class="hero-content reveal">
+                    <h1>Share big files<br>in seconds.</h1>
+                    <p>Sharebeam lets you send up to 50GB with a link, no account needed, with expiry and password protection.</p>
+                    <div class="flex gap-4">
+                        <a href="#cta" class="btn btn-primary">Send a file</a>
+                        <a href="#features" class="btn btn-secondary">See features</a>
+                    </div>
+                </div>
+                
+                <div class="mockup-wrapper reveal" style="transition-delay: 0.2s;">
+                    <div class="ui-mockup">
+                        <div class="ui-header">
+                            <div class="ui-dot"></div>
+                            <div class="ui-dot"></div>
+                            <div class="ui-dot"></div>
+                        </div>
+                        <div class="ui-body">
+                            <div class="ui-dropzone">
+                                <svg class="ui-drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                </svg>
+                                <p class="text-sm text-muted font-medium">Drag & drop files here</p>
+                                <p class="text-xs text-light mt-1">Up to 50GB</p>
+                            </div>
+                            <div class="ui-file">
+                                <div class="ui-file-icon">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon>
+                                    </svg>
+                                </div>
+                                <div class="ui-file-info">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="ui-file-name">Project_Final_v4.mp4</span>
+                                        <span class="text-xs text-muted">2.4 GB</span>
+                                    </div>
+                                    <div class="ui-progress-bg">
+                                        <div class="ui-progress-bar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="logo-wall section">
+            <div class="container">
+                <p class="text-center text-sm font-medium text-muted mb-6">Trusted by users switching from</p>
+                <div class="logo-track reveal">
+                    <!-- Typographic representations of competitors -->
+                    <div class="logo-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        WeTransfer
+                    </div>
+                    <div class="logo-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                        Smash
+                    </div>
+                    <div class="logo-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                        Send Anywhere
+                    </div>
+                    <div class="logo-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                        Dropbox
+                    </div>
+                    <div class="logo-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        Filemail
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section id="features" class="section">
+            <div class="container">
+                <div class="text-center mb-12 reveal">
+                    <h2 class="font-display text-4xl mb-4">Everything you need.<br>Nothing you don't.</h2>
+                    <p class="text-lg text-muted max-w-2xl mx-auto">Engineered for speed and simplicity. We stripped away the bloat so you can focus on getting files from A to B.</p>
+                </div>
+                
+                <div class="bento-grid">
+                    <div class="bento-card reveal">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                                <line x1="6" y1="12" x2="18" y2="12"></line>
+                                <line x1="6" y1="16" x2="18" y2="16"></line>
+                                <line x1="6" y1="8" x2="6.01" y2="8"></line>
+                            </svg>
+                        </div>
+                        <h3>50GB Transfers</h3>
+                        <p class="text-muted text-sm">Send massive raw video files, entire project folders, or high-res assets in a single batch without compression.</p>
+                    </div>
+                    
+                    <div class="bento-card reveal" style="transition-delay: 0.1s;">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="7" r="4"></circle>
+                                <path d="M5.5 21v-2a4 4 0 0 1 4-4h5a4 4 0 0 1 4 4v2"></path>
+                                <line x1="3" y1="3" x2="21" y2="21"></line>
+                            </svg>
+                        </div>
+                        <h3>No Account Needed</h3>
+                        <p class="text-muted text-sm">Skip the onboarding. Neither you nor your recipient needs to create an account or verify an email to use Sharebeam.</p>
+                    </div>
+                    
+                    <div class="bento-card reveal" style="transition-delay: 0.2s;">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <h3>Auto Expiry</h3>
+                        <p class="text-muted text-sm">Keep your data secure by setting files to self-destruct after a specific time or a certain number of downloads.</p>
+                    </div>
+                    
+                    <div class="bento-card reveal" style="transition-delay: 0.3s;">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </div>
+                        <h3>Password Protection</h3>
+                        <p class="text-muted text-sm">Add an extra layer of security for sensitive client work with end-to-end password protection on any link.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section container reveal">
+            <div class="metrics">
+                <div>
+                    <div class="metric-val text-main">9M+</div>
+                    <div class="text-sm text-muted font-medium">Files transferred</div>
+                </div>
+                <div>
+                    <div class="metric-val text-main">4.9</div>
+                    <div class="text-sm text-muted font-medium">On Trustpilot</div>
+                </div>
+                <div>
+                    <div class="metric-val text-main">4.8</div>
+                    <div class="text-sm text-muted font-medium">On G2</div>
+                </div>
+            </div>
+        </div>
+
+        <section id="testimonials" class="section">
+            <div class="container reveal">
+                <div class="testimonial-card">
+                    <div class="flex justify-center mb-6 text-main">
+                        <svg width="100" height="20" viewBox="0 0 100 20" fill="currentColor">
+                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z M30 15l-5.878 3.09 1.123-6.545L20.489 6.91l6.572-.955L30 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z M50 15l-5.878 3.09 1.123-6.545L40.489 6.91l6.572-.955L50 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z M70 15l-5.878 3.09 1.123-6.545L60.489 6.91l6.572-.955L70 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z M90 15l-5.878 3.09 1.123-6.545L80.489 6.91l6.572-.955L90 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                        </svg>
+                    </div>
+                    <blockquote class="quote text-main">
+                        "Sharebeam completely removed the friction from our review process. Sending 40GB dailies to clients used to be a nightmare of zipped folders and failed uploads. Now it just works."
+                    </blockquote>
+                    <div class="avatar-wrap">
+                        <div class="avatar">AR</div>
+                        <div class="text-left">
+                            <div class="font-medium text-main text-sm">Asha Rao</div>
+                            <div class="text-xs text-muted">Lead Videographer, Studio Nine</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing" class="section">
+            <div class="container">
+                <div class="pricing-header reveal">
+                    <h2 class="font-display text-4xl mb-4">Simple, transparent pricing</h2>
+                    <p class="text-lg text-muted">Start for free, upgrade when you need more power.</p>
+                    
+                    <div class="billing-toggle">
+                        <button class="toggle-btn active" id="btn-monthly">Monthly</button>
+                        <button class="toggle-btn" id="btn-annual">Annually <span class="text-xs text-main ml-1 font-semibold" style="color: var(--accent-start);">2 mos free</span></button>
+                    </div>
+                </div>
+
+                <div class="pricing-grid">
+                    <div class="price-card reveal">
+                        <div class="tier-name">Free</div>
+                        <div class="price">$0<span>/mo</span></div>
+                        <p class="text-sm text-muted">Perfect for occasional small transfers.</p>
+                        
+                        <ul class="feature-list">
+                            <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to 2GB per transfer</li>
+                            <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> 7 day file expiry</li>
+                            <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> No account required</li>
+                        </ul>
+                        <a href="#" class="btn btn-secondary w-full" style="width: 100%;">Start for free</a>
+                    </div>
+
+                    <div class="price-card popular reveal" style="transition-delay: 0.1s;">
+                        <div class="popular-badge">Most Popular</div>
+                        <div class="tier-name">Pro</div>
+                        <div class="price">$<span id="price-pro">12</span><span>/mo</span></div>
+                        <p class="text-sm text-muted">For creators and freelancers.</p>
+                        
+                        <ul class="feature-list">
+                            <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to 50GB per transfer</li>
+                            <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Custom expiry dates</li>
+                            <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Password protection</li>
+                            <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> 1TB Active Storage</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary w-full" style="width: 100%;">Get Pro</a>
+                    </div>
+
+                    <div class="price-card reveal" style="transition-delay: 0.2s;">
+                        <div class="tier-name">Team</div>
+                        <div class="price">$<span id="price-team">29</span><span>/mo</span></div>
+                        <p class="text-sm text-muted">For agencies and studios.</p>
+                        
+                        <ul class="feature-list">
+                            <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to 200GB per transfer</li>
+                            <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Custom branding</li>
+                            <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Multi-user workspace</li>
+                            <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> 5TB Active Storage</li>
+                        </ul>
+                        <a href="#" class="btn btn-secondary w-full" style="width: 100%;">Get Team</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cta" class="section pb-0">
+            <div class="container reveal">
+                <div class="cta-band">
+                    <h2 class="font-display">Ready to send?</h2>
+                    <p class="text-lg mb-8" style="color: rgba(255,255,255,0.8);">No credit card. No account required. Just select your files.</p>
+                    <a href="#" class="btn btn-primary" style="background: white; color: var(--text-main); box-shadow: none;">Select files to send</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content text-sm">
+            <div class="font-display font-bold text-lg text-main">Sharebeam</div>
+            <div class="footer-links">
+                <a href="#">Terms</a>
+                <a href="#">Privacy</a>
+                <a href="#">Security</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="text-muted">© 2024 Sharebeam Inc. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <div class="mobile-cta">
+        <a href="#cta" class="btn btn-primary" style="width: 100%;">Send a file</a>
+    </div>
+
+    <script>
+        // Scroll Reveal Logic
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            root: null,
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Pricing Toggle Logic
+        const btnMonthly = document.getElementById('btn-monthly');
+        const btnAnnual = document.getElementById('btn-annual');
+        const pricePro = document.getElementById('price-pro');
+        const priceTeam = document.getElementById('price-team');
+
+        const prices = {
+            monthly: { pro: '12', team: '29' },
+            annual: { pro: '10', team: '24' }
+        };
+
+        btnMonthly.addEventListener('click', () => {
+            btnMonthly.classList.add('active');
+            btnAnnual.classList.remove('active');
+            pricePro.innerText = prices.monthly.pro;
+            priceTeam.innerText = prices.monthly.team;
+        });
+
+        btnAnnual.addEventListener('click', () => {
+            btnAnnual.classList.add('active');
+            btnMonthly.classList.remove('active');
+            pricePro.innerText = prices.annual.pro;
+            priceTeam.innerText = prices.annual.team;
+        });
+    </script>
+</body>
+</html>

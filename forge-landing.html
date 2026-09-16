@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forge | Adaptive Strength Coaching</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0A0A0A;
+            --bg-surface: #141414;
+            --accent-start: #FF4D2E;
+            --accent-end: #FF8A3D;
+            --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-tertiary: rgba(255, 255, 255, 0.4);
+            --border: rgba(255, 255, 255, 0.08);
+            --font-body: 'Inter', -apple-system, sans-serif;
+            --font-heading: 'Instrument Serif', serif;
+            --section-py: clamp(80px, 10vw, 120px);
+            --max-w: 1200px;
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Reset & Base */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Noise Texture */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Typography */
+        h1, h2, h3, .logo-text { font-family: var(--font-heading); font-weight: 400; line-height: 1.1; }
+        h1 { font-size: clamp(3.5rem, 8vw, 6rem); letter-spacing: -0.03em; margin-bottom: 1.5rem; }
+        h2 { font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: -0.02em; margin-bottom: 1rem; }
+        h3 { font-size: 1.5rem; letter-spacing: -0.01em; margin-bottom: 0.75rem; }
+        p { color: var(--text-secondary); font-size: 1.125rem; }
+        .text-sm { font-size: 0.875rem; }
+        
+        .accent-text {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Layout */
+        .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; width: 100%; }
+        section { padding: var(--section-py) 0; }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 14px 28px; border-radius: 100px;
+            font-weight: 500; text-decoration: none; transition: var(--transition);
+            cursor: pointer; font-size: 1rem; border: none; font-family: var(--font-body);
+        }
+        .btn-primary {
+            background: var(--accent-gradient); color: #fff;
+            box-shadow: 0 4px 24px rgba(255, 77, 46, 0.2);
+            position: relative; overflow: hidden;
+        }
+        .btn-primary::after {
+            content: ''; position: absolute; inset: 0; background: linear-gradient(rgba(255,255,255,0.2), transparent);
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .btn-primary:hover::after { opacity: 1; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(255, 77, 46, 0.3); }
+        
+        .btn-secondary {
+            background: rgba(255,255,255,0.03); color: var(--text-primary);
+            border: 1px solid var(--border); backdrop-filter: blur(10px);
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+
+        /* Navigation */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        .nav-inner {
+            display: flex; justify-content: space-between; align-items: center;
+            height: 80px; max-width: var(--max-w); margin: 0 auto; padding: 0 24px;
+        }
+        .logo { font-family: var(--font-heading); font-size: 2rem; color: #fff; text-decoration: none; letter-spacing: -0.02em; }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9375rem; transition: color 0.2s; font-weight: 500; }
+        .nav-links a:hover { color: var(--text-primary); }
+        @media (max-width: 768px) { .nav-links.desktop-only { display: none; } }
+
+        /* Mesh Background */
+        .mesh-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100vh; z-index: -1; overflow: hidden; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15; animation: drift 20s infinite alternate linear; }
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--accent-start); }
+        .blob-2 { top: 40%; right: -20%; width: 60vw; height: 60vw; background: var(--accent-end); animation-delay: -5s; }
+        @keyframes drift { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(10%, 10%) scale(1.1); } }
+
+        /* Hero */
+        .hero { min-height: 100vh; display: flex; align-items: center; padding-top: 80px; }
+        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+        .hero-content p { font-size: clamp(1.125rem, 2vw, 1.375rem); max-width: 480px; margin-bottom: 40px; }
+        .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; }
+        
+        /* UI Mockup */
+        .ui-mockup {
+            background: rgba(20, 20, 20, 0.6);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 32px 64px rgba(0,0,0,0.5);
+            transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
+            transition: transform 0.5s ease;
+        }
+        .ui-mockup:hover { transform: perspective(1000px) rotateY(0deg) rotateX(0deg); }
+        .ui-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
+        .ui-tag { background: rgba(255,255,255,0.05); padding: 6px 12px; border-radius: 100px; font-size: 0.75rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+        
+        /* Progress Ring */
+        .progress-circle { position: relative; width: 120px; height: 120px; margin: 0 auto 32px; }
+        .progress-circle svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+        .circle-bg { fill: none; stroke: var(--border); stroke-width: 6; }
+        .circle-fill { fill: none; stroke: url(#gradient); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 314; stroke-dashoffset: 314; }
+        .progress-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .progress-text span:first-child { font-family: var(--font-heading); font-size: 2rem; line-height: 1; }
+        .progress-text span:last-child { font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+        
+        .workout-list { display: flex; flex-direction: column; gap: 16px; }
+        .workout-item { display: flex; align-items: center; gap: 16px; padding: 16px; background: rgba(255,255,255,0.02); border-radius: var(--radius-md); border: 1px solid transparent; transition: var(--transition); }
+        .workout-item:hover { background: rgba(255,255,255,0.04); border-color: var(--border); }
+        .workout-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--bg-base); display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); color: var(--text-secondary); }
+        .workout-info flex { display: flex; flex-direction: column; }
+        .workout-title { font-weight: 500; font-size: 0.9375rem; }
+        .workout-meta { font-size: 0.8125rem; color: var(--text-tertiary); margin-top: 4px; }
+
+        /* Logo Wall */
+        .logo-wall { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 48px 0; background: rgba(20,20,20,0.3); }
+        .logo-wall-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 32px; opacity: 0.5; filter: grayscale(100%); transition: var(--transition); }
+        .logo-wall:hover .logo-wall-inner { opacity: 0.8; }
+        .brand-logo { height: 24px; fill: currentColor; }
+
+        /* Bento Grid */
+        .section-header { text-align: center; max-width: 600px; margin: 0 auto 64px; }
+        .bento-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+        .bento-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 40px; transition: var(--transition); position: relative; overflow: hidden; }
+        .bento-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.15); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .bento-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at top right, rgba(255,77,46,0.05), transparent 60%); pointer-events: none; }
+        .icon-wrapper { width: 56px; height: 56px; border-radius: var(--radius-md); background: var(--bg-base); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: var(--accent-start); }
+        .icon-wrapper svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+        /* Metrics Strip */
+        .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; text-align: center; padding: 64px 0; }
+        .metric-value { font-family: var(--font-heading); font-size: clamp(3rem, 5vw, 4.5rem); margin-bottom: 8px; color: #fff; line-height: 1; }
+        .metric-label { font-size: 0.875rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 1px; font-weight: 500; }
+
+        /* Testimonial */
+        .testimonial { max-width: 800px; margin: 0 auto; text-align: center; }
+        .quote-icon { width: 48px; height: 48px; margin: 0 auto 32px; color: var(--accent-start); opacity: 0.5; }
+        .testimonial-text { font-family: var(--font-heading); font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.3; margin-bottom: 40px; }
+        .author { display: flex; align-items: center; justify-content: center; gap: 16px; }
+        .avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--bg-surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-size: 1.25rem; color: var(--accent-end); }
+        .author-info { text-align: left; }
+        .author-name { font-weight: 500; color: var(--text-primary); }
+        .author-role { font-size: 0.875rem; color: var(--text-tertiary); }
+
+        /* Pricing */
+        .billing-toggle { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 64px; }
+        .toggle-switch { position: relative; width: 56px; height: 32px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 100px; cursor: pointer; transition: var(--transition); }
+        .toggle-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; background: var(--text-primary); border-radius: 50%; transition: var(--transition); }
+        input[type="checkbox"] { display: none; }
+        input[type="checkbox"]:checked + .toggle-switch::after { transform: translateX(24px); background: var(--accent-start); }
+        .toggle-label { font-size: 0.9375rem; color: var(--text-secondary); cursor: pointer; }
+        .toggle-label.active { color: var(--text-primary); }
+        .save-badge { background: rgba(255,77,46,0.1); color: var(--accent-start); font-size: 0.75rem; padding: 4px 8px; border-radius: 100px; font-weight: 600; margin-left: 8px; border: 1px solid rgba(255,77,46,0.2); }
+
+        .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .pricing-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 48px 32px; display: flex; flex-direction: column; transition: var(--transition); }
+        .pricing-card.pro { position: relative; padding: 1px; border: none; background: linear-gradient(135deg, rgba(255,77,46,0.5), rgba(255,138,61,0.2)); }
+        .pricing-card.pro .card-inner { background: var(--bg-surface); border-radius: calc(var(--radius-lg) - 1px); padding: 47px 31px; height: 100%; display: flex; flex-direction: column; }
+        .popular-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--accent-gradient); color: #fff; font-size: 0.75rem; font-weight: 600; padding: 4px 16px; border-radius: 100px; letter-spacing: 0.5px; text-transform: uppercase; z-index: 1; box-shadow: 0 4px 12px rgba(255,77,46,0.3); }
+        .plan-name { font-size: 1.25rem; font-weight: 500; margin-bottom: 16px; }
+        .plan-price { font-family: var(--font-heading); font-size: 3.5rem; line-height: 1; margin-bottom: 8px; display: flex; align-items: baseline; gap: 4px; }
+        .plan-price span { font-family: var(--font-body); font-size: 1rem; color: var(--text-tertiary); font-weight: 400; }
+        .plan-desc { color: var(--text-secondary); margin-bottom: 32px; font-size: 0.9375rem; }
+        .plan-features { list-style: none; margin-bottom: 48px; flex-grow: 1; }
+        .plan-features li { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; font-size: 0.9375rem; color: var(--text-secondary); }
+        .plan-features li svg { width: 20px; height: 20px; color: var(--accent-start); flex-shrink: 0; }
+        .pricing-card .btn { width: 100%; }
+
+        /* CTA Band */
+        .cta-band { position: relative; text-align: center; padding: 120px 24px; border-top: 1px solid var(--border); overflow: hidden; }
+        .cta-band::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; background: var(--accent-start); filter: blur(200px); opacity: 0.1; z-index: -1; pointer-events: none; }
+        .cta-band h2 { max-width: 600px; margin: 0 auto 32px; }
+
+        /* Footer */
+        footer { border-top: 1px solid var(--border); padding: 48px 0; }
+        .footer-inner { display: flex; justify-content: space-between; align-items: center; }
+        .footer-links { display: flex; gap: 24px; }
+        .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.875rem; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--text-primary); }
+
+        /* Mobile Sticky CTA */
+        .mobile-cta-bar { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(10,10,10,0.9); backdrop-filter: blur(16px); padding: 16px 24px; border-top: 1px solid var(--border); z-index: 1000; }
+        .mobile-cta-bar .btn { width: 100%; }
+
+        /* Animations */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+
+        .animate-ring { animation: fillRing 2s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: 0.5s; }
+        @keyframes fillRing { to { stroke-dashoffset: 78; /* ~75% */ } }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero-grid { grid-template-columns: 1fr; gap: 80px; text-align: center; }
+            .hero-content p { margin: 0 auto 40px; }
+            .hero-ctas { justify-content: center; }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+            .bento-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .metrics { grid-template-columns: 1fr; gap: 32px; }
+            .footer-inner { flex-direction: column; gap: 24px; text-align: center; }
+            .mobile-cta-bar { display: block; }
+            body { padding-bottom: 80px; }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+            .reveal { opacity: 1; transform: none; }
+            .circle-fill { stroke-dashoffset: 78; }
+            .blob { animation: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <svg style="width:0;height:0;position:absolute;" aria-hidden="true">
+        <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FF4D2E" />
+                <stop offset="100%" stop-color="#FF8A3D" />
+            </linearGradient>
+            
+            <!-- Reusable Feature Icons -->
+            <g id="icon-calendar"><path d="M4 7v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7M4 7l2-4h12l2 4M4 7h16M12 11v6M9 14h6"/></g>
+            <g id="icon-chart"><path d="M3 3v18h18M7 15l4-4 4 4 6-6"/></g>
+            <g id="icon-play"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9l5 3-5 3v-6z"/></g>
+            <g id="icon-heart"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></g>
+            <g id="icon-check"><path d="M20 6L9 17l-5-5"/></g>
+        </defs>
+    </svg>
+
+    <div class="mesh-bg" aria-hidden="true">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <nav>
+        <div class="nav-inner">
+            <a href="#" class="logo">Forge</a>
+            <div class="nav-links desktop-only">
+                <a href="#method">Method</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#stories">Stories</a>
+            </div>
+            <div class="nav-links desktop-only">
+                <a href="#pricing" class="btn btn-secondary" style="padding: 10px 20px;">Start Free Trial</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero container">
+            <div class="hero-grid">
+                <div class="hero-content reveal">
+                    <h1>Stronger every week.<br><span class="accent-text">Zero guesswork.</span></h1>
+                    <p>Forge builds a 12-week strength plan that dynamically adapts to your body, your schedule, and your progress.</p>
+                    <div class="hero-ctas">
+                        <a href="#pricing" class="btn btn-primary">Start your first week free</a>
+                        <a href="#method" class="btn btn-secondary">See the plan</a>
+                    </div>
+                </div>
+                
+                <div class="hero-visual reveal delay-2">
+                    <div class="ui-mockup">
+                        <div class="ui-header">
+                            <div>
+                                <h3 style="margin:0;">Week 3 / Day 2</h3>
+                                <div class="text-sm" style="color:var(--text-tertiary);">Lower Body Power</div>
+                            </div>
+                            <span class="ui-tag">In Progress</span>
+                        </div>
+                        
+                        <div class="progress-circle">
+                            <svg viewBox="0 0 100 100">
+                                <circle class="circle-bg" cx="50" cy="50" r="47" />
+                                <circle class="circle-fill animate-ring" cx="50" cy="50" r="47" />
+                            </svg>
+                            <div class="progress-text">
+                                <span>75<span style="font-size:1rem;">%</span></span>
+                                <span>Completed</span>
+                            </div>
+                        </div>
+
+                        <div class="workout-list">
+                            <div class="workout-item">
+                                <div class="workout-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 5v14M18 5v14M4 7h4M16 7h4M4 17h4M16 17h4M6 12h12"/></svg>
+                                </div>
+                                <div class="workout-info">
+                                    <div class="workout-title">Heavy Deadlifts</div>
+                                    <div class="workout-meta">4 sets • 5 reps • 315 lbs</div>
+                                </div>
+                            </div>
+                            <div class="workout-item" style="opacity: 0.5;">
+                                <div class="workout-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                                </div>
+                                <div class="workout-info">
+                                    <div class="workout-title">Bulgarian Split Squats</div>
+                                    <div class="workout-meta">3 sets • 8 reps • 60 lbs</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="logo-wall" aria-label="Brands integrating with Forge">
+            <div class="container logo-wall-inner reveal">
+                <!-- Using stylized text as vector representation of brands to keep it clean and minimal -->
+                <svg class="brand-logo" viewBox="0 0 100 24" width="100"><text x="0" y="18" font-family="'Inter', sans-serif" font-weight="600" font-size="18" fill="currentColor" letter-spacing="-0.5">WHOOP</text></svg>
+                <svg class="brand-logo" viewBox="0 0 100 24" width="100"><text x="0" y="18" font-family="'Inter', sans-serif" font-weight="700" font-size="20" fill="currentColor" font-style="italic" letter-spacing="-1">STRAVA</text></svg>
+                <svg class="brand-logo" viewBox="0 0 160 24" width="160"><text x="0" y="18" font-family="-apple-system, sans-serif" font-weight="500" font-size="18" fill="currentColor"> Fitness+</text></svg>
+                <svg class="brand-logo" viewBox="0 0 120 24" width="120"><text x="0" y="18" font-family="'Inter', sans-serif" font-weight="800" font-size="18" fill="currentColor" font-style="italic" letter-spacing="-0.5">NIKE TRAINING</text></svg>
+                <svg class="brand-logo" viewBox="0 0 100 24" width="100"><text x="0" y="18" font-family="'Inter', sans-serif" font-weight="500" font-size="18" fill="currentColor" letter-spacing="1">PELOTON</text></svg>
+                <svg class="brand-logo" viewBox="0 0 100 24" width="100"><text x="0" y="18" font-family="'Inter', sans-serif" font-weight="600" font-size="18" fill="currentColor">FITBOD</text></svg>
+            </div>
+        </section>
+
+        <section id="method" class="container">
+            <div class="section-header reveal">
+                <h2>A system built for <span class="accent-text">results</span></h2>
+                <p>We removed the friction between you and your goals. No more searching for workouts or guessing weights.</p>
+            </div>
+            
+            <div class="bento-grid">
+                <div class="bento-card reveal">
+                    <div class="icon-wrapper"><svg viewBox="0 0 24 24"><use href="#icon-calendar"/></svg></div>
+                    <h3>Adaptive 12-week plan</h3>
+                    <p>Your program evolves based on your daily readiness and performance, ensuring optimal progressive overload without burnout.</p>
+                </div>
+                <div class="bento-card reveal delay-1">
+                    <div class="icon-wrapper"><svg viewBox="0 0 24 24"><use href="#icon-chart"/></svg></div>
+                    <h3>Progress tracking</h3>
+                    <p>Log your sets, reps, and RPE seamlessly. Watch your calculated 1RM and total volume grow over the 12-week cycle.</p>
+                </div>
+                <div class="bento-card reveal">
+                    <div class="icon-wrapper"><svg viewBox="0 0 24 24"><use href="#icon-play"/></svg></div>
+                    <h3>Form coaching videos</h3>
+                    <p>HD demonstrations and cues for every movement, straight from elite powerlifting and strength coaches.</p>
+                </div>
+                <div class="bento-card reveal delay-1">
+                    <div class="icon-wrapper"><svg viewBox="0 0 24 24"><use href="#icon-heart"/></svg></div>
+                    <h3>Recovery insights</h3>
+                    <p>Integrates with your wearables to adjust daily volume based on sleep metrics and heart rate variability.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="container reveal">
+            <div class="metrics" style="border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+                <div>
+                    <div class="metric-value">92%</div>
+                    <div class="metric-label">Finish the 12 weeks</div>
+                </div>
+                <div>
+                    <div class="metric-value">1.2M</div>
+                    <div class="metric-label">Workouts logged</div>
+                </div>
+                <div>
+                    <div class="metric-value">4.8</div>
+                    <div class="metric-label">App store rating</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="stories" class="container">
+            <div class="testimonial reveal">
+                <svg class="quote-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21L16.44 14.99H11.96L11.96 3H21.96L21.96 14.99L19.49 21H14.017ZM3.987 21L6.41 14.99H1.93L1.93 3H11.93L11.93 14.99L9.46 21H3.987Z"/></svg>
+                <div class="testimonial-text">"As a founder, my schedule is chaotic. Forge is the only program that actually adjusts when I miss a day or feel under-recovered. I've added 40lbs to my squat in one cycle."</div>
+                <div class="author">
+                    <div class="avatar" aria-hidden="true">MK</div>
+                    <div class="author-info">
+                        <div class="author-name">Marcus K.</div>
+                        <div class="author-role">Tech Founder</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing" class="container">
+            <div class="section-header reveal">
+                <h2>Invest in your <span class="accent-text">strength</span></h2>
+                <p>Start your first week free. Cancel anytime.</p>
+            </div>
+
+            <div class="billing-toggle reveal">
+                <span class="toggle-label" id="monthly-label">Monthly</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="billing-toggle" checked aria-label="Toggle annual billing">
+                </label>
+                <span class="toggle-label active" id="annual-label">Annually <span class="save-badge">2 Months Free</span></span>
+            </div>
+
+            <div class="pricing-grid">
+                <!-- Starter -->
+                <div class="pricing-card reveal">
+                    <div class="plan-name">Starter</div>
+                    <div class="plan-price">$0<span>/mo</span></div>
+                    <div class="plan-desc">Basic logging for self-guided athletes.</div>
+                    <ul class="plan-features">
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-check"/></svg> Manual workout logging</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-check"/></svg> Basic exercise library</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-check"/></svg> 1RM calculator</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary">Get Started</a>
+                </div>
+
+                <!-- Pro -->
+                <div class="pricing-card pro reveal delay-1">
+                    <div class="popular-badge">Most Popular</div>
+                    <div class="card-inner">
+                        <div class="plan-name">Pro</div>
+                        <div class="plan-price" id="price-pro">$19<span>/mo</span></div>
+                        <div class="plan-desc">The full adaptive 12-week experience.</div>
+                        <ul class="plan-features">
+                            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-check"/></svg> Adaptive 12-week programming</li>
+                            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-check"/></svg> Wearable integration (Apple/Garmin)</li>
+                            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-check"/></svg> Advanced recovery insights</li>
+                            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-check"/></svg> Form video library</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary">Start 7-Day Free Trial</a>
+                    </div>
+                </div>
+
+                <!-- Coach -->
+                <div class="pricing-card reveal delay-2">
+                    <div class="plan-name">Coach</div>
+                    <div class="plan-price" id="price-coach">$79<span>/mo</span></div>
+                    <div class="plan-desc">Human oversight for serious athletes.</div>
+                    <ul class="plan-features">
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-check"/></svg> Everything in Pro</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-check"/></svg> Weekly form check via video</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-check"/></svg> Direct messaging with a coach</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-check"/></svg> Custom macro guidelines</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary">Apply for Coaching</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-band reveal">
+            <h2>Ready to build a <span class="accent-text">stronger</span> baseline?</h2>
+            <a href="#pricing" class="btn btn-primary" style="padding: 16px 36px; font-size: 1.125rem;">Start your first week free</a>
+        </section>
+    </main>
+
+    <footer class="container">
+        <div class="footer-inner">
+            <div class="logo-text" style="font-size: 1.5rem;">Forge</div>
+            <div class="footer-links">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Contact Support</a>
+            </div>
+            <div style="color: var(--text-tertiary); font-size: 0.875rem;">© 2023 Forge Athletics. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <div class="mobile-cta-bar">
+        <a href="#pricing" class="btn btn-primary">Start Free Trial</a>
+    </div>
+
+    <script>
+        // Scroll Reveal Observer
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    // Unobserve after animating in
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Pricing Toggle Logic
+        const toggle = document.getElementById('billing-toggle');
+        const pricePro = document.getElementById('price-pro');
+        const priceCoach = document.getElementById('price-coach');
+        const monthlyLabel = document.getElementById('monthly-label');
+        const annualLabel = document.getElementById('annual-label');
+
+        // Annual prices (monthly equivalent)
+        const pricesAnnual = { pro: 19, coach: 65 }; // e.g. 24 * 10 / 12 = 20 (rounded down to 19 for marketing), 79 * 10 / 12 = 65
+        // Monthly prices
+        const pricesMonthly = { pro: 24, coach: 79 };
+
+        toggle.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                // Annual
+                pricePro.innerHTML = `$${pricesAnnual.pro}<span>/mo</span>`;
+                priceCoach.innerHTML = `$${pricesAnnual.coach}<span>/mo</span>`;
+                annualLabel.classList.add('active');
+                monthlyLabel.classList.remove('active');
+            } else {
+                // Monthly
+                pricePro.innerHTML = `$${pricesMonthly.pro}<span>/mo</span>`;
+                priceCoach.innerHTML = `$${pricesMonthly.coach}<span>/mo</span>`;
+                monthlyLabel.classList.add('active');
+                annualLabel.classList.remove('active');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

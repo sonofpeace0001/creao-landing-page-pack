@@ -1,0 +1,47 @@
+Research the top 5 premium SaaS landing pages in the Cloud storage space (Linear, Vercel, Framer, Raycast, Arc grade).
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Cloudbin, private cloud storage for your files.
+
+Audience: people and teams storing files.
+Hero headline: "Your files, your cloud."
+Subheadline: "Cloudbin gives you end-to-end encrypted storage, sync, and sharing across every device."
+Primary CTA: "Start free". Secondary CTA: "See it sync".
+
+Design system:
+- Dark theme, background #0A0A0A, surfaces #141414
+- Accent gradient from #0EA5E9 to #6366F1
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)
+- centered-hero layout
+
+Sections:
+1. Sticky glass nav with "Cloudbin" wordmark + 3 nav links + primary CTA
+2. centered-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction
+3. Logo wall: Dropbox, Google Drive, iCloud, pCloud, Sync, Tresorit in muted monochrome
+4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):
+   - E2E encryption (custom inline SVG line icon, no emoji, no stock)
+   - Sync (custom inline SVG line icon, no emoji, no stock)
+   - Sharing (custom inline SVG line icon, no emoji, no stock)
+   - Version history (custom inline SVG line icon, no emoji, no stock)
+5. Metrics strip: 3.2M users | 4.8 rating | 4.7 rating
+6. Testimonial card: "Finally, storage I trust. - Mia Chen, Photographer" with a generated SVG monogram avatar
+7. Pricing:       - Free 5GB
+      - Plus $8
+      - Team $15 with the middle tier highlighted (gradient border + "Most popular" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

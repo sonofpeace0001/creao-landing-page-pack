@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio | Launch your course this afternoon</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0A0A0A;
+            --surface: #141414;
+            --surface-hover: #1A1A1A;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+            --text-main: #FFFFFF;
+            --text-muted: #A1A1AA;
+            --accent-start: #8B5CF6;
+            --accent-end: #EC4899;
+            --accent-gradient: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --container: 1200px;
+            --section-padding: clamp(60px, 10vw, 120px);
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            :root {
+                --ease-out: linear;
+            }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Noise Texture */
+        .noise {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.4;
+            mix-blend-mode: overlay;
+            background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: 'Instrument Serif', serif;
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        h1 { font-size: clamp(3rem, 6vw, 5.5rem); }
+        h2 { font-size: clamp(2.5rem, 4.5vw, 4rem); }
+        h3 { font-size: clamp(1.5rem, 3vw, 2.5rem); }
+
+        p { color: var(--text-muted); }
+        
+        .text-gradient {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Layout */
+        .container {
+            max-width: var(--container);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        section { padding: var(--section-padding) 0; }
+
+        /* Buttons & Links */
+        a { text-decoration: none; color: inherit; }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 24px;
+            height: 48px;
+            border-radius: 99px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s var(--ease-out);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: #fff;
+            box-shadow: 0 4px 14px 0 rgba(139, 92, 246, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px 0 rgba(139, 92, 246, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            border-color: var(--border);
+            color: var(--text-main);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-hover);
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            background: rgba(10, 10, 10, 0.7);
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+        }
+
+        .logo {
+            font-family: 'Instrument Serif', serif;
+            font-size: 2rem;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--text-main); }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+        }
+
+        /* Hero */
+        .hero {
+            position: relative;
+            padding-top: calc(72px + var(--section-padding));
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .mesh-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            filter: blur(80px);
+            opacity: 0.5;
+        }
+
+        .mesh-blob {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out alternate;
+        }
+
+        .mesh-1 { width: 600px; height: 600px; background: rgba(139, 92, 246, 0.3); top: -10%; left: -10%; }
+        .mesh-2 { width: 500px; height: 500px; background: rgba(236, 72, 153, 0.2); bottom: 10%; right: -5%; animation-delay: -5s; }
+        .mesh-3 { width: 400px; height: 400px; background: rgba(59, 130, 246, 0.2); top: 40%; left: 40%; animation-delay: -10s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 50px) scale(1.1); }
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            margin: 24px 0 40px;
+            max-width: 480px;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        /* Mockup UI CSS-only */
+        .mockup-wrapper {
+            perspective: 1000px;
+        }
+        
+        .mockup {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+            transform: rotateY(-10deg) rotateX(5deg) scale(0.95);
+            transition: transform 0.5s var(--ease-out);
+        }
+
+        .mockup:hover {
+            transform: rotateY(-5deg) rotateX(2deg) scale(1);
+        }
+
+        .mockup-header {
+            height: 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 8px;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot-r { background: #FF5F56; }
+        .dot-y { background: #FFBD2E; }
+        .dot-g { background: #27C93F; }
+
+        .mockup-body {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            height: 400px;
+        }
+
+        .mockup-sidebar {
+            border-right: 1px solid var(--border);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .skeleton-line { height: 12px; background: var(--border); border-radius: 4px; }
+        .sl-short { width: 60%; }
+        .sl-med { width: 80%; }
+        .sl-long { width: 100%; }
+
+        .mockup-content { padding: 24px; display: flex; flex-direction: column; gap: 24px; }
+        
+        .mockup-video {
+            flex: 1;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .play-btn {
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center;
+        }
+        
+        .play-btn::after {
+            content: ''; width: 0; height: 0;
+            border-style: solid; border-width: 6px 0 6px 10px;
+            border-color: transparent transparent transparent var(--text-main);
+            margin-left: 4px;
+        }
+
+        .mockup-progress {
+            position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: var(--border);
+        }
+        .mockup-progress-fill {
+            height: 100%; background: var(--accent-gradient); width: 0%;
+            animation: progress 4s ease-in-out infinite;
+        }
+
+        @keyframes progress { 0% { width: 0%; } 50%, 100% { width: 100%; } }
+
+        @media (max-width: 992px) {
+            .hero-grid { grid-template-columns: 1fr; text-align: center; }
+            .hero-content p { margin: 24px auto 40px; }
+            .hero-ctas { justify-content: center; }
+            .mockup { transform: none; }
+            .mockup:hover { transform: none; }
+            .mockup-body { grid-template-columns: 1fr; }
+            .mockup-sidebar { display: none; }
+        }
+
+        /* Logo Wall */
+        .logos {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: rgba(20,20,20,0.3);
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .logos p { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 32px; }
+        
+        .logo-grid {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(32px, 8vw, 80px); align-items: center;
+            opacity: 0.6;
+        }
+
+        .logo-item {
+            font-size: 1.25rem; font-weight: 600; letter-spacing: -0.03em;
+            color: var(--text-muted); transition: color 0.3s; cursor: default;
+            font-family: 'Inter', sans-serif;
+        }
+        .logo-item:hover { color: var(--text-main); }
+        
+        /* Typography tweaks for fake logos */
+        .logo-teachable { font-weight: 500; }
+        .logo-kajabi { font-weight: 600; letter-spacing: 0; }
+        .logo-podia { font-weight: 500; letter-spacing: -0.05em; }
+        .logo-thinkific { font-weight: 400; text-transform: uppercase; font-size: 1rem; letter-spacing: 0.05em; }
+        .logo-gumroad { font-weight: 700; letter-spacing: -0.04em; }
+        .logo-skool { font-weight: 600; letter-spacing: -0.02em; }
+
+        /* Bento Grid */
+        .section-header { text-align: center; margin-bottom: 64px; max-width: 600px; margin-inline: auto; }
+        
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .bento-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            display: flex; flex-direction: column; gap: 24px;
+            transition: transform 0.3s var(--ease-out), border-color 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bento-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-hover);
+        }
+
+        .bento-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(255,255,255,0.03), transparent 40%);
+            opacity: 0; transition: opacity 0.3s; pointer-events: none;
+        }
+        .bento-card:hover::before { opacity: 1; }
+
+        .bento-icon {
+            width: 48px; height: 48px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-main);
+        }
+
+        .bento-icon svg { width: 24px; height: 24px; stroke-width: 1.5; stroke: currentColor; fill: none; }
+
+        .bento-title { font-size: 1.25rem; font-weight: 500; margin-bottom: 8px; font-family: 'Inter', sans-serif; letter-spacing: -0.01em;}
+        .bento-desc { color: var(--text-muted); font-size: 0.95rem; }
+
+        .span-2 { grid-column: span 2; }
+        .span-1 { grid-column: span 1; }
+
+        @media (max-width: 992px) {
+            .bento-grid { grid-template-columns: 1fr; }
+            .span-2, .span-1 { grid-column: span 1; }
+        }
+
+        /* Metrics */
+        .metrics { padding: 80px 0; border-bottom: 1px solid var(--border); }
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; text-align: center; }
+        .metric-value { font-family: 'Instrument Serif', serif; font-size: clamp(3rem, 5vw, 4.5rem); line-height: 1; margin-bottom: 8px; }
+        .metric-label { color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        @media (max-width: 768px) { .metrics-grid { grid-template-columns: 1fr; gap: 48px; } }
+
+        /* Testimonial */
+        .testimonial { text-align: center; max-width: 800px; margin: 0 auto; }
+        .quote { font-family: 'Instrument Serif', serif; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.2; margin-bottom: 40px; }
+        .author { display: flex; align-items: center; justify-content: center; gap: 16px; }
+        .avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: 'Instrument Serif', serif; font-size: 1.2rem; }
+        .author-info { text-align: left; }
+        .author-name { font-weight: 500; font-size: 0.95rem; }
+        .author-title { color: var(--text-muted); font-size: 0.85rem; }
+
+        /* Pricing */
+        .pricing-toggle { display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 64px; }
+        .toggle-label { font-size: 0.95rem; color: var(--text-muted); cursor: pointer; transition: color 0.3s; }
+        .toggle-label.active { color: var(--text-main); }
+        
+        .switch { position: relative; display: inline-block; width: 52px; height: 28px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--surface); border: 1px solid var(--border); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: var(--text-main); transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--accent-start); border-color: transparent; }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: center; }
+
+        .price-card {
+            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+            padding: 40px 32px; display: flex; flex-direction: column; height: 100%;
+        }
+
+        .price-card.popular {
+            background: linear-gradient(var(--bg), var(--bg)) padding-box, var(--accent-gradient) border-box;
+            border: 1px solid transparent;
+            position: relative;
+            transform: scale(1.05);
+            z-index: 2;
+        }
+
+        .popular-badge {
+            position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+            background: var(--accent-gradient); color: #fff; font-size: 0.75rem; font-weight: 600;
+            padding: 4px 12px; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.05em;
+        }
+
+        .tier-name { font-size: 1.25rem; font-weight: 500; margin-bottom: 8px; }
+        .tier-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 32px; height: 40px; }
+        .tier-price { font-family: 'Instrument Serif', serif; font-size: 3.5rem; line-height: 1; margin-bottom: 32px; display: flex; align-items: baseline; gap: 8px;}
+        .tier-period { font-family: 'Inter', sans-serif; font-size: 1rem; color: var(--text-muted); font-weight: 400; }
+        
+        .feature-list { list-style: none; margin-bottom: 40px; flex-grow: 1; display: flex; flex-direction: column; gap: 16px; }
+        .feature-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 0.95rem; color: var(--text-muted); }
+        .feature-list svg { width: 18px; height: 18px; color: var(--text-main); flex-shrink: 0; margin-top: 2px; }
+
+        .price-card .btn { width: 100%; }
+
+        @media (max-width: 992px) {
+            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; gap: 32px; }
+            .price-card.popular { transform: scale(1); }
+        }
+
+        /* Final CTA */
+        .cta-final {
+            text-align: center; padding: 120px 24px; position: relative; overflow: hidden;
+            border-top: 1px solid var(--border);
+        }
+        .cta-glow {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 800px; height: 400px; background: var(--accent-gradient);
+            filter: blur(150px); opacity: 0.15; z-index: -1; border-radius: 50%;
+            pointer-events: none;
+        }
+        .cta-final h2 { margin-bottom: 24px; }
+        .cta-final p { margin-bottom: 40px; font-size: 1.1rem; }
+
+        /* Footer */
+        footer { border-top: 1px solid var(--border); padding: 48px 0; }
+        .footer-inner { display: flex; justify-content: space-between; align-items: center; }
+        .footer-logo { font-family: 'Instrument Serif', serif; font-size: 1.5rem; }
+        .footer-links { display: flex; gap: 24px; }
+        .footer-links a { color: var(--text-muted); font-size: 0.9rem; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--text-main); }
+        
+        @media (max-width: 600px) {
+            .footer-inner { flex-direction: column; gap: 24px; text-align: center; }
+        }
+
+        /* Mobile Sticky CTA */
+        .mobile-cta {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: rgba(20,20,20,0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid var(--border); padding: 16px 24px;
+            display: none; z-index: 1000;
+        }
+        .mobile-cta .btn { width: 100%; }
+        @media (max-width: 768px) { .mobile-cta { display: block; } body { padding-bottom: 80px; } }
+
+        /* Scroll Reveal Animation */
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+
+    <nav>
+        <div class="container nav-inner">
+            <a href="#" class="logo">Studio</a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#testimonials">Wall of Love</a>
+                <a href="#pricing">Pricing</a>
+            </div>
+            <a href="#pricing" class="btn btn-primary" style="display: none;">Start building free</a>
+            <!-- Using JS to handle responsive display of CTA in nav vs sticky footer to avoid duplicate IDs/logic if needed, but simple CSS hide/show works best -->
+            <a href="#pricing" class="btn btn-primary desktop-cta" aria-label="Start building free">Start free</a>
+        </div>
+    </nav>
+    <style>
+        @media (max-width: 768px) { .desktop-cta { display: none; } }
+    </style>
+
+    <main>
+        <section class="hero">
+            <div class="mesh-bg">
+                <div class="mesh-blob mesh-1"></div>
+                <div class="mesh-blob mesh-2"></div>
+                <div class="mesh-blob mesh-3"></div>
+            </div>
+            <div class="container hero-grid">
+                <div class="hero-content reveal">
+                    <h1>Launch your course <br>this afternoon.</h1>
+                    <p>Studio handles payments, student access, and video hosting so you can focus on teaching.</p>
+                    <div class="hero-ctas">
+                        <a href="#pricing" class="btn btn-primary">Start building free</a>
+                        <a href="#" class="btn btn-secondary">See a sample course</a>
+                    </div>
+                </div>
+                
+                <div class="hero-visual reveal" style="transition-delay: 0.2s;">
+                    <div class="mockup-wrapper">
+                        <div class="mockup">
+                            <div class="mockup-header">
+                                <div class="mockup-dot dot-r"></div>
+                                <div class="mockup-dot dot-y"></div>
+                                <div class="mockup-dot dot-g"></div>
+                            </div>
+                            <div class="mockup-body">
+                                <div class="mockup-sidebar">
+                                    <div class="skeleton-line sl-med"></div>
+                                    <div class="skeleton-line sl-short" style="margin-top: 24px; opacity: 0.5;"></div>
+                                    <div class="skeleton-line sl-long" style="opacity: 0.5;"></div>
+                                    <div class="skeleton-line sl-med" style="opacity: 0.5;"></div>
+                                </div>
+                                <div class="mockup-content">
+                                    <div class="mockup-video">
+                                        <div class="play-btn"></div>
+                                        <div class="mockup-progress"><div class="mockup-progress-fill"></div></div>
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                                        <div class="skeleton-line sl-short" style="height: 20px;"></div>
+                                        <div class="skeleton-line sl-long"></div>
+                                        <div class="skeleton-line sl-med"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="logos reveal">
+            <div class="container">
+                <p>Migrate from or integrate with</p>
+                <div class="logo-grid">
+                    <span class="logo-item logo-teachable">teachable</span>
+                    <span class="logo-item logo-kajabi">KAJABI</span>
+                    <span class="logo-item logo-podia">podia</span>
+                    <span class="logo-item logo-thinkific">Thinkific</span>
+                    <span class="logo-item logo-gumroad">Gumroad</span>
+                    <span class="logo-item logo-skool">skool</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="container reveal">
+            <div class="section-header">
+                <h2>Everything you need, <br>nothing you don't.</h2>
+            </div>
+            
+            <div class="bento-grid">
+                <!-- Card 1 -->
+                <div class="bento-card span-2 card-hover">
+                    <div class="bento-icon">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/><path d="M7 14h.01"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="bento-title">Built-in payments</h3>
+                        <p class="bento-desc">Accept credit cards and Apple Pay globally in one click. We handle taxes, receipts, and payouts automatically.</p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bento-card span-1 card-hover">
+                    <div class="bento-icon">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="bento-title">Student dashboards</h3>
+                        <p class="bento-desc">Beautiful, distraction-free learning environments out of the box.</p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bento-card span-1 card-hover">
+                    <div class="bento-icon">
+                        <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m10 9 5 3-5 3z"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="bento-title">Video hosting</h3>
+                        <p class="bento-desc">Lightning-fast 4K streaming globally, included in every plan. No external CDNs required.</p>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="bento-card span-2 card-hover">
+                    <div class="bento-icon">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="bento-title">Drip lessons</h3>
+                        <p class="bento-desc">Schedule content to unlock over time. Keep cohorts synchronized and prevent students from feeling overwhelmed.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="metrics reveal">
+            <div class="container metrics-grid">
+                <div>
+                    <div class="metric-value">9,400+</div>
+                    <div class="metric-label">Active Creators</div>
+                </div>
+                <div>
+                    <div class="metric-value">$31M</div>
+                    <div class="metric-label">Paid out in 2023</div>
+                </div>
+                <div>
+                    <div class="metric-value">4.9/5</div>
+                    <div class="metric-label">Average Student Rating</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="container reveal" style="padding: 120px 24px;">
+            <div class="testimonial">
+                <p class="quote">"I migrated my entire curriculum and launched my new cohort in a single weekend. It just works."</p>
+                <div class="author">
+                    <div class="avatar">
+                        <svg viewBox="0 0 40 40" width="40" height="40" style="border-radius: 50%;">
+                            <rect width="100%" height="100%" fill="#1A1A1A"/>
+                            <text x="50%" y="50%" fill="#FFF" font-family="'Instrument Serif', serif" font-size="16" text-anchor="middle" dy=".3em">DR</text>
+                        </svg>
+                    </div>
+                    <div class="author-info">
+                        <div class="author-name">Dana Ruiz</div>
+                        <div class="author-title">Design Educator</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing" class="container reveal">
+            <div class="section-header">
+                <h2>Simple, transparent pricing.</h2>
+            </div>
+            
+            <div class="pricing-toggle">
+                <span class="toggle-label active" id="label-monthly">Monthly</span>
+                <label class="switch">
+                    <input type="checkbox" id="billing-toggle" aria-label="Toggle annual billing">
+                    <span class="slider"></span>
+                </label>
+                <span class="toggle-label" id="label-annual">Annually <span style="color: var(--accent-start); font-size: 0.8rem; margin-left: 4px;">(2 mos free)</span></span>
+            </div>
+
+            <div class="pricing-grid">
+                <!-- Free -->
+                <div class="price-card">
+                    <h3 class="tier-name">Free</h3>
+                    <p class="tier-desc">Perfect for testing your material.</p>
+                    <div class="tier-price">$0<span class="tier-period">/forever</span></div>
+                    <ul class="feature-list">
+                        <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> 1 Course</li>
+                        <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Unlimited students</li>
+                        <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> 10% transaction fee</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary">Get started</a>
+                </div>
+
+                <!-- Creator -->
+                <div class="price-card popular">
+                    <div class="popular-badge">Most Popular</div>
+                    <h3 class="tier-name">Creator</h3>
+                    <p class="tier-desc">Everything you need to run a business.</p>
+                    <div class="tier-price">$<span id="price-creator">39</span><span class="tier-period" id="period-creator">/mo</span></div>
+                    <ul class="feature-list">
+                        <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Unlimited courses</li>
+                        <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> 0% transaction fee</li>
+                        <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Custom domain</li>
+                        <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Drip scheduling</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary">Start free trial</a>
+                </div>
+
+                <!-- Studio -->
+                <div class="price-card">
+                    <h3 class="tier-name">Studio</h3>
+                    <p class="tier-desc">For teams and high-volume schools.</p>
+                    <div class="tier-price">$<span id="price-studio">99</span><span class="tier-period" id="period-studio">/mo</span></div>
+                    <ul class="feature-list">
+                        <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Everything in Creator</li>
+                        <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> API & Webhooks</li>
+                        <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Affiliate center</li>
+                        <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> Priority support</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary">Start free trial</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-final reveal">
+            <div class="cta-glow"></div>
+            <div class="container">
+                <h2 class="text-gradient">Ready to share your knowledge?</h2>
+                <p>Join thousands of creators building independent businesses on Studio.</p>
+                <a href="#pricing" class="btn btn-primary" style="height: 56px; padding: 0 32px; font-size: 1.1rem;">Launch your course today</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="container">
+        <div class="footer-inner">
+            <div class="footer-logo">Studio</div>
+            <div class="footer-links">
+                <a href="#">Twitter</a>
+                <a href="#">Terms</a>
+                <a href="#">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="mobile-cta">
+        <a href="#pricing" class="btn btn-primary">Start building free</a>
+    </div>
+
+    <script>
+        // Scroll Reveal
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach((el) => {
+            observer.observe(el);
+        });
+
+        // Pricing Toggle Logic
+        const toggle = document.getElementById('billing-toggle');
+        const priceCreator = document.getElementById('price-creator');
+        const periodCreator = document.getElementById('period-creator');
+        const priceStudio = document.getElementById('price-studio');
+        const periodStudio = document.getElementById('period-studio');
+        const labelMonthly = document.getElementById('label-monthly');
+        const labelAnnual = document.getElementById('label-annual');
+
+        // Annual = 2 months free. Displaying equivalent monthly price for visual appeal, or total.
+        // Standard pattern is showing total yearly billing divided by 12, or just yearly total.
+        // Let's show yearly total to be absolutely transparent and match requirements (Creator $39 -> 10 mo = $390/yr)
+        
+        toggle.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                // Annual
+                priceCreator.innerText = '390';
+                periodCreator.innerText = '/yr';
+                priceStudio.innerText = '990';
+                periodStudio.innerText = '/yr';
+                labelMonthly.classList.remove('active');
+                labelAnnual.classList.add('active');
+            } else {
+                // Monthly
+                priceCreator.innerText = '39';
+                periodCreator.innerText = '/mo';
+                priceStudio.innerText = '99';
+                periodStudio.innerText = '/mo';
+                labelAnnual.classList.remove('active');
+                labelMonthly.classList.add('active');
+            }
+        });
+
+        // Bento Card Mouse Follow Glow Effect
+        document.querySelectorAll('.card-hover').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+</body>
+</html>

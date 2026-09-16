@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadence | Your day, planned around your energy.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Design System */
+            --bg: #0A0A0A;
+            --surface: #141414;
+            --surface-hover: #1A1A1A;
+            --text-main: #FFFFFF;
+            --text-muted: #A1A1AA;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+            
+            /* Accents */
+            --accent-amber: #F59E0B;
+            --accent-rose: #F43F5E;
+            --gradient: linear-gradient(135deg, var(--accent-amber), var(--accent-rose));
+            
+            /* Typography */
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-serif: 'Instrument Serif', Georgia, serif;
+            
+            /* Spacing & Layout */
+            --max-width: 1200px;
+            --section-padding: clamp(4rem, 10vw, 7.5rem); /* ~120px */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 24px;
+            
+            /* Transitions */
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-fast: 0.2s var(--ease-out);
+            --transition-slow: 0.6s var(--ease-out);
+        }
+
+        /* Reset & Base */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Noise Texture */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Animated Mesh Gradient Background */
+        .mesh-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .mesh-blob {
+            position: absolute;
+            filter: blur(90px);
+            opacity: 0.15;
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out alternate;
+        }
+
+        .mesh-blob.one {
+            top: -10%;
+            left: 20%;
+            width: 600px;
+            height: 600px;
+            background: var(--accent-amber);
+            animation-delay: -5s;
+        }
+
+        .mesh-blob.two {
+            top: 20%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: var(--accent-rose);
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 50px) scale(1.1); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .mesh-blob { animation: none; }
+            * { scroll-behavior: auto !important; transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+        }
+
+        /* Layout Utility */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Typography Utilities */
+        h1, h2, h3 { font-family: var(--font-serif); font-weight: 400; line-height: 1.1; }
+        .text-gradient {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .muted { color: var(--text-muted); }
+        .balance { text-wrap: balance; }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all var(--transition-fast);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        
+        .btn-primary {
+            background: var(--gradient);
+            color: #fff;
+            box-shadow: 0 4px 14px 0 rgba(244, 63, 94, 0.2);
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px 0 rgba(244, 63, 94, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-hover);
+            border-color: var(--border-hover);
+        }
+
+        /* Section Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity var(--transition-slow), transform var(--transition-slow);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 1. Navbar */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color var(--transition-fast);
+        }
+
+        .nav-links a:hover { color: var(--text-main); }
+
+        @media (max-width: 768px) {
+            .nav-links, .nav .btn { display: none; }
+        }
+
+        /* 2. Hero Section */
+        .hero {
+            padding-top: calc(64px + var(--section-padding));
+            padding-bottom: var(--section-padding);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+        }
+
+        .hero p {
+            font-size: clamp(1.125rem, 2vw, 1.375rem);
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 5rem;
+        }
+
+        /* Hero UI Mockup (CSS Only) */
+        .ui-mockup {
+            width: 100%;
+            max-width: 1000px;
+            height: 600px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .ui-header {
+            height: 48px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .ui-dots {
+            display: flex;
+            gap: 6px;
+        }
+        
+        .ui-dot { width: 10px; height: 10px; border-radius: 50%; background: #333; }
+
+        .ui-body {
+            display: flex;
+            flex: 1;
+            background: var(--bg);
+        }
+
+        .ui-sidebar {
+            width: 240px;
+            border-right: 1px solid var(--border);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .ui-sidebar-item {
+            height: 24px;
+            background: var(--surface);
+            border-radius: 4px;
+            width: 80%;
+            opacity: 0.5;
+        }
+
+        .ui-main {
+            flex: 1;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .ui-section-title {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .ui-task {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ui-task-left { display: flex; align-items: center; gap: 1rem; }
+        .ui-checkbox { width: 16px; height: 16px; border: 1px solid var(--border); border-radius: 4px; }
+        .ui-task-line { height: 12px; background: #333; border-radius: 2px; width: 120px; }
+        
+        .ui-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--accent-amber);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        /* Micro-interaction Animation */
+        .ui-task.active-task {
+            border-color: rgba(244, 63, 94, 0.4);
+            box-shadow: 0 0 20px rgba(244, 63, 94, 0.1);
+        }
+        
+        .ui-task.active-task::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--gradient);
+            animation: pulse-height 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse-height {
+            0%, 100% { height: 40%; top: 30%; }
+            50% { height: 80%; top: 10%; }
+        }
+
+        @media (max-width: 768px) {
+            .ui-sidebar { display: none; }
+            .ui-mockup { height: 400px; }
+            .hero-ctas { flex-direction: column; width: 100%; max-width: 300px; }
+        }
+
+        /* 3. Logo Wall */
+        .logo-wall {
+            padding: var(--section-padding) 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+            background: linear-gradient(to bottom, transparent, rgba(20,20,20,0.3), transparent);
+        }
+
+        .logo-wall p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(2rem, 5vw, 4rem);
+            flex-wrap: wrap;
+            opacity: 0.6;
+            filter: grayscale(100%);
+        }
+
+        .logo-item {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Simulated Logos via CSS/SVG inline */
+        .logo-item svg { width: 20px; height: 20px; fill: currentColor; }
+
+        /* 4. Bento Grid */
+        .features {
+            padding: var(--section-padding) 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 { font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 1rem; }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.5rem;
+        }
+
+        .bento-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bento-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-hover);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+        }
+
+        .bento-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+        }
+
+        .bento-card h3 { font-family: var(--font-sans); font-weight: 500; font-size: 1.25rem; margin-bottom: 0.5rem; }
+        .bento-card p { color: var(--text-muted); font-size: 0.9375rem; }
+
+        /* Grid Spanning */
+        .card-energy { grid-column: span 8; grid-row: span 2; }
+        .card-focus { grid-column: span 4; }
+        .card-keyboard { grid-column: span 4; }
+        .card-calendar { grid-column: span 12; }
+
+        /* Specific Card Styling */
+        .card-energy .bento-illustration {
+            flex: 1;
+            margin-top: 2rem;
+            background: radial-gradient(circle at 50% 100%, rgba(245, 158, 11, 0.15) 0%, transparent 60%);
+            border-radius: 8px;
+            border: 1px dashed var(--border);
+            position: relative;
+        }
+        
+        .energy-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='none' stroke='rgba(245,158,11,0.5)' stroke-width='2' d='M0,160L48,170.7C96,181,192,203,288,213.3C384,224,480,224,576,197.3C672,171,768,117,864,112C960,107,1056,149,1152,154.7C1248,160,1344,128,1392,112L1440,96'/%3E%3C/svg%3E");
+            background-size: cover;
+            background-position: center bottom;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 900px) {
+            .card-energy, .card-focus, .card-keyboard, .card-calendar { grid-column: span 12; }
+        }
+
+        /* 5. Metrics Strip */
+        .metrics {
+            padding: 4rem 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: rgba(20,20,20,0.2);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            text-align: center;
+            gap: 2rem;
+        }
+
+        .metric-number {
+            font-family: var(--font-serif);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        @media (max-width: 600px) {
+            .metrics-grid { grid-template-columns: 1fr; gap: 3rem; }
+        }
+
+        /* 6. Testimonial */
+        .testimonial {
+            padding: var(--section-padding) 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .testimonial-card {
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .testimonial-quote {
+            font-family: var(--font-serif);
+            font-size: clamp(2rem, 4vw, 3rem);
+            line-height: 1.2;
+            margin-bottom: 2.5rem;
+            color: var(--text-main);
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-sans);
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .author-info { text-align: left; }
+        .author-name { font-weight: 500; font-size: 1rem; }
+        .author-title { color: var(--text-muted); font-size: 0.875rem; }
+
+        /* 7. Pricing */
+        .pricing { padding: var(--section-padding) 0; }
+
+        .billing-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 4rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--text-main);
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider { border-color: var(--accent-amber); }
+        input:checked + .slider:before { transform: translateX(20px); background: var(--accent-amber); }
+        
+        .badge-free {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--accent-amber);
+            border-radius: 4px;
+            margin-left: 0.5rem;
+            display: none;
+        }
+        
+        input:checked ~ .badge-free { display: inline-block; }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .price-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .price-card.pro {
+            background: transparent;
+            position: relative;
+            padding: 1px; /* for gradient border */
+            border: none;
+        }
+        
+        .pro-inner {
+            background: var(--surface);
+            border-radius: calc(var(--radius-lg) - 1px);
+            padding: 2.5rem 2rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+        }
+
+        .price-card.pro::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: var(--radius-lg);
+            background: var(--gradient);
+            z-index: 0;
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            z-index: 2;
+        }
+
+        .plan-name { font-size: 1.25rem; font-weight: 500; margin-bottom: 0.5rem; }
+        .plan-price { font-family: var(--font-serif); font-size: 3rem; line-height: 1; margin: 1rem 0; }
+        .plan-period { font-size: 0.875rem; color: var(--text-muted); font-family: var(--font-sans); }
+        .plan-desc { color: var(--text-muted); font-size: 0.875rem; margin-bottom: 2rem; min-height: 40px;}
+
+        .plan-features { list-style: none; margin-bottom: 2.5rem; flex: 1; }
+        .plan-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+        }
+        .plan-features svg { width: 16px; height: 16px; color: var(--text-main); }
+
+        .price-card .btn { width: 100%; }
+
+        @media (max-width: 900px) {
+            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+        }
+
+        /* 8. CTA Band */
+        .cta-band {
+            padding: var(--section-padding) 0;
+            position: relative;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .cta-band::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, rgba(244, 63, 94, 0.15) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .cta-band h2 { font-size: clamp(3rem, 6vw, 5rem); margin-bottom: 1.5rem; }
+        .cta-band p { color: var(--text-muted); font-size: 1.125rem; margin-bottom: 2.5rem; }
+
+        /* 9. Footer */
+        .footer {
+            border-top: 1px solid var(--border);
+            padding: 3rem 0;
+            background: var(--bg);
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer p { color: var(--text-muted); font-size: 0.875rem; }
+        
+        .footer-links { display: flex; gap: 1.5rem; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.875rem; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--text-main); }
+
+        @media (max-width: 600px) {
+            .footer-inner { flex-direction: column; gap: 1.5rem; text-align: center; }
+        }
+
+        /* Mobile Sticky CTA */
+        .mobile-cta {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid var(--border);
+            z-index: 100;
+        }
+
+        .mobile-cta .btn { width: 100%; }
+
+        @media (max-width: 768px) {
+            .mobile-cta { display: block; }
+            body { padding-bottom: 80px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Animated Mesh Background -->
+    <div class="mesh-bg">
+        <div class="mesh-blob one"></div>
+        <div class="mesh-blob two"></div>
+    </div>
+
+    <!-- 1. Navbar -->
+    <nav class="nav">
+        <div class="container nav-inner">
+            <a href="#" class="logo">Cadence</a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#customers">Customers</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+            </ul>
+            <a href="#" class="btn btn-secondary">Start free</a>
+        </div>
+    </nav>
+
+    <!-- 2. Hero Section -->
+    <section class="hero container reveal">
+        <h1 class="balance">Your day, planned around your energy.</h1>
+        <p class="balance">Cadence sequences your tasks by focus and priority so deep work actually happens.</p>
+        
+        <div class="hero-ctas">
+            <a href="#" class="btn btn-primary">Start free</a>
+            <a href="#" class="btn btn-secondary">Tour the app</a>
+        </div>
+
+        <div class="ui-mockup" aria-hidden="true">
+            <div class="ui-header">
+                <div class="ui-dots">
+                    <div class="ui-dot" style="background:#ff5f56"></div>
+                    <div class="ui-dot" style="background:#ffbd2e"></div>
+                    <div class="ui-dot" style="background:#27c93f"></div>
+                </div>
+            </div>
+            <div class="ui-body">
+                <div class="ui-sidebar">
+                    <div class="ui-sidebar-item" style="width: 60%"></div>
+                    <div class="ui-sidebar-item"></div>
+                    <div class="ui-sidebar-item" style="width: 70%"></div>
+                    <div class="ui-sidebar-item" style="width: 40%; margin-top: 2rem;"></div>
+                    <div class="ui-sidebar-item" style="width: 80%"></div>
+                </div>
+                <div class="ui-main">
+                    <div>
+                        <div class="ui-section-title">High Energy &bull; Morning</div>
+                        <div style="display:flex; flex-direction:column; gap:1rem;">
+                            <div class="ui-task active-task">
+                                <div class="ui-task-left">
+                                    <div class="ui-checkbox"></div>
+                                    <span style="font-size: 0.875rem; color:#fff;">Draft Q3 Strategy Doc</span>
+                                </div>
+                                <div class="ui-badge">Deep Work</div>
+                            </div>
+                            <div class="ui-task">
+                                <div class="ui-task-left">
+                                    <div class="ui-checkbox"></div>
+                                    <div class="ui-task-line"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 1rem;">
+                        <div class="ui-section-title">Low Energy &bull; Afternoon</div>
+                        <div style="display:flex; flex-direction:column; gap:1rem; opacity: 0.7;">
+                            <div class="ui-task">
+                                <div class="ui-task-left">
+                                    <div class="ui-checkbox"></div>
+                                    <div class="ui-task-line" style="width: 180px;"></div>
+                                </div>
+                            </div>
+                            <div class="ui-task">
+                                <div class="ui-task-left">
+                                    <div class="ui-checkbox"></div>
+                                    <div class="ui-task-line" style="width: 140px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Logo Wall -->
+    <section class="logo-wall reveal" id="customers">
+        <div class="container">
+            <p>Loved by teams abandoning</p>
+            <div class="logos">
+                <div class="logo-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13h-13L12 6.5z"/></svg>
+                    Linear
+                </div>
+                <div class="logo-item">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 8h8v8H8z" fill="currentColor"/></svg>
+                    Notion
+                </div>
+                <div class="logo-item" style="font-weight:400; font-style:italic;">Things</div>
+                <div class="logo-item">
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.4-1.4 3.6 3.6 7.6-7.6L20 8l-9 9z" fill="currentColor"/></svg>
+                    Todoist
+                </div>
+                <div class="logo-item" style="letter-spacing: 0.1em; text-transform: uppercase; font-size: 1rem;">Sunsama</div>
+                <div class="logo-item">Akiflow</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Bento Grid Features -->
+    <section class="features container reveal" id="features">
+        <div class="section-header">
+            <h2>Work at the speed of thought.</h2>
+            <p class="muted">Designed to remove friction between intention and execution.</p>
+        </div>
+
+        <div class="bento-grid">
+            <!-- Feature 1 -->
+            <div class="bento-card card-energy reveal">
+                <div class="bento-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14H4z"/></svg>
+                </div>
+                <h3>Energy-aware scheduling</h3>
+                <p>Map your tasks to your natural circadian rhythm. Tackle complex problems when you're sharpest, save admin for the slump.</p>
+                <div class="bento-illustration">
+                    <div class="energy-wave"></div>
+                </div>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="bento-card card-focus reveal">
+                <div class="bento-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                </div>
+                <h3>Focus blocks</h3>
+                <p>Automate Do-Not-Disturb and silence Slack when a deep work block begins. Reclaim your attention.</p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="bento-card card-keyboard reveal">
+                <div class="bento-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2" ry="2"/><path d="M6 8h.001"/><path d="M10 8h.001"/><path d="M14 8h.001"/><path d="M18 8h.001"/><path d="M8 12h.001"/><path d="M12 12h.001"/><path d="M16 12h.001"/><path d="M7 16h10"/></svg>
+                </div>
+                <h3>Keyboard-first</h3>
+                <p>Navigate, schedule, and complete tasks entirely without the mouse. Command palette built right in.</p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="bento-card card-calendar reveal">
+                <div class="bento-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></svg>
+                </div>
+                <h3>Calendar synchronization</h3>
+                <p>Two-way sync with Google and Outlook. Your tasks fit perfectly between your meetings, automatically adjusting as your day shifts.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Metrics Strip -->
+    <section class="metrics reveal">
+        <div class="container metrics-grid">
+            <div>
+                <div class="metric-number">2.1M</div>
+                <div class="metric-label">Tasks Shipped</div>
+            </div>
+            <div>
+                <div class="metric-number">47k</div>
+                <div class="metric-label">Active Users</div>
+            </div>
+            <div>
+                <div class="metric-number">4.8</div>
+                <div class="metric-label">App Store Rating</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Testimonial -->
+    <section class="testimonial container reveal">
+        <div class="testimonial-card">
+            <h3 class="testimonial-quote">"Deep work finally fits into my day. It's the first tool that understands I'm human, not a machine."</h3>
+            <div class="testimonial-author">
+                <div class="avatar">
+                    <svg width="24" height="24" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <text x="50%" y="53%" dominant-baseline="middle" text-anchor="middle" font-size="40" fill="#fff" font-family="Inter, sans-serif" font-weight="500">TB</text>
+                    </svg>
+                </div>
+                <div class="author-info">
+                    <div class="author-name">Tom Becker</div>
+                    <div class="author-title">Founder & CEO</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Pricing -->
+    <section class="pricing container reveal" id="pricing">
+        <div class="section-header">
+            <h2>Invest in your focus.</h2>
+            <div class="billing-toggle">
+                <span class="muted">Monthly</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="pricing-toggle" aria-label="Toggle annual billing">
+                    <span class="slider"></span>
+                </label>
+                <span>Annually <span class="badge-free">2 months free</span></span>
+            </div>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- Free -->
+            <div class="price-card reveal">
+                <div class="plan-name">Free</div>
+                <p class="plan-desc">For individuals finding their rhythm.</p>
+                <div class="plan-price">$0<span class="plan-period">/mo</span></div>
+                
+                <ul class="plan-features">
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Unlimited tasks</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Basic energy tagging</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> 1 Calendar sync</li>
+                </ul>
+                <a href="#" class="btn btn-secondary">Get started</a>
+            </div>
+
+            <!-- Pro -->
+            <div class="price-card pro reveal">
+                <div class="popular-badge">Most popular</div>
+                <div class="pro-inner">
+                    <div class="plan-name text-gradient">Pro</div>
+                    <p class="plan-desc">For professionals who need deep work.</p>
+                    <div class="plan-price"><span id="price-pro">$12</span><span class="plan-period billing-period">/mo</span></div>
+                    
+                    <ul class="plan-features">
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Everything in Free</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Auto-scheduling engine</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Unlimited Calendars</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Focus block automation</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary">Start 14-day trial</a>
+                </div>
+            </div>
+
+            <!-- Team -->
+            <div class="price-card reveal">
+                <div class="plan-name">Team</div>
+                <p class="plan-desc">Align your entire team's energy.</p>
+                <div class="plan-price"><span id="price-team">$32</span><span class="plan-period billing-period">/mo</span></div>
+                
+                <ul class="plan-features">
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Everything in Pro</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Shared team rhythms</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Capacity planning</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> SSO & Priority Support</li>
+                </ul>
+                <a href="#" class="btn btn-secondary">Contact sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Final CTA -->
+    <section class="cta-band container reveal">
+        <h2>Ready to find your flow?</h2>
+        <p>Join 47,000+ knowledge workers planning around their energy.</p>
+        <a href="#" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1rem;">Start free today</a>
+    </section>
+
+    <!-- 9. Footer -->
+    <footer class="footer">
+        <div class="container footer-inner">
+            <p>&copy; 2023 Cadence Inc. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#">Twitter</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Sticky CTA -->
+    <div class="mobile-cta">
+        <a href="#" class="btn btn-primary">Start free</a>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Intersection Observer for scroll animations
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // Stop observing once animated in
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Pricing Toggle Logic
+            const toggle = document.getElementById('pricing-toggle');
+            const pricePro = document.getElementById('price-pro');
+            const priceTeam = document.getElementById('price-team');
+            const periodLabels = document.querySelectorAll('.billing-period');
+
+            toggle.addEventListener('change', (e) => {
+                const isAnnual = e.target.checked;
+                
+                // Opacity transition for smooth number change
+                pricePro.style.opacity = '0';
+                priceTeam.style.opacity = '0';
+                
+                setTimeout(() => {
+                    if (isAnnual) {
+                        // 2 months free calculation (10 months paid) -> display monthly equivalent
+                        pricePro.textContent = '$10'; 
+                        priceTeam.textContent = '$26'; // approx (32 * 10 / 12 = 26.6)
+                        periodLabels.forEach(label => label.textContent = '/mo, billed yearly');
+                    } else {
+                        pricePro.textContent = '$12';
+                        priceTeam.textContent = '$32';
+                        periodLabels.forEach(label => label.textContent = '/mo');
+                    }
+                    
+                    pricePro.style.transition = 'opacity 0.3s ease';
+                    priceTeam.style.transition = 'opacity 0.3s ease';
+                    pricePro.style.opacity = '1';
+                    priceTeam.style.opacity = '1';
+                }, 150); // half of transition time
+            });
+        });
+    </script>
+</body>
+</html>

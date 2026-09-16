@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse API Monitor | Know before your users do</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0A0A0A;
+            --surface: #141414;
+            --surface-hover: #1e1e1e;
+            --text-main: #FFFFFF;
+            --text-muted: #A1A1AA;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+            --accent-start: #10B981;
+            --accent-end: #F43F5E;
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Instrument Serif', serif;
+            
+            --max-w: 1200px;
+            --pad-section: clamp(80px, 10vw, 120px);
+            --nav-h: 70px;
+        }
+
+        /* Reset & Base */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Noise Texture */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            mix-blend-mode: overlay;
+        }
+
+        /* Typography */
+        h1, h2, h3 { font-weight: 500; line-height: 1.1; letter-spacing: -0.02em; }
+        .font-serif { font-family: var(--font-serif); font-weight: 400; letter-spacing: 0; }
+        .text-gradient {
+            background: linear-gradient(to right, var(--accent-start), var(--accent-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        p { color: var(--text-muted); }
+        a { color: inherit; text-decoration: none; transition: color 0.2s; }
+        a:hover { color: var(--text-main); }
+        ul { list-style: none; }
+
+        /* Layout */
+        .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; width: 100%; }
+        .section { padding: var(--pad-section) 0; }
+        .flex { display: flex; }
+        .grid { display: grid; }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        .btn-primary {
+            background: var(--text-main);
+            color: var(--bg);
+            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255,255,255,0.2);
+            background: #f0f0f0;
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            backdrop-filter: blur(10px);
+        }
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: var(--border-hover);
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: var(--nav-h);
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+        }
+        .nav-inner { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .logo { font-weight: 600; font-size: 1.125rem; display: flex; align-items: center; gap: 8px; }
+        .logo span { color: var(--text-muted); font-weight: 400; font-size: 0.875rem; }
+        .nav-links { display: flex; gap: 2rem; font-size: 0.875rem; }
+        @media (max-width: 768px) { .nav-links, .nav-cta { display: none; } }
+
+        /* Hero */
+        .hero {
+            padding-top: calc(var(--nav-h) + 80px);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .hero-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        @media (max-width: 992px) {
+            .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 3rem; }
+            .hero-content { display: flex; flex-direction: column; align-items: center; }
+        }
+        .hero h1 { font-size: clamp(3rem, 6vw, 5.5rem); margin-bottom: 1.5rem; }
+        .hero p { font-size: clamp(1.125rem, 2vw, 1.25rem); max-width: 500px; margin-bottom: 2.5rem; }
+        .hero-btns { display: flex; gap: 1rem; }
+
+        /* Mesh Gradient Background */
+        .mesh-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            opacity: 0.4;
+        }
+        .mesh-blob {
+            position: absolute;
+            filter: blur(90px);
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out alternate;
+        }
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: rgba(16, 185, 129, 0.15); animation-delay: 0s; }
+        .blob-2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: rgba(244, 63, 94, 0.15); animation-delay: -5s; }
+
+        /* CSS UI Mockup */
+        .mockup-wrapper {
+            perspective: 1000px;
+            width: 100%;
+        }
+        .mockup {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.02);
+            overflow: hidden;
+            animation: float-mockup 6s ease-in-out infinite;
+            transform-style: preserve-3d;
+        }
+        .mockup-header {
+            background: rgba(255,255,255,0.02);
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 8px;
+        }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot.r { background: #ff5f56; } .dot.y { background: #ffbd2e; } .dot.g { background: #27c93f; }
+        .mockup-body { padding: 24px; }
+        .m-title { display: flex; justify-content: space-between; margin-bottom: 24px; align-items: center;}
+        .m-title div { font-size: 0.875rem; font-weight: 500; }
+        .status-badge { background: rgba(16, 185, 129, 0.1); color: var(--accent-start); padding: 4px 10px; border-radius: 99px; font-size: 0.75rem; display: flex; align-items: center; gap: 6px;}
+        .status-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+        
+        .m-row { display: flex; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--border); font-size: 0.875rem; }
+        .m-row:last-child { border: none; padding-bottom: 0; }
+        .m-endpoint { font-family: monospace; color: var(--text-muted); }
+        .m-metric { display: flex; align-items: center; gap: 12px; }
+        .m-pill { background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; }
+        .m-pill.green { color: var(--accent-start); }
+        .m-pill.red { color: var(--accent-end); }
+        
+        .m-chart { display: flex; align-items: flex-end; gap: 3px; height: 40px; margin-top: 24px; }
+        .m-bar { width: 100%; background: var(--accent-start); border-radius: 2px 2px 0 0; opacity: 0.8; }
+        .m-bar.err { background: var(--accent-end); height: 100% !important; }
+
+        /* Logos */
+        .logos-wrap { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(2rem, 5vw, 4rem); opacity: 0.5; filter: grayscale(100%); }
+        .logos-wrap h4 { width: 100%; text-align: center; margin-bottom: 2rem; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); }
+        .logo-item { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; display: flex; align-items: center; }
+
+        /* Bento Grid */
+        .bento-header { text-align: center; margin-bottom: 4rem; }
+        .bento-header h2 { font-size: clamp(2.5rem, 4vw, 3.5rem); margin-bottom: 1rem; }
+        .bento-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+        @media (max-width: 768px) { .bento-grid { grid-template-columns: 1fr; } }
+        .bento-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .bento-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-hover);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+            background: var(--surface-hover);
+        }
+        .bento-card::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            opacity: 0; transition: opacity 0.4s;
+        }
+        .bento-card:hover::before { opacity: 1; }
+        .b-icon { width: 48px; height: 48px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; color: var(--text-main); }
+        .bento-card h3 { font-size: 1.25rem; margin-bottom: 8px; }
+        .bento-card p { font-size: 0.9375rem; }
+
+        /* Metrics */
+        .metrics-strip {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 4rem 0;
+            margin: 4rem 0;
+        }
+        .metric { flex: 1; text-align: center; border-right: 1px solid var(--border); }
+        .metric:last-child { border: none; }
+        .metric h4 { font-size: clamp(2.5rem, 4vw, 3.5rem); color: var(--text-main); margin-bottom: 4px; }
+        .metric p { font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        @media (max-width: 640px) {
+            .metrics-strip { flex-direction: column; gap: 3rem; padding: 3rem 0; }
+            .metric { border-right: none; }
+        }
+
+        /* Testimonial */
+        .testimonial { text-align: center; max-width: 800px; margin: 0 auto; }
+        .testimonial blockquote { font-size: clamp(1.5rem, 3vw, 2.5rem); line-height: 1.3; margin-bottom: 2rem; color: var(--text-main); }
+        .author { display: flex; align-items: center; justify-content: center; gap: 16px; }
+        .avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--surface-hover), #2a2a2a); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: var(--font-serif); font-size: 1.25rem; color: var(--text-main); }
+        .author-info { text-align: left; }
+        .author-name { font-weight: 500; font-size: 1rem; }
+        .author-title { font-size: 0.875rem; color: var(--text-muted); }
+
+        /* Pricing */
+        .pricing-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 4rem; }
+        .pricing-header h2 { font-size: clamp(2.5rem, 4vw, 3.5rem); margin-bottom: 2rem; }
+        .toggle-wrap { display: flex; background: var(--surface); padding: 4px; border-radius: 99px; border: 1px solid var(--border); }
+        .toggle-btn { background: transparent; border: none; color: var(--text-muted); padding: 8px 16px; border-radius: 99px; cursor: pointer; font-size: 0.875rem; font-weight: 500; transition: 0.3s; }
+        .toggle-btn.active { background: #2a2a2a; color: var(--text-main); box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        
+        .pricing-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: center; }
+        @media (max-width: 992px) { .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; align-items: stretch; } }
+        
+        .p-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 40px 32px; display: flex; flex-direction: column; position: relative; }
+        .p-card.highlight {
+            background: #111;
+            padding: 48px 32px;
+            border: none;
+        }
+        .p-card.highlight::before {
+            content: ""; position: absolute; inset: -1px; border-radius: 21px;
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            z-index: -1;
+        }
+        .badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(to right, var(--accent-start), var(--accent-end)); color: #fff; font-size: 0.75rem; font-weight: 600; padding: 4px 12px; border-radius: 99px; white-space: nowrap; }
+        
+        .p-name { font-size: 1.125rem; margin-bottom: 12px; }
+        .p-price { font-size: 3rem; font-weight: 500; font-family: var(--font-serif); margin-bottom: 8px; display: flex; align-items: baseline; gap: 4px; }
+        .p-price span.period { font-size: 1rem; font-family: var(--font-sans); color: var(--text-muted); }
+        .p-desc { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+        .p-features { list-style: none; margin-bottom: 32px; flex: 1; }
+        .p-features li { display: flex; align-items: center; gap: 12px; font-size: 0.875rem; margin-bottom: 16px; color: var(--text-muted); }
+        .p-features svg { width: 16px; height: 16px; color: var(--text-main); flex-shrink: 0; }
+        .p-card .btn { width: 100%; }
+
+        /* Final CTA */
+        .cta-band { position: relative; padding: 6rem 24px; text-align: center; border-radius: 24px; border: 1px solid var(--border); background: var(--surface); overflow: hidden; margin-top: 4rem; }
+        .cta-band::before {
+            content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 80%; height: 80%; background: radial-gradient(circle, rgba(16,185,129,0.1) 0%, rgba(244,63,94,0.05) 50%, transparent 70%);
+            filter: blur(40px); pointer-events: none;
+        }
+        .cta-band h2 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem; position: relative; }
+        .cta-band p { margin-bottom: 2rem; position: relative; }
+
+        /* Footer */
+        footer { border-top: 1px solid var(--border); padding: 3rem 0; margin-top: 4rem; }
+        .footer-inner { display: flex; justify-content: space-between; align-items: center; font-size: 0.875rem; color: var(--text-muted); }
+        .footer-links { display: flex; gap: 1.5rem; }
+        @media (max-width: 640px) { .footer-inner { flex-direction: column; gap: 1.5rem; text-align: center; } }
+
+        /* Mobile CTA Bar */
+        .mobile-cta-bar {
+            display: none; position: fixed; bottom: 0; left: 0; right: 0;
+            padding: 16px 24px; background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(16px); border-top: 1px solid var(--border); z-index: 99;
+        }
+        .mobile-cta-bar .btn { width: 100%; }
+        @media (max-width: 768px) { .mobile-cta-bar { display: block; } body { padding-bottom: 80px; } }
+
+        /* Animations */
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(5%, 5%) scale(1.1); } }
+        @keyframes float-mockup { 0%, 100% { transform: translateY(0) rotateX(2deg); } 50% { transform: translateY(-15px) rotateX(4deg); } }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.4); } 70% { box-shadow: 0 0 0 6px rgba(16,185,129,0); } 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); } }
+        
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+            .reveal { opacity: 1; transform: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav aria-label="Main Navigation">
+        <div class="container nav-inner">
+            <a href="#" class="logo">Pulse <span>API Monitor</span></a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#customers">Customers</a>
+                <a href="#pricing">Pricing</a>
+            </div>
+            <a href="#pricing" class="btn btn-secondary nav-cta">Start free</a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero section">
+            <div class="mesh-bg" aria-hidden="true">
+                <div class="mesh-blob blob-1"></div>
+                <div class="mesh-blob blob-2"></div>
+            </div>
+            <div class="container grid hero-grid">
+                <div class="hero-content reveal">
+                    <h1 class="font-serif">Know before your users do.</h1>
+                    <p>Pulse monitors your endpoints, alerts you on downtime, and tracks latency from 30 global regions.</p>
+                    <div class="hero-btns">
+                        <a href="#pricing" class="btn btn-primary">Start free</a>
+                        <a href="#demo" class="btn btn-secondary">See a monitor</a>
+                    </div>
+                </div>
+                
+                <div class="mockup-wrapper reveal" style="transition-delay: 0.2s;">
+                    <div class="mockup" aria-label="Product UI Mockup">
+                        <div class="mockup-header">
+                            <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+                        </div>
+                        <div class="mockup-body">
+                            <div class="m-title">
+                                <div>Production API cluster</div>
+                                <div class="status-badge">All systems operational</div>
+                            </div>
+                            
+                            <div class="m-row">
+                                <span class="m-endpoint">POST /api/v1/auth/login</span>
+                                <div class="m-metric"><span class="m-pill green">200 OK</span><span style="width: 40px; text-align: right;">45ms</span></div>
+                            </div>
+                            <div class="m-row">
+                                <span class="m-endpoint">GET /api/v1/users/profile</span>
+                                <div class="m-metric"><span class="m-pill green">200 OK</span><span style="width: 40px; text-align: right;">12ms</span></div>
+                            </div>
+                            <div class="m-row">
+                                <span class="m-endpoint">POST /api/v1/checkout/process</span>
+                                <div class="m-metric"><span class="m-pill green">200 OK</span><span style="width: 40px; text-align: right;">118ms</span></div>
+                            </div>
+                            <div class="m-row">
+                                <span class="m-endpoint" style="color:var(--accent-end)">GET /api/v1/legacy/sync</span>
+                                <div class="m-metric"><span class="m-pill red">502 Bad</span><span style="width: 40px; text-align: right;">--</span></div>
+                            </div>
+
+                            <div class="m-chart" aria-hidden="true">
+                                <div class="m-bar" style="height: 30%"></div>
+                                <div class="m-bar" style="height: 40%"></div>
+                                <div class="m-bar" style="height: 35%"></div>
+                                <div class="m-bar" style="height: 60%"></div>
+                                <div class="m-bar" style="height: 45%"></div>
+                                <div class="m-bar" style="height: 50%"></div>
+                                <div class="m-bar" style="height: 30%"></div>
+                                <div class="m-bar err"></div>
+                                <div class="m-bar" style="height: 20%"></div>
+                                <div class="m-bar" style="height: 35%"></div>
+                                <div class="m-bar" style="height: 40%"></div>
+                                <div class="m-bar" style="height: 30%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logo Wall -->
+        <section id="customers" class="section container reveal">
+            <div class="logos-wrap">
+                <h4>Trusted by engineering teams at</h4>
+                <div class="logo-item">Datadog</div>
+                <div class="logo-item" style="font-family: monospace;">Pingdom</div>
+                <div class="logo-item" style="font-weight: 400; letter-spacing: 0;">UptimeRobot</div>
+                <div class="logo-item" style="font-style: italic;">Better Stack</div>
+                <div class="logo-item">Checkly</div>
+                <div class="logo-item" style="font-weight: 300;">Statuspage</div>
+            </div>
+        </section>
+
+        <!-- Bento Features -->
+        <section id="features" class="section container">
+            <div class="bento-header reveal">
+                <h2 class="font-serif">Observability <span class="text-gradient">simplified.</span></h2>
+                <p>Everything you need to ensure your APIs are fast and available.</p>
+            </div>
+            
+            <div class="grid bento-grid">
+                <div class="bento-card reveal">
+                    <div class="b-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24" height="24" aria-label="Uptime Icon"><path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <h3>Uptime monitoring</h3>
+                    <p>Check endpoints every 30 seconds from multiple geographic locations to prevent false positives and catch regional outages instantly.</p>
+                </div>
+                <div class="bento-card reveal" style="transition-delay: 0.1s;">
+                    <div class="b-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24" height="24" aria-label="Latency Icon"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <h3>Latency tracking</h3>
+                    <p>Track response times over time. Detect performance regressions before they turn into full outages and impact user experience.</p>
+                </div>
+                <div class="bento-card reveal">
+                    <div class="b-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24" height="24" aria-label="Status Page Icon"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><path d="M3 9h18M9 21V9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <h3>Status pages</h3>
+                    <p>Communicate downtime automatically with beautiful, brandable status pages hosted on our edge network, isolated from your infrastructure.</p>
+                </div>
+                <div class="bento-card reveal" style="transition-delay: 0.1s;">
+                    <div class="b-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="24" height="24" aria-label="Alerting Icon"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.73 21a2 2 0 0 1-3.46 0" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <h3>Incident alerting</h3>
+                    <p>Route critical alerts to Slack, PagerDuty, SMS, or webhooks. Set custom thresholds and escalation policies for your on-call team.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Metrics Strip -->
+        <section class="container reveal">
+            <div class="metrics-strip">
+                <div class="metric">
+                    <h4 class="font-serif">31k+</h4>
+                    <p>Engineering teams</p>
+                </div>
+                <div class="metric">
+                    <h4 class="font-serif">99.99%</h4>
+                    <p>Historical uptime</p>
+                </div>
+                <div class="metric">
+                    <h4 class="font-serif">4.8/5</h4>
+                    <p>G2 rating</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonial -->
+        <section class="section container reveal">
+            <div class="testimonial">
+                <blockquote class="font-serif">"Pulse caught a silent authentication outage 15 minutes before our support queue blew up. It literally paid for itself on day two."</blockquote>
+                <div class="author">
+                    <div class="avatar" aria-hidden="true">HB</div>
+                    <div class="author-info">
+                        <div class="author-name">Hanna Berg</div>
+                        <div class="author-title">Site Reliability Engineer</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing -->
+        <section id="pricing" class="section container">
+            <div class="pricing-header reveal">
+                <h2 class="font-serif">Simple, transparent pricing.</h2>
+                <div class="toggle-wrap">
+                    <button class="toggle-btn active" data-period="monthly">Monthly</button>
+                    <button class="toggle-btn" data-period="annual">Annually (2mo free)</button>
+                </div>
+            </div>
+
+            <div class="grid pricing-grid">
+                <!-- Free -->
+                <div class="p-card reveal">
+                    <div class="p-name">Hobby</div>
+                    <div class="p-price">$0<span class="period">/mo</span></div>
+                    <div class="p-desc">For personal projects and side hustles.</div>
+                    <ul class="p-features">
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg> 5 API monitors</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg> 3-minute check intervals</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg> Email alerts</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg> 7-day data retention</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary">Get started</a>
+                </div>
+
+                <!-- Team (Highlighted) -->
+                <div class="p-card highlight reveal" style="transition-delay: 0.1s;">
+                    <div class="badge">Most popular</div>
+                    <div class="p-name" style="color: var(--accent-start);">Pro</div>
+                    <div class="p-price">$<span class="price-val" data-monthly="29" data-annual="290">29</span><span class="period period-val">/mo</span></div>
+                    <div class="p-desc">For production applications and startups.</div>
+                    <ul class="p-features">
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg> 50 API monitors</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg> 30-second check intervals</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg> Slack & Webhook alerts</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg> 1 public status page</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary">Start 14-day trial</a>
+                </div>
+
+                <!-- Business -->
+                <div class="p-card reveal" style="transition-delay: 0.2s;">
+                    <div class="p-name">Business</div>
+                    <div class="p-price">$<span class="price-val" data-monthly="99" data-annual="990">99</span><span class="period period-val">/mo</span></div>
+                    <div class="p-desc">For growing engineering organizations.</div>
+                    <ul class="p-features">
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg> 250 API monitors</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg> 10-second check intervals</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg> PagerDuty integration</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg> 1-year data retention</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary">Contact sales</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="container reveal">
+            <div class="cta-band">
+                <h2 class="font-serif">Ready to take control?</h2>
+                <p>Deploy your first monitor in under 60 seconds. No credit card required.</p>
+                <a href="#pricing" class="btn btn-primary" style="position: relative;">Start monitoring for free</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="container">
+        <div class="footer-inner">
+            <div class="logo">Pulse</div>
+            <div class="footer-links">
+                <a href="#">Documentation</a>
+                <a href="#">API</a>
+                <a href="#">Terms</a>
+                <a href="#">Privacy</a>
+            </div>
+            <div>&copy; 2023 Pulse Monitor Inc.</div>
+        </div>
+    </footer>
+
+    <!-- Mobile Sticky CTA -->
+    <div class="mobile-cta-bar">
+        <a href="#pricing" class="btn btn-primary">Start free</a>
+    </div>
+
+    <script>
+        // Pricing Toggle Logic
+        const toggles = document.querySelectorAll('.toggle-btn');
+        const priceVals = document.querySelectorAll('.price-val');
+        const periodVals = document.querySelectorAll('.period-val');
+
+        toggles.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active state
+                toggles.forEach(t => t.classList.remove('active'));
+                btn.classList.add('active');
+
+                const period = btn.dataset.period; // 'monthly' or 'annual'
+
+                // Update prices
+                priceVals.forEach(val => {
+                    val.textContent = val.dataset[period];
+                });
+
+                // Update periods text
+                periodVals.forEach(val => {
+                    val.textContent = period === 'monthly' ? '/mo' : '/yr';
+                });
+            });
+        });
+
+        // Intersection Observer for scroll reveal animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helix | Ship work that matters</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0A0A0A;
+            --surface: #141414;
+            --surface-hover: #1A1A1A;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(255, 255, 255, 0.15);
+            --text-primary: #FFFFFF;
+            --text-secondary: #A1A1AA;
+            --accent-start: #6366F1;
+            --accent-end: #A855F7;
+            
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-serif: 'Instrument Serif', Georgia, serif;
+            
+            --max-w: 1200px;
+            --nav-h: 72px;
+            
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Noise Texture */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+            opacity: 0.8;
+        }
+
+        /* Typography */
+        h1, h2, h3, .font-serif {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, var(--text-primary), #71717A);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .text-accent-gradient {
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Utilities */
+        .container {
+            width: 100%;
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .section-padding {
+            padding: clamp(5rem, 10vw, 8rem) 0;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--text-primary);
+            color: var(--bg);
+            box-shadow: 0 0 0 0 rgba(255,255,255,0);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -8px rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border-color: var(--border);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface);
+            border-color: var(--border-highlight);
+            transform: translateY(-2px);
+        }
+
+        /* Nav */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            height: var(--nav-h);
+            display: flex;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            font-weight: 600;
+            font-size: 1.25rem;
+            letter-spacing: -0.04em;
+            text-decoration: none;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-mark {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            border-radius: 6px;
+            mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+            -webkit-mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5' fill='none' stroke='black' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+        }
+
+        .nav-links {
+            display: none;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Hero */
+        .hero {
+            position: relative;
+            min-height: calc(100vh - var(--nav-h));
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+        }
+
+        .mesh-bg {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            opacity: 0.4;
+        }
+
+        .mesh-blob {
+            position: absolute;
+            filter: blur(90px);
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out alternate;
+        }
+
+        .mesh-1 {
+            background: var(--accent-start);
+            width: 400px;
+            height: 400px;
+            top: -10%;
+            left: 10%;
+            opacity: 0.3;
+        }
+
+        .mesh-2 {
+            background: var(--accent-end);
+            width: 500px;
+            height: 500px;
+            bottom: 0;
+            right: -10%;
+            opacity: 0.2;
+            animation-delay: -5s;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        @media (min-width: 992px) {
+            .hero-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .hero-content h1 {
+            font-size: clamp(3.5rem, 8vw, 5.5rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-content p {
+            font-size: clamp(1.125rem, 2vw, 1.25rem);
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 90%;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* CSS UI Mockup */
+        .mockup-wrapper {
+            position: relative;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+
+        .mockup {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.05);
+            transform: rotateY(-15deg) rotateX(5deg) translateZ(0);
+            transition: transform 0.5s ease;
+            animation: float-mockup 6s infinite ease-in-out;
+            aspect-ratio: 16/10;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mockup-wrapper:hover .mockup {
+            transform: rotateY(-5deg) rotateX(2deg) translateZ(20px);
+        }
+
+        .mockup-header {
+            height: 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            gap: 0.5rem;
+        }
+
+        .mockup-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #3f3f46;
+        }
+
+        .mockup-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .mockup-sidebar {
+            width: 20%;
+            border-right: 1px solid var(--border);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .mockup-line {
+            height: 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+            width: 100%;
+        }
+        .mockup-line.short { width: 60%; }
+
+        .mockup-main {
+            flex: 1;
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .mockup-column {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .mockup-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .mockup-card-title {
+            height: 8px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 2px;
+            width: 80%;
+        }
+        
+        .mockup-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .mockup-avatar {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+        }
+
+        .mockup-tag {
+            width: 24px;
+            height: 8px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* Logo Wall */
+        .logos {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(to right, transparent, rgba(20, 20, 20, 0.5), transparent);
+            padding: 3rem 0;
+            overflow: hidden;
+        }
+
+        .logos-track {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(2rem, 5vw, 4rem);
+            flex-wrap: wrap;
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+
+        .logos svg {
+            height: 24px;
+            width: auto;
+            fill: currentColor;
+        }
+
+        /* Bento Grid */
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .bento-grid {
+                grid-template-columns: repeat(12, 1fr);
+                grid-auto-rows: minmax(300px, auto);
+            }
+        }
+
+        .bento-card {
+            background: linear-gradient(160deg, var(--surface) 0%, rgba(20,20,20,0.4) 100%);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bento-card:hover {
+            border-color: var(--border-highlight);
+            transform: translateY(-2px);
+        }
+
+        .bento-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.03), transparent 40%);
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .bento-card:hover::after {
+            opacity: 1;
+        }
+
+        .bento-content {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bento-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: auto;
+            color: var(--text-primary);
+        }
+
+        .bento-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: url(#accent-gradient);
+            stroke-width: 1.5;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .bento-card h3 {
+            font-size: 1.5rem;
+            margin: 1.5rem 0 0.5rem;
+            font-family: var(--font-sans);
+            font-weight: 500;
+        }
+
+        .bento-card p {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+        }
+
+        /* Bento Spans */
+        @media (min-width: 768px) {
+            .bento-sprints { grid-column: span 8; }
+            .bento-roadmaps { grid-column: span 4; }
+            .bento-docs { grid-column: span 4; }
+            .bento-burndown { grid-column: span 8; }
+        }
+
+        /* Metrics */
+        .metrics-strip {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .metrics-strip {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .metric-item h4 {
+            font-size: clamp(3rem, 5vw, 4rem);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-item p {
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Testimonial */
+        .testimonial-card {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 4rem 2rem;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            background: linear-gradient(180deg, rgba(20,20,20,0) 0%, rgba(20,20,20,0.5) 100%);
+        }
+
+        .testimonial-quote {
+            font-size: clamp(1.5rem, 3vw, 2.25rem);
+            line-height: 1.3;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .avatar-svg {
+            width: 48px;
+            height: 48px;
+        }
+
+        .author-info {
+            text-align: left;
+        }
+
+        .author-name {
+            font-weight: 500;
+        }
+
+        .author-title {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Pricing */
+        .pricing-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .toggle-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .toggle-label.active {
+            color: var(--text-primary);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--text-primary);
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-start);
+            border-color: transparent;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        @media (min-width: 992px) {
+            .pricing-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .pricing-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .pricing-card.popular {
+            border: none;
+            background: var(--bg);
+            padding: 3.5rem 2rem;
+        }
+
+        .pricing-card.popular::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            z-index: -1;
+        }
+        
+        .pricing-card.popular::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: var(--surface);
+            z-index: -1;
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            color: #fff;
+            padding: 0.25rem 1rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .tier-name {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .tier-price {
+            display: flex;
+            align-items: baseline;
+            gap: 0.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .price-num {
+            font-size: 3.5rem;
+            font-family: var(--font-serif);
+            line-height: 1;
+        }
+
+        .price-period {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .features-list {
+            list-style: none;
+            margin: 2rem 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .features-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .features-list svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--text-primary);
+        }
+
+        /* Final CTA */
+        .cta-band {
+            position: relative;
+            padding: 6rem 0;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .cta-band::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .cta-band h2 {
+            font-size: clamp(3rem, 6vw, 4.5rem);
+            margin-bottom: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 3rem 0;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Mobile CTA Bar */
+        .mobile-cta {
+            display: none;
+            position: fixed;
+            bottom: 1.5rem;
+            left: 1.5rem;
+            right: 1.5rem;
+            z-index: 40;
+            background: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 0.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        @media (max-width: 767px) {
+            .mobile-cta {
+                display: flex;
+            }
+            .nav-cta {
+                display: none;
+            }
+        }
+
+        .mobile-cta .btn {
+            width: 100%;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, 50px) scale(1.1); }
+        }
+
+        @keyframes float-mockup {
+            0%, 100% { transform: rotateY(-15deg) rotateX(5deg) translateZ(0) translateY(0); }
+            50% { transform: rotateY(-15deg) rotateX(5deg) translateZ(0) translateY(-15px); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            .reveal { opacity: 1; transform: none; transition: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- SVG Gradients Definition -->
+    <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
+        <linearGradient id="accent-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="var(--accent-start)" />
+            <stop offset="100%" stop-color="var(--accent-end)" />
+        </linearGradient>
+    </svg>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav aria-label="Main Navigation">
+                <a href="#" class="logo" aria-label="Helix Home">
+                    <div class="logo-mark"></div>
+                    Helix
+                </a>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#customers">Customers</a>
+                    <a href="#pricing">Pricing</a>
+                </div>
+                <div class="nav-cta">
+                    <a href="#" class="btn btn-primary">Start free</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <main>
+        <section class="hero">
+            <div class="mesh-bg">
+                <div class="mesh-blob mesh-1"></div>
+                <div class="mesh-blob mesh-2"></div>
+            </div>
+            
+            <div class="container">
+                <div class="hero-grid">
+                    <div class="hero-content reveal">
+                        <h1 class="text-gradient">Ship work that matters.</h1>
+                        <p>Helix gives you sprints, roadmaps, and docs in one fast workspace built for product teams.</p>
+                        <div class="hero-ctas">
+                            <a href="#" class="btn btn-primary">Start free</a>
+                            <a href="#features" class="btn btn-secondary">See a project</a>
+                        </div>
+                    </div>
+                    
+                    <div class="hero-visual reveal" style="transition-delay: 0.2s;">
+                        <div class="mockup-wrapper">
+                            <div class="mockup" aria-hidden="true">
+                                <div class="mockup-header">
+                                    <div class="mockup-dot" style="background:#ef4444"></div>
+                                    <div class="mockup-dot" style="background:#eab308"></div>
+                                    <div class="mockup-dot" style="background:#22c55e"></div>
+                                </div>
+                                <div class="mockup-body">
+                                    <div class="mockup-sidebar">
+                                        <div class="mockup-line"></div>
+                                        <div class="mockup-line short"></div>
+                                        <div class="mockup-line" style="margin-top: 1rem;"></div>
+                                        <div class="mockup-line short"></div>
+                                        <div class="mockup-line short"></div>
+                                    </div>
+                                    <div class="mockup-main">
+                                        <!-- Column 1 -->
+                                        <div class="mockup-column">
+                                            <div class="mockup-card">
+                                                <div class="mockup-card-title"></div>
+                                                <div class="mockup-card-footer">
+                                                    <div class="mockup-tag"></div>
+                                                    <div class="mockup-avatar"></div>
+                                                </div>
+                                            </div>
+                                            <div class="mockup-card">
+                                                <div class="mockup-card-title" style="width: 60%"></div>
+                                                <div class="mockup-card-footer">
+                                                    <div class="mockup-tag"></div>
+                                                    <div class="mockup-avatar"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Column 2 -->
+                                        <div class="mockup-column">
+                                            <div class="mockup-card">
+                                                <div class="mockup-card-title" style="width: 90%"></div>
+                                                <div class="mockup-card-footer">
+                                                    <div class="mockup-tag"></div>
+                                                    <div class="mockup-avatar"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Column 3 -->
+                                        <div class="mockup-column">
+                                            <div class="mockup-card" style="border-color: var(--border-highlight); background: rgba(255,255,255,0.05)">
+                                                <div class="mockup-card-title" style="background: var(--text-primary)"></div>
+                                                <div class="mockup-card-footer">
+                                                    <div class="mockup-tag" style="background: var(--accent-start)"></div>
+                                                    <div class="mockup-avatar"></div>
+                                                </div>
+                                            </div>
+                                            <div class="mockup-card">
+                                                <div class="mockup-card-title" style="width: 50%"></div>
+                                                <div class="mockup-card-footer">
+                                                    <div class="mockup-tag"></div>
+                                                    <div class="mockup-avatar"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logo Wall -->
+        <section id="customers" class="logos reveal">
+            <div class="container">
+                <div class="logos-track" aria-label="Our Customers">
+                    <!-- Stylized SVG Text Logos representing typical premium clients -->
+                    <svg viewBox="0 0 100 30"><text x="0" y="22" font-family="Inter" font-weight="700" font-size="20">Linear</text></svg>
+                    <svg viewBox="0 0 100 30"><text x="0" y="22" font-family="Inter" font-weight="700" font-size="20">Asana</text></svg>
+                    <svg viewBox="0 0 100 30"><text x="0" y="22" font-family="Inter" font-weight="700" font-size="20">ClickUp</text></svg>
+                    <svg viewBox="0 0 100 30"><text x="0" y="22" font-family="Inter" font-weight="700" font-size="20">Jira</text></svg>
+                    <svg viewBox="0 0 100 30"><text x="0" y="22" font-family="Inter" font-weight="700" font-size="20">Notion</text></svg>
+                    <svg viewBox="0 0 100 30"><text x="0" y="22" font-family="Inter" font-weight="700" font-size="20">Monday</text></svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bento Features -->
+        <section id="features" class="section-padding">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2 class="text-gradient">The perfect product lifecycle</h2>
+                    <p>Everything you need to go from idea to launch, without the bloat.</p>
+                </div>
+                
+                <div class="bento-grid">
+                    <!-- Sprints -->
+                    <div class="bento-card bento-sprints reveal">
+                        <div class="bento-content">
+                            <div class="bento-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                            </div>
+                            <h3>Velocity driven sprints</h3>
+                            <p>Automate your planning. Helix learns your team's velocity and suggests the perfect workload for every cycle.</p>
+                        </div>
+                    </div>
+
+                    <!-- Roadmaps -->
+                    <div class="bento-card bento-roadmaps reveal" style="transition-delay: 0.1s;">
+                        <div class="bento-content">
+                            <div class="bento-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                                </svg>
+                            </div>
+                            <h3>Living roadmaps</h3>
+                            <p>Connect high-level strategy directly to daily engineering tasks.</p>
+                        </div>
+                    </div>
+
+                    <!-- Docs -->
+                    <div class="bento-card bento-docs reveal" style="transition-delay: 0.2s;">
+                        <div class="bento-content">
+                            <div class="bento-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                            </div>
+                            <h3>Integrated docs</h3>
+                            <p>Write specs side-by-side with your tickets. No more switching contexts.</p>
+                        </div>
+                    </div>
+
+                    <!-- Burndown -->
+                    <div class="bento-card bento-burndown reveal" style="transition-delay: 0.3s;">
+                        <div class="bento-content">
+                            <div class="bento-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M3 3v18h18M7 14l4-4 4 4 6-6" />
+                                </svg>
+                            </div>
+                            <h3>Real-time insights</h3>
+                            <p>Watch the burndown chart update in real-time as your team ships code. Identify bottlenecks before they derail the release.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Metrics -->
+        <section class="metrics-strip reveal">
+            <div class="container">
+                <div class="metrics-strip">
+                    <div class="metric-item">
+                        <h4 class="font-serif">4.1M+</h4>
+                        <p>Tasks Shipped</p>
+                    </div>
+                    <div class="metric-item">
+                        <h4 class="font-serif">22k</h4>
+                        <p>Active Teams</p>
+                    </div>
+                    <div class="metric-item" style="grid-column: span 2; @media(min-width: 768px){grid-column: span 1;}">
+                        <h4 class="font-serif">4.9/5</h4>
+                        <p>Average Rating</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonial -->
+        <section class="section-padding reveal">
+            <div class="container">
+                <div class="testimonial-card">
+                    <p class="testimonial-quote font-serif">"Helix is the first PM tool our engineers actually like using. It gets out of the way so we can just build."</p>
+                    <div class="testimonial-author">
+                        <svg class="avatar-svg" viewBox="0 0 48 48" aria-hidden="true">
+                            <rect width="48" height="48" rx="24" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+                            <text x="24" y="28" font-family="Inter" font-weight="600" font-size="16" fill="var(--text-primary)" text-anchor="middle">VT</text>
+                        </svg>
+                        <div class="author-info">
+                            <div class="author-name">Vic Tran</div>
+                            <div class="author-title">Eng Manager</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing -->
+        <section id="pricing" class="section-padding reveal">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="text-gradient">Simple, transparent pricing</h2>
+                    <p>Start for free, upgrade when your team needs more power.</p>
+                </div>
+                
+                <div class="pricing-toggle">
+                    <span class="toggle-label" id="label-monthly">Monthly</span>
+                    <label class="switch" aria-label="Toggle pricing period">
+                        <input type="checkbox" id="pricing-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span class="toggle-label active" id="label-annual">Annually (2 months free)</span>
+                </div>
+
+                <div class="pricing-grid">
+                    <!-- Free -->
+                    <div class="pricing-card">
+                        <div class="tier-name">Free</div>
+                        <div class="tier-price">
+                            <span class="price-num">$0</span>
+                            <span class="price-period">/forever</span>
+                        </div>
+                        <ul class="features-list">
+                            <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Up to 3 users</li>
+                            <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Basic sprints</li>
+                            <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> GitHub integration</li>
+                        </ul>
+                        <a href="#" class="btn btn-secondary" style="width: 100%">Get started</a>
+                    </div>
+
+                    <!-- Plus (Popular) -->
+                    <div class="pricing-card popular">
+                        <div class="popular-badge">Most Popular</div>
+                        <div class="tier-name">Plus</div>
+                        <div class="tier-price">
+                            <span class="price-num" data-monthly="14" data-annual="140">$140</span>
+                            <span class="price-period period-text">/user/year</span>
+                        </div>
+                        <ul class="features-list">
+                            <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Everything in Free</li>
+                            <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Unlimited users</li>
+                            <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Advanced roadmaps</li>
+                            <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Custom workflows</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary" style="width: 100%">Start free trial</a>
+                    </div>
+
+                    <!-- Pro -->
+                    <div class="pricing-card">
+                        <div class="tier-name">Pro</div>
+                        <div class="tier-price">
+                            <span class="price-num" data-monthly="24" data-annual="240">$240</span>
+                            <span class="price-period period-text">/user/year</span>
+                        </div>
+                        <ul class="features-list">
+                            <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Everything in Plus</li>
+                            <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> SSO / SAML</li>
+                            <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Audit logs</li>
+                            <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Priority support</li>
+                        </ul>
+                        <a href="#" class="btn btn-secondary" style="width: 100%">Contact sales</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="cta-band reveal">
+            <div class="container">
+                <h2 class="font-serif">Ready to ship faster?</h2>
+                <a href="#" class="btn btn-primary">Start building for free</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Helix, Inc. All rights reserved. Designed for product teams.</p>
+        </div>
+    </footer>
+
+    <!-- Mobile CTA sticky bar -->
+    <div class="mobile-cta">
+        <a href="#" class="btn btn-primary">Start free</a>
+    </div>
+
+    <!-- Interactivity Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Scroll Reveal via IntersectionObserver
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Pricing Toggle Logic
+            const toggle = document.getElementById('pricing-toggle');
+            const labelMonthly = document.getElementById('label-monthly');
+            const labelAnnual = document.getElementById('label-annual');
+            const priceElements = document.querySelectorAll('.price-num[data-monthly]');
+            const periodElements = document.querySelectorAll('.period-text');
+
+            function updatePricing() {
+                const isAnnual = toggle.checked;
+                
+                labelMonthly.classList.toggle('active', !isAnnual);
+                labelAnnual.classList.toggle('active', isAnnual);
+
+                priceElements.forEach(el => {
+                    const price = isAnnual ? el.getAttribute('data-annual') : el.getAttribute('data-monthly');
+                    el.textContent = `$${price}`;
+                });
+
+                periodElements.forEach(el => {
+                    el.textContent = isAnnual ? '/user/year' : '/user/month';
+                });
+            }
+
+            toggle.addEventListener('change', updatePricing);
+            
+            // Bento Hover Effect (Mouse tracking for radial glow)
+            const cards = document.querySelectorAll('.bento-card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

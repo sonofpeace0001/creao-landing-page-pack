@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pivot | See your money clearly</title>
+    <meta name="description" content="Pivot auto-categorizes every transaction and shows your real financial picture in one dashboard.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Color Palette */
+            --bg: #0A0A0A;
+            --surface: #141414;
+            --surface-hover: #1E1E1E;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A1A1AA;
+            --text-muted: #52525B;
+            --accent-start: #10B981;
+            --accent-end: #34D399;
+            --accent-glow: rgba(16, 185, 129, 0.2);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(255, 255, 255, 0.15);
+            
+            /* Typography */
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-serif: 'Instrument Serif', Georgia, serif;
+            
+            /* Spacing & Layout */
+            --max-width: 1200px;
+            --section-padding: clamp(60px, 10vw, 120px) 24px;
+            
+            /* Motion */
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-fast: 0.2s var(--ease-out);
+            --transition-slow: 0.6s var(--ease-out);
+        }
+
+        /* Reset & Base */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Noise Texture */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            opacity: 0.8;
+        }
+
+        /* Typography */
+        h1, h2, h3, .serif {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        h1 { font-size: clamp(3rem, 6vw, 5.5rem); }
+        h2 { font-size: clamp(2.5rem, 5vw, 4rem); }
+        h3 { font-size: clamp(1.5rem, 3vw, 2.25rem); }
+        
+        p { color: var(--text-secondary); font-size: 1.125rem; }
+        
+        a { text-decoration: none; color: inherit; }
+        
+        /* Layout Utilities */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        section { padding: var(--section-padding); position: relative; }
+
+        /* Buttons & CTAs */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all var(--transition-fast);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            color: #000;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border-color: var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--border-highlight);
+        }
+
+        /* Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 40;
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 24px;
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.75rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: '';
+            display: block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            transition: color var(--transition-fast);
+        }
+
+        .nav-links a:hover { color: var(--text-primary); }
+
+        @media (max-width: 768px) {
+            .nav-links, .header-cta { display: none; }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 120px;
+            overflow: hidden;
+        }
+
+        /* Animated Mesh Gradient Background */
+        .mesh-bg {
+            position: absolute;
+            top: -20%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 15% 50%, rgba(16, 185, 129, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(52, 211, 153, 0.1), transparent 25%);
+            filter: blur(60px);
+            animation: meshFloat 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes meshFloat {
+            0% { transform: scale(1) translate(0, 0); }
+            50% { transform: scale(1.1) translate(2%, 3%); }
+            100% { transform: scale(1) translate(-2%, -1%); }
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            z-index: 2;
+        }
+
+        .hero-content p { font-size: clamp(1.125rem, 2vw, 1.25rem); max-width: 480px; }
+
+        .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+        /* CSS UI Mockup */
+        .hero-visual {
+            position: relative;
+            perspective: 1000px;
+            z-index: 2;
+        }
+
+        .ui-mockup {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border);
+            transform: rotateY(-15deg) rotateX(5deg);
+            animation: float 6s ease-in-out infinite;
+            transform-style: preserve-3d;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: rotateY(-15deg) rotateX(5deg) translateY(0px); }
+            50% { transform: rotateY(-15deg) rotateX(5deg) translateY(-20px); }
+        }
+
+        .ui-header { margin-bottom: 2rem; }
+        .ui-label { font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; display: block;}
+        .ui-balance { font-family: var(--font-serif); font-size: 3.5rem; margin: 0; line-height: 1; }
+
+        .ui-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 0.5rem;
+            height: 120px;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .ui-bar {
+            flex: 1;
+            background: var(--surface-hover);
+            border-radius: 4px 4px 0 0;
+            transition: height 1s ease-out, background 0.3s;
+        }
+        
+        .ui-bar.active { background: linear-gradient(to top, var(--accent-start), var(--accent-end)); }
+
+        .ui-transactions { display: flex; flex-direction: column; gap: 1rem; }
+        .ui-txn { display: flex; align-items: center; justify-content: space-between; }
+        .ui-txn-left { display: flex; align-items: center; gap: 1rem; }
+        .ui-txn-icon { width: 40px; height: 40px; border-radius: 12px; background: var(--surface-hover); display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); }
+        .ui-txn-icon svg { width: 20px; height: 20px; stroke: var(--text-secondary); fill: none; stroke-width: 1.5; }
+        .ui-txn-details div:first-child { font-weight: 500; font-size: 0.95rem; }
+        .ui-txn-details div:last-child { font-size: 0.8rem; color: var(--text-secondary); }
+        .ui-txn-amount { font-weight: 600; font-family: var(--font-sans); }
+
+        @media (max-width: 992px) {
+            .hero-grid { grid-template-columns: 1fr; gap: 4rem; text-align: center; }
+            .hero-content { align-items: center; }
+            .hero-content p { max-width: 100%; }
+            .hero-visual { padding: 0 1rem; }
+            .ui-mockup { transform: rotateY(0) rotateX(0); animation: floatMobile 6s ease-in-out infinite; }
+            @keyframes floatMobile {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-15px); }
+            }
+        }
+
+        /* Logo Wall */
+        .logo-wall {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 4rem 24px;
+            background: linear-gradient(to bottom, transparent, rgba(20, 20, 20, 0.3));
+        }
+
+        .logo-wall p { text-align: center; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2rem; color: var(--text-muted); }
+        
+        .logos-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(2rem, 5vw, 4rem);
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+
+        .logo-item { font-family: var(--font-sans); font-weight: 600; font-size: 1.25rem; letter-spacing: -0.02em; display: flex; align-items: center; gap: 0.5rem;}
+        
+        /* Bento Grid */
+        .bento-header { text-align: center; margin-bottom: 4rem; max-width: 600px; margin-inline: auto; }
+        
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .bento-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all var(--transition-slow);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .bento-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(255,255,255,0.06), transparent 40%);
+            z-index: 0;
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+
+        .bento-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-highlight);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+        }
+        
+        .bento-card:hover::before { opacity: 1; }
+
+        .bento-card > * { position: relative; z-index: 1; }
+
+        .bento-icon {
+            width: 48px; height: 48px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bento-icon svg { width: 24px; height: 24px; stroke: var(--text-primary); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+        .bento-card h3 { font-family: var(--font-sans); font-size: 1.25rem; font-weight: 500; margin-bottom: 0.5rem; }
+        .bento-card p { font-size: 0.95rem; }
+
+        @media (max-width: 768px) { .bento-grid { grid-template-columns: 1fr; } }
+
+        /* Metrics Strip */
+        .metrics-strip { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 4rem 24px; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 900px; margin: 0 auto; text-align: center; }
+        .metric-item { display: flex; flex-direction: column; gap: 0.5rem; position: relative; }
+        .metric-item:not(:last-child)::after { content: ''; position: absolute; right: -1rem; top: 10%; height: 80%; width: 1px; background: var(--border); }
+        .metric-value { font-family: var(--font-serif); font-size: 3.5rem; color: var(--text-primary); line-height: 1; }
+        .metric-label { font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+        
+        @media (max-width: 640px) {
+            .metrics-grid { grid-template-columns: 1fr; gap: 3rem; }
+            .metric-item:not(:last-child)::after { display: none; }
+        }
+
+        /* Testimonial */
+        .testimonial { text-align: center; max-width: 800px; margin: 0 auto; }
+        .quote { font-size: clamp(1.75rem, 4vw, 2.5rem); color: var(--text-primary); margin-bottom: 2rem; }
+        .author { display: flex; align-items: center; justify-content: center; gap: 1rem; }
+        .avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--surface-hover); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: var(--font-serif); font-size: 1.25rem; color: var(--accent-end); }
+        .author-info { text-align: left; }
+        .author-name { font-weight: 500; font-size: 1rem; }
+        .author-role { font-size: 0.85rem; color: var(--text-secondary); }
+
+        /* Pricing */
+        .pricing-header { text-align: center; margin-bottom: 3rem; }
+        
+        .billing-toggle {
+            display: inline-flex;
+            align-items: center;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 99px;
+            padding: 4px;
+            margin-top: 1.5rem;
+            position: relative;
+        }
+
+        .toggle-label {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            z-index: 1;
+            color: var(--text-secondary);
+            transition: color var(--transition-fast);
+        }
+        
+        .toggle-label.active { color: var(--text-primary); font-weight: 500; }
+        
+        .toggle-pill {
+            position: absolute;
+            top: 4px; bottom: 4px; left: 4px;
+            width: calc(50% - 4px);
+            background: var(--surface-hover);
+            border: 1px solid var(--border-highlight);
+            border-radius: 99px;
+            transition: transform var(--transition-fast);
+        }
+        
+        input[type="checkbox"]#billing:checked ~ .toggle-pill { transform: translateX(100%); }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .price-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            transition: transform var(--transition-fast);
+        }
+        
+        .price-card.popular {
+            border-color: var(--accent-start);
+            background: linear-gradient(180deg, rgba(20,20,20,1) 0%, rgba(16, 185, 129, 0.05) 100%);
+            transform: scale(1.05);
+            position: relative;
+        }
+
+        @media (max-width: 992px) {
+            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+            .price-card.popular { transform: scale(1); }
+        }
+
+        .badge {
+            position: absolute;
+            top: -12px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            color: #000;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .plan-name { font-family: var(--font-sans); font-weight: 500; font-size: 1.25rem; }
+        .plan-price { font-family: var(--font-serif); font-size: 3rem; line-height: 1; display: flex; align-items: baseline; gap: 0.25rem; }
+        .plan-period { font-family: var(--font-sans); font-size: 0.9rem; color: var(--text-secondary); }
+        .plan-desc { font-size: 0.9rem; color: var(--text-secondary); border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; }
+        
+        .features-list { display: flex; flex-direction: column; gap: 1rem; flex-grow: 1; list-style: none; }
+        .features-list li { display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; }
+        .features-list svg { width: 16px; height: 16px; stroke: var(--accent-start); fill: none; stroke-width: 2; flex-shrink: 0; }
+
+        .price-card .btn { width: 100%; margin-top: 1rem; }
+
+        /* Final CTA */
+        .cta-band {
+            text-align: center;
+            position: relative;
+            padding: 8rem 24px;
+            overflow: hidden;
+        }
+
+        .cta-glow {
+            position: absolute;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 60vw; height: 60vw;
+            background: radial-gradient(circle, var(--accent-glow), transparent 70%);
+            filter: blur(80px);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .cta-band h2 { margin-bottom: 1.5rem; }
+        .cta-band p { margin-bottom: 2.5rem; max-width: 500px; margin-inline: auto; }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 3rem 24px;
+            text-align: center;
+        }
+
+        .footer-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .footer-links { display: flex; gap: 1.5rem; }
+        .footer-links a { font-size: 0.85rem; color: var(--text-secondary); }
+        .footer-links a:hover { color: var(--text-primary); }
+        
+        .copyright { font-size: 0.85rem; color: var(--text-muted); }
+
+        /* Mobile Sticky CTA */
+        .mobile-cta {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            padding: 1rem 24px;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid var(--border);
+            z-index: 40;
+            display: none;
+            transform: translateY(100%);
+            transition: transform var(--transition-fast);
+        }
+        
+        .mobile-cta.visible { transform: translateY(0); }
+        .mobile-cta .btn { width: 100%; }
+
+        @media (max-width: 768px) {
+            .mobile-cta { display: block; }
+            footer { padding-bottom: 6rem; }
+        }
+
+        /* Scroll Reveal Animation */
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+            .reveal { opacity: 1; transform: none; transition: none; }
+            .ui-mockup, .mesh-bg { animation: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-inner">
+            <a href="#" class="logo" aria-label="Pivot Home">Pivot</a>
+            <nav class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#testimonials">Testimonials</a>
+                <a href="#pricing">Pricing</a>
+            </nav>
+            <div class="header-cta">
+                <a href="#" class="btn btn-primary" aria-label="Connect your bank">Connect bank</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="mesh-bg"></div>
+            <div class="container hero-grid">
+                <div class="hero-content reveal">
+                    <h1>See your money clearly.<br>For the first time.</h1>
+                    <p>Pivot auto-categorizes every transaction and shows your real financial picture in one dashboard. Ditch the spreadsheets.</p>
+                    <div class="hero-ctas">
+                        <a href="#" class="btn btn-primary">Connect your bank</a>
+                        <a href="#features" class="btn btn-secondary">How it works</a>
+                    </div>
+                </div>
+                
+                <div class="hero-visual reveal" style="transition-delay: 0.2s;">
+                    <div class="ui-mockup">
+                        <div class="ui-header">
+                            <span class="ui-label">Net Worth</span>
+                            <h2 class="ui-balance">$84,209.00</h2>
+                        </div>
+                        
+                        <div class="ui-chart" aria-hidden="true">
+                            <div class="ui-bar" style="height: 30%"></div>
+                            <div class="ui-bar" style="height: 45%"></div>
+                            <div class="ui-bar" style="height: 40%"></div>
+                            <div class="ui-bar" style="height: 60%"></div>
+                            <div class="ui-bar" style="height: 55%"></div>
+                            <div class="ui-bar" style="height: 75%"></div>
+                            <div class="ui-bar active" style="height: 100%"></div>
+                        </div>
+
+                        <div class="ui-transactions">
+                            <span class="ui-label">Recent</span>
+                            <div class="ui-txn">
+                                <div class="ui-txn-left">
+                                    <div class="ui-txn-icon">
+                                        <svg viewBox="0 0 24 24"><path d="M3 3h18v18H3z" stroke-width="2" rx="2" ry="2"></path><path d="M3 9h18"></path></svg>
+                                    </div>
+                                    <div class="ui-txn-details">
+                                        <div>Whole Foods</div>
+                                        <div>Groceries</div>
+                                    </div>
+                                </div>
+                                <div class="ui-txn-amount">-$124.50</div>
+                            </div>
+                            <div class="ui-txn">
+                                <div class="ui-txn-left">
+                                    <div class="ui-txn-icon">
+                                        <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                    </div>
+                                    <div class="ui-txn-details">
+                                        <div>Stripe Payout</div>
+                                        <div>Income</div>
+                                    </div>
+                                </div>
+                                <div class="ui-txn-amount" style="color: var(--accent-start)">+$3,400.00</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logo Wall -->
+        <section class="logo-wall reveal">
+            <p>Syncs securely with your favorite institutions</p>
+            <div class="logos-container">
+                <div class="logo-item"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4M3 15v4c0 1.1.9 2 2 2h14v-4"/></svg>Monzo</div>
+                <div class="logo-item"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Revolut</div>
+                <div class="logo-item serif" style="font-size: 1.5rem; text-transform: lowercase;">ynab</div>
+                <div class="logo-item"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12A10 10 0 0 0 15 21.54A10 10 0 0 1 15 2.46A10 10 0 0 0 2 12Z"/></svg>Copilot</div>
+                <div class="logo-item" style="font-weight: 400; letter-spacing: 0;">Lunch Money</div>
+                <div class="logo-item"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2l.5-.5m3-3L18 8a3.5 3.5 0 0 0-5-5l-8 7.5m5 5L7 13"/></svg>Rocket</div>
+            </div>
+        </section>
+
+        <!-- Bento Features -->
+        <section id="features" class="container reveal">
+            <div class="bento-header">
+                <h2>Built for clarity.</h2>
+                <p>Everything you need to understand your money, engineered into a single, lightning-fast interface.</p>
+            </div>
+            
+            <div class="bento-grid">
+                <div class="bento-card">
+                    <div class="bento-icon">
+                        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                    </div>
+                    <div>
+                        <h3>Auto-categorization</h3>
+                        <p>Our engine learns your spending habits instantly. Transactions are sorted before you even open the app. No more manual tagging.</p>
+                    </div>
+                </div>
+                
+                <div class="bento-card">
+                    <div class="bento-icon">
+                        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    </div>
+                    <div>
+                        <h3>Real-time net worth</h3>
+                        <p>Connect accounts, credit cards, investments, and loans. Watch your true financial health update in real-time across all devices.</p>
+                    </div>
+                </div>
+
+                <div class="bento-card">
+                    <div class="bento-icon">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg>
+                    </div>
+                    <div>
+                        <h3>Timeline & Goals</h3>
+                        <p>Project your wealth into the future. Set dynamic goals that adjust automatically based on your current spending rate.</p>
+                    </div>
+                </div>
+
+                <div class="bento-card">
+                    <div class="bento-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    </div>
+                    <div>
+                        <h3>Privacy-first</h3>
+                        <p>We read-only. We don't sell your data. Bank-level AES-256 encryption ensures your financial life remains entirely yours.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Metrics -->
+        <section class="metrics-strip reveal">
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <div class="metric-value">$240M+</div>
+                    <div class="metric-label">Assets Tracked</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">31,000</div>
+                    <div class="metric-label">Active Users</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">4.9/5</div>
+                    <div class="metric-label">App Store Rating</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonial -->
+        <section id="testimonials" class="container reveal">
+            <div class="testimonial">
+                <h3 class="quote">"I saved $3,200 in three months just by seeing where it went. Pivot makes spreadsheets feel like the stone age."</h3>
+                <div class="author">
+                    <div class="avatar" aria-hidden="true">
+                        <svg width="48" height="48" viewBox="0 0 48 48">
+                            <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="currentColor" font-size="20">PS</text>
+                        </svg>
+                    </div>
+                    <div class="author-info">
+                        <div class="author-name">Priya Shah</div>
+                        <div class="author-role">Product Designer</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing -->
+        <section id="pricing" class="container reveal">
+            <div class="pricing-header">
+                <h2>Simple, transparent pricing.</h2>
+                <div class="billing-toggle">
+                    <input type="checkbox" id="billing" hidden>
+                    <label for="billing" class="toggle-label active" id="label-mo">Monthly</label>
+                    <label for="billing" class="toggle-label" id="label-yr">Annual <span style="color: var(--accent-start); font-size: 0.75rem;">(2 mo free)</span></label>
+                    <div class="toggle-pill"></div>
+                </div>
+            </div>
+
+            <div class="pricing-grid">
+                <!-- Free Tier -->
+                <div class="price-card">
+                    <div>
+                        <div class="plan-name">Free</div>
+                        <div class="plan-price">$0</div>
+                        <div class="plan-desc">Perfect for getting started.</div>
+                    </div>
+                    <ul class="features-list">
+                        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> 2 Bank connections</li>
+                        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> Basic categorization</li>
+                        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> 30-day history</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary">Get started</a>
+                </div>
+
+                <!-- Plus Tier (Middle) -->
+                <div class="price-card popular">
+                    <div class="badge">Most Popular</div>
+                    <div>
+                        <div class="plan-name">Plus</div>
+                        <div class="plan-price" id="price-plus-amt">$8<span class="plan-period" id="price-plus-period">/mo</span></div>
+                        <div class="plan-desc">For serious wealth builders.</div>
+                    </div>
+                    <ul class="features-list">
+                        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> Unlimited connections</li>
+                        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> AI Auto-categorization</li>
+                        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> Unlimited history</li>
+                        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> Custom rules & tags</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary">Start free trial</a>
+                </div>
+
+                <!-- Life Tier -->
+                <div class="price-card">
+                    <div>
+                        <div class="plan-name">Life</div>
+                        <div class="plan-price">$59<span class="plan-period">/yr</span></div>
+                        <div class="plan-desc">Commit to your future.</div>
+                    </div>
+                    <ul class="features-list">
+                        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> Everything in Plus</li>
+                        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> Advanced forecasting</li>
+                        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> Export to CSV/API</li>
+                        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> Priority support</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary">Get Life plan</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="cta-band reveal">
+            <div class="cta-glow"></div>
+            <h2>Take control today.</h2>
+            <p>Join 31,000+ professionals who stopped tracking and started living.</p>
+            <a href="#" class="btn btn-primary">Connect your bank</a>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <a href="#" class="logo">Pivot</a>
+            <div class="footer-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Security</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="copyright">© 2024 Pivot Finance Inc.</div>
+        </div>
+    </footer>
+
+    <!-- Mobile Sticky CTA -->
+    <div class="mobile-cta" id="mobileCta">
+        <a href="#" class="btn btn-primary">Connect your bank</a>
+    </div>
+
+    <script>
+        // Scroll Reveal
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Pricing Toggle Logic
+        const billingToggle = document.getElementById('billing');
+        const labelMo = document.getElementById('label-mo');
+        const labelYr = document.getElementById('label-yr');
+        const pricePlusAmt = document.getElementById('price-plus-amt');
+        
+        billingToggle.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                // Annual
+                labelYr.classList.add('active');
+                labelMo.classList.remove('active');
+                pricePlusAmt.innerHTML = '$80<span class="plan-period">/yr</span>';
+            } else {
+                // Monthly
+                labelMo.classList.add('active');
+                labelYr.classList.remove('active');
+                pricePlusAmt.innerHTML = '$8<span class="plan-period">/mo</span>';
+            }
+        });
+
+        // Bento Card Hover Effect (Mouse tracking for radial gradient)
+        document.querySelectorAll('.bento-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Mobile Sticky CTA Logic
+        const mobileCta = document.getElementById('mobileCta');
+        const heroSection = document.getElementById('home');
+        
+        const ctaObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (window.innerWidth <= 768) {
+                    if (!entry.isIntersecting) {
+                        mobileCta.classList.add('visible');
+                    } else {
+                        mobileCta.classList.remove('visible');
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+
+        ctaObserver.observe(heroSection);
+        
+        // Handle resize for mobile CTA
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                mobileCta.classList.remove('visible');
+            }
+        });
+    </script>
+</body>
+</html>

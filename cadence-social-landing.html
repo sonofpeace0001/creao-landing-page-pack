@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drift | Post everywhere. From one place.</title>
+    <meta name="description" content="Drift schedules, recycles, and analyzes your posts across X, LinkedIn, Instagram, and TikTok from one calm dashboard.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@700,500,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Colors */
+            --bg-color: #FAFAF7;
+            --surface-color: #FFFFFF;
+            --surface-alt: #F4F4F2;
+            --text-primary: #111827;
+            --text-secondary: #6B7280;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --accent-start: #6366F1;
+            --accent-end: #0EA5E9;
+            
+            /* Typography */
+            --font-display: 'Satoshi', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            
+            /* Spacing & Layout */
+            --max-width: 1200px;
+            --section-padding: clamp(80px, 10vw, 120px);
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            
+            /* Animation */
+            --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Noise Texture */
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0.4;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, .brand {
+            font-family: var(--font-display);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); }
+        h2 { font-size: clamp(2rem, 4vw, 3rem); }
+        h3 { font-size: 1.25rem; }
+
+        p { color: var(--text-secondary); }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.2s var(--ease-out);
+        }
+
+        /* Container */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 99px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s var(--ease-out);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.39);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.23);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--surface-color);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-alt);
+            transform: translateY(-2px);
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            background: rgba(250, 250, 247, 0.8);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 72px;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: none;
+            gap: 32px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        @media (min-width: 768px) {
+            .nav-links { display: flex; }
+        }
+
+        .nav-links a:hover { color: var(--text-primary); }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            padding: var(--section-padding) 0;
+            overflow: hidden;
+        }
+
+        /* Animated Mesh Background */
+        .hero-mesh {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .mesh-blob {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.4;
+            border-radius: 50%;
+            animation: float 20s infinite alternate ease-in-out;
+        }
+
+        .blob-1 {
+            top: -10%; left: 40%;
+            width: 500px; height: 500px;
+            background: var(--accent-start);
+            animation-delay: 0s;
+        }
+
+        .blob-2 {
+            top: 40%; right: -10%;
+            width: 400px; height: 400px;
+            background: var(--accent-end);
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 50px) scale(1.1); }
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        @media (min-width: 1024px) {
+            .hero-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        .hero-content {
+            max-width: 540px;
+        }
+
+        .hero-content h1 {
+            margin-bottom: 24px;
+        }
+
+        .hero-content p {
+            font-size: clamp(1.125rem, 2vw, 1.25rem);
+            margin-bottom: 40px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        /* CSS UI Mockup */
+        .ui-mockup-wrapper {
+            perspective: 1000px;
+            position: relative;
+        }
+
+        .ui-mockup {
+            background: var(--surface-color);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 24px 48px -12px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.02);
+            overflow: hidden;
+            display: flex;
+            height: 480px;
+            transform: rotateY(-5deg) rotateX(5deg);
+            transition: transform 0.5s var(--ease-out);
+        }
+
+        .ui-mockup:hover {
+            transform: rotateY(0deg) rotateX(0deg);
+        }
+
+        .ui-sidebar {
+            width: 80px;
+            background: var(--surface-alt);
+            border-right: 1px solid var(--border-color);
+            padding: 24px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .ui-dot { width: 12px; height: 12px; border-radius: 50%; background: #E5E7EB; }
+        .ui-dot.active { background: var(--accent-start); box-shadow: 0 0 8px var(--accent-start); }
+
+        .ui-main {
+            flex: 1;
+            padding: 32px;
+            background: #FAFAFA;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .ui-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ui-skeleton-title { width: 120px; height: 16px; background: #E5E7EB; border-radius: 4px; }
+        .ui-skeleton-btn { width: 80px; height: 32px; background: var(--accent-end); border-radius: 99px; opacity: 0.8;}
+
+        .ui-kanban {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            height: 100%;
+        }
+
+        .ui-col { display: flex; flex-direction: column; gap: 16px; }
+        
+        .ui-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            animation: slideUp 0.8s var(--ease-out) backwards;
+        }
+
+        .ui-card:nth-child(2) { animation-delay: 0.1s; }
+        .ui-col:nth-child(2) .ui-card { animation-delay: 0.2s; }
+
+        .ui-card-header { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+        .ui-avatar { width: 24px; height: 24px; border-radius: 50%; background: #E5E7EB; }
+        .ui-line { height: 8px; background: #F3F4F6; border-radius: 4px; margin-bottom: 8px; }
+        .ui-line.w-full { width: 100%; }
+        .ui-line.w-half { width: 60%; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Logo Wall */
+        .logo-wall {
+            padding: 40px 0 var(--section-padding);
+            text-align: center;
+        }
+
+        .logo-wall p {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 32px;
+        }
+
+        .logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 48px;
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+
+        .logos svg {
+            height: 24px;
+            width: auto;
+            fill: var(--text-primary);
+        }
+
+        /* Bento Grid */
+        .features {
+            padding: var(--section-padding) 0;
+            background: var(--surface-color);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 64px;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .bento-card {
+            background: var(--surface-alt);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 40px;
+            transition: all 0.3s var(--ease-out);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .bento-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0,0,0,0.15);
+            box-shadow: 0 12px 24px -10px rgba(0,0,0,0.05);
+        }
+
+        .icon-wrapper {
+            width: 48px;
+            height: 48px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-start);
+        }
+
+        /* Metrics Strip */
+        .metrics {
+            padding: 80px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 32px;
+            text-align: center;
+        }
+
+        .metric-val {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Testimonial */
+        .testimonial {
+            padding: var(--section-padding) 0;
+            text-align: center;
+        }
+
+        .testimonial-card {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quote {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2.25rem);
+            line-height: 1.3;
+            color: var(--text-primary);
+            margin-bottom: 32px;
+        }
+
+        .author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--surface-alt), #E5E7EB);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: var(--section-padding) 0;
+            background: var(--surface-color);
+        }
+
+        .toggle-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 64px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 52px;
+            height: 28px;
+            background: #E5E7EB;
+            border-radius: 99px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s var(--ease-spring);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .toggle-switch.active { background: var(--accent-start); }
+        .toggle-switch.active::after { transform: translateX(24px); }
+
+        .save-badge {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--accent-end);
+            border-radius: 99px;
+            font-weight: 600;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .pricing-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .price-card {
+            background: var(--surface-alt);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 40px 32px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .price-card.popular {
+            background: var(--surface-color);
+            padding: 1px;
+            border: none;
+            overflow: hidden;
+            box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.1);
+        }
+
+        .price-card.popular::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            z-index: 0;
+        }
+
+        .popular-inner {
+            background: var(--surface-color);
+            height: 100%;
+            border-radius: calc(var(--radius-md) - 1px);
+            padding: 39px 31px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 99px;
+            z-index: 2;
+        }
+
+        .tier { font-weight: 600; margin-bottom: 16px; font-size: 1.125rem; }
+        .price { font-family: var(--font-display); font-size: 2.5rem; font-weight: 700; margin-bottom: 24px; display: flex; align-items: baseline; gap: 4px;}
+        .price span { font-size: 1rem; color: var(--text-secondary); font-weight: 400; font-family: var(--font-body);}
+        
+        .feature-list { list-style: none; margin-bottom: 32px; flex: 1; }
+        .feature-list li { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; font-size: 0.95rem; }
+        .feature-list svg { width: 16px; height: 16px; color: var(--accent-start); flex-shrink: 0; }
+
+        .price-card .btn { width: 100%; }
+
+        /* Final CTA */
+        .final-cta {
+            padding: var(--section-padding) 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99,102,241,0.1) 0%, rgba(250,250,247,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .final-cta h2 { margin-bottom: 24px; }
+        .final-cta .btn { margin-top: 32px; transform: scale(1.1); }
+        .final-cta .btn:hover { transform: scale(1.1) translateY(-2px); }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 48px 0;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s var(--ease-out);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mobile Sticky CTA */
+        .mobile-cta {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 16px 24px;
+            background: rgba(250, 250, 247, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid var(--border-color);
+            z-index: 99;
+        }
+
+        .mobile-cta .btn { width: 100%; }
+
+        @media (max-width: 767px) {
+            .mobile-cta { display: block; }
+            body { padding-bottom: 80px; }
+            nav .btn-primary { display: none; }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            .reveal { opacity: 1; transform: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <nav>
+        <div class="nav-inner">
+            <div class="brand">Drift</div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#testimonials">Creators</a>
+                <a href="#pricing">Pricing</a>
+            </div>
+            <a href="#pricing" class="btn btn-primary">Start free</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-mesh" aria-hidden="true">
+            <div class="mesh-blob blob-1"></div>
+            <div class="mesh-blob blob-2"></div>
+        </div>
+        <div class="container hero-grid">
+            <div class="hero-content reveal">
+                <h1>Post everywhere. From one place.</h1>
+                <p>Drift schedules, recycles, and analyzes your posts across X, LinkedIn, Instagram, and TikTok from one calm dashboard.</p>
+                <div class="hero-actions">
+                    <a href="#pricing" class="btn btn-primary">Start free</a>
+                    <a href="#features" class="btn btn-secondary">See it work</a>
+                </div>
+            </div>
+            
+            <div class="ui-mockup-wrapper reveal" style="transition-delay: 0.1s;">
+                <div class="ui-mockup" aria-hidden="true">
+                    <div class="ui-sidebar">
+                        <div class="ui-dot active"></div>
+                        <div class="ui-dot"></div>
+                        <div class="ui-dot"></div>
+                        <div class="ui-dot"></div>
+                    </div>
+                    <div class="ui-main">
+                        <div class="ui-header">
+                            <div class="ui-skeleton-title"></div>
+                            <div class="ui-skeleton-btn"></div>
+                        </div>
+                        <div class="ui-kanban">
+                            <div class="ui-col">
+                                <div class="ui-card">
+                                    <div class="ui-card-header">
+                                        <div class="ui-avatar"></div>
+                                        <div class="ui-line w-half" style="margin:0;"></div>
+                                    </div>
+                                    <div class="ui-line w-full"></div>
+                                    <div class="ui-line w-full"></div>
+                                    <div class="ui-line w-half"></div>
+                                </div>
+                                <div class="ui-card">
+                                    <div class="ui-card-header">
+                                        <div class="ui-avatar"></div>
+                                        <div class="ui-line w-half" style="margin:0;"></div>
+                                    </div>
+                                    <div class="ui-line w-full"></div>
+                                    <div class="ui-line w-half"></div>
+                                </div>
+                            </div>
+                            <div class="ui-col">
+                                <div class="ui-card" style="opacity: 0.6;">
+                                    <div class="ui-card-header">
+                                        <div class="ui-avatar"></div>
+                                        <div class="ui-line w-half" style="margin:0;"></div>
+                                    </div>
+                                    <div class="ui-line w-full"></div>
+                                    <div class="ui-line w-half"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="logo-wall reveal">
+        <div class="container">
+            <p>Replaces your clunky stack</p>
+            <div class="logos" aria-label="Competitors Drift replaces">
+                <!-- Buffer -->
+                <svg viewBox="0 0 100 30" xmlns="http://www.w3.org/2000/svg"><text x="0" y="22" font-family="Inter" font-weight="700" font-size="24">Buffer</text></svg>
+                <!-- Later -->
+                <svg viewBox="0 0 80 30" xmlns="http://www.w3.org/2000/svg"><text x="0" y="22" font-family="Inter" font-weight="700" font-size="24">Later</text></svg>
+                <!-- Publer -->
+                <svg viewBox="0 0 100 30" xmlns="http://www.w3.org/2000/svg"><text x="0" y="22" font-family="Inter" font-weight="700" font-size="24">Publer</text></svg>
+                <!-- Hootsuite -->
+                <svg viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg"><text x="0" y="22" font-family="Inter" font-weight="700" font-size="24">Hootsuite</text></svg>
+                <!-- Sprout -->
+                <svg viewBox="0 0 90 30" xmlns="http://www.w3.org/2000/svg"><text x="0" y="22" font-family="Inter" font-weight="700" font-size="24">Sprout</text></svg>
+                <!-- Metricool -->
+                <svg viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg"><text x="0" y="22" font-family="Inter" font-weight="700" font-size="24">Metricool</text></svg>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Designed for solo leverage</h2>
+                <p>Everything you need to build an audience across networks, stripped of enterprise bloat.</p>
+            </div>
+            
+            <div class="bento-grid">
+                <!-- Cross-posting -->
+                <div class="bento-card reveal">
+                    <div class="icon-wrapper">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 3h5v5"></path>
+                            <path d="M4 20L21 3"></path>
+                            <path d="M21 16v5h-5"></path>
+                            <path d="M15 15l6 6"></path>
+                            <path d="M4 4l5 5"></path>
+                        </svg>
+                    </div>
+                    <h3>Cross-posting</h3>
+                    <p>Write once, tailor slightly, publish everywhere. Drift auto-formats image ratios and mentions per platform.</p>
+                </div>
+
+                <!-- Recycle evergreen -->
+                <div class="bento-card reveal" style="transition-delay: 0.1s;">
+                    <div class="icon-wrapper">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="1 4 1 10 7 10"></polyline>
+                            <polyline points="23 20 23 14 17 14"></polyline>
+                            <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+                        </svg>
+                    </div>
+                    <h3>Recycle evergreen</h3>
+                    <p>Don't let good content die. Set your best posts to loop automatically at safe intervals.</p>
+                </div>
+
+                <!-- Best-time AI -->
+                <div class="bento-card reveal" style="transition-delay: 0.2s;">
+                    <div class="icon-wrapper">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                            <path d="M2 12h2"></path>
+                            <path d="M20 12h2"></path>
+                        </svg>
+                    </div>
+                    <h3>Best-time AI</h3>
+                    <p>Stop guessing. Our model learns when your specific audience is online and slots posts automatically.</p>
+                </div>
+
+                <!-- Analytics -->
+                <div class="bento-card reveal" style="transition-delay: 0.3s;">
+                    <div class="icon-wrapper">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="20" x2="18" y2="10"></line>
+                            <line x1="12" y1="20" x2="12" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="14"></line>
+                        </svg>
+                    </div>
+                    <h3>Unified Analytics</h3>
+                    <p>One dashboard to see what's working across all networks. Filter by engagement rate, clicks, or reach.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="metrics reveal">
+        <div class="container metrics-grid">
+            <div>
+                <div class="metric-val">3.2M</div>
+                <div class="metric-label">Posts scheduled</div>
+            </div>
+            <div>
+                <div class="metric-val">48k</div>
+                <div class="metric-label">Solo creators</div>
+            </div>
+            <div>
+                <div class="metric-val">4.8</div>
+                <div class="metric-label">Average rating</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="testimonial reveal">
+        <div class="container">
+            <div class="testimonial-card">
+                <div class="quote">"Drift replaced my whole social stack. I spend 2 hours on Sunday and my entire week is handled. It's incredibly calm."</div>
+                <div class="author">
+                    <div class="avatar" aria-label="Nora Fields">NF</div>
+                    <div style="text-align: left;">
+                        <div style="font-weight: 600; color: var(--text-primary);">Nora Fields</div>
+                        <div style="font-size: 0.875rem;">Creator & Designer</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Simple, transparent pricing</h2>
+                <p>Start for free. Upgrade when you need more power.</p>
+            </div>
+
+            <div class="toggle-wrapper reveal">
+                <span style="font-weight: 500;">Monthly</span>
+                <div class="toggle-switch active" id="billingToggle" role="switch" aria-checked="true" tabindex="0"></div>
+                <span style="font-weight: 500;">Annually <span class="save-badge">2 mos free</span></span>
+            </div>
+
+            <div class="pricing-grid">
+                <!-- Free -->
+                <div class="price-card reveal">
+                    <div class="tier">Free</div>
+                    <div class="price">$0<span>/mo</span></div>
+                    <ul class="feature-list">
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> 2 Social Profiles</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> 20 Posts per month</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Basic Analytics</li>
+                    </ul>
+                    <button class="btn btn-secondary">Get started</button>
+                </div>
+
+                <!-- Pro -->
+                <div class="price-card popular reveal" style="transition-delay: 0.1s;">
+                    <div class="popular-badge">Most popular</div>
+                    <div class="popular-inner">
+                        <div class="tier">Pro</div>
+                        <div class="price">$<span class="price-val" data-monthly="18" data-annual="15">15</span><span>/mo</span></div>
+                        <ul class="feature-list">
+                            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> 5 Social Profiles</li>
+                            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Unlimited Posts</li>
+                            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Best-time AI</li>
+                            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Evergreen Recycling</li>
+                        </ul>
+                        <button class="btn btn-primary">Start Pro free trial</button>
+                    </div>
+                </div>
+
+                <!-- Team -->
+                <div class="price-card reveal" style="transition-delay: 0.2s;">
+                    <div class="tier">Team</div>
+                    <div class="price">$<span class="price-val" data-monthly="39" data-annual="32">32</span><span>/mo</span></div>
+                    <ul class="feature-list">
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> 15 Social Profiles</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> 3 Team Members</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Approval Workflows</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Advanced Export</li>
+                    </ul>
+                    <button class="btn btn-secondary">Start Team free trial</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="final-cta reveal">
+        <div class="glow"></div>
+        <div class="container">
+            <h2>Ready to reclaim your time?</h2>
+            <p style="max-width: 500px; margin: 0 auto;">Join 48,000 creators who use Drift to stay consistent without burning out.</p>
+            <a href="#pricing" class="btn btn-primary">Start your free trial</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            &copy; <span id="year"></span> Drift Inc. All rights reserved. Designed for solo leverage.
+        </div>
+    </footer>
+
+    <div class="mobile-cta">
+        <a href="#pricing" class="btn btn-primary">Start free</a>
+    </div>
+
+    <script>
+        // Set current year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Scroll Reveal Animation
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Pricing Toggle Logic
+        const toggle = document.getElementById('billingToggle');
+        const priceVals = document.querySelectorAll('.price-val');
+        let isAnnual = true; // Default state based on HTML class
+
+        function updatePricing() {
+            priceVals.forEach(el => {
+                el.textContent = isAnnual ? el.getAttribute('data-annual') : el.getAttribute('data-monthly');
+            });
+        }
+
+        toggle.addEventListener('click', () => {
+            isAnnual = !isAnnual;
+            toggle.classList.toggle('active', isAnnual);
+            toggle.setAttribute('aria-checked', isAnnual);
+            updatePricing();
+        });
+
+        // Accessibility for toggle with keyboard
+        toggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggle.click();
+            }
+        });
+    </script>
+</body>
+</html>

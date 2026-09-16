@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streak | Small habits, big change.</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* === Design System & Variables === */
+        :root {
+            /* Colors */
+            --bg-color: #FAFAF7;
+            --surface-color: #FFFFFF;
+            --card-color: #F4F4F2;
+            --text-main: #09090B;
+            --text-muted: #52525B;
+            --border-color: rgba(0, 0, 0, 0.08);
+            
+            /* Accents */
+            --accent-rose: #E11D48;
+            --accent-amber: #F59E0B;
+            --accent-gradient: linear-gradient(135deg, var(--accent-rose), var(--accent-amber));
+            --accent-glow: rgba(225, 29, 72, 0.15);
+
+            /* Typography */
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-serif: 'Instrument Serif', Georgia, serif;
+            
+            /* Sizing & Spacing */
+            --container-width: 1200px;
+            --section-padding: clamp(80px, 12vw, 140px);
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-full: 9999px;
+            
+            /* Motion */
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-fast: 0.2s var(--ease-out);
+            --transition-slow: 0.6s var(--ease-out);
+        }
+
+        /* === Reset & Base === */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Noise Texture Overlay */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.4;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            mix-blend-mode: multiply;
+        }
+
+        /* === Typography === */
+        h1, h2, h3, .serif {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+        
+        h1 {
+            font-size: clamp(3rem, 6vw, 5.5rem);
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+        }
+
+        h3 {
+            font-family: var(--font-sans);
+            font-weight: 500;
+            font-size: 1.25rem;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            color: var(--text-muted);
+            font-size: 1.125rem;
+        }
+
+        .text-lead {
+            font-size: clamp(1.125rem, 2vw, 1.25rem);
+            max-width: 500px;
+        }
+
+        i, em {
+            font-style: italic;
+        }
+
+        /* === Layout === */
+        .container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 10;
+        }
+
+        section {
+            padding: var(--section-padding) 0;
+        }
+
+        /* === UI Components === */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: var(--radius-full);
+            font-weight: 500;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all var(--transition-fast);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--text-main);
+            color: var(--surface-color);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .btn-gradient {
+            background: var(--accent-gradient);
+            color: var(--surface-color);
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: inherit;
+            background: linear-gradient(135deg, var(--accent-amber), var(--accent-rose));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+
+        .btn-gradient:hover::before {
+            opacity: 1;
+        }
+        
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-main);
+            border-color: var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        /* === Navigation === */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(250, 250, 247, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 0;
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.75rem;
+            text-decoration: none;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color var(--transition-fast);
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        /* === Hero Section === */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            overflow: hidden;
+        }
+
+        /* Animated Mesh Background */
+        .mesh-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 0;
+            overflow: hidden;
+            opacity: 0.4;
+        }
+
+        .mesh-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s infinite alternate ease-in-out;
+        }
+
+        .blob-1 {
+            top: -10%; left: -10%; width: 50vw; height: 50vw;
+            background: var(--accent-rose);
+            animation-delay: 0s;
+        }
+
+        .blob-2 {
+            bottom: -20%; right: -10%; width: 60vw; height: 60vw;
+            background: var(--accent-amber);
+            animation-delay: -5s;
+        }
+        
+        .blob-3 {
+            top: 20%; left: 40%; width: 40vw; height: 40vw;
+            background: #FFE4E6;
+            animation-delay: -10s;
+            mix-blend-mode: overlay;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(5%, 10%) scale(1.1); }
+            100% { transform: translate(-5%, -10%) scale(0.9); }
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        /* CSS UI Mockup */
+        .hero-visual {
+            perspective: 1000px;
+        }
+
+        .ui-mockup {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: 
+                0 24px 48px -12px rgba(0,0,0,0.05),
+                0 0 0 1px rgba(255,255,255,0.5) inset;
+            transform: rotateY(-5deg) rotateX(2deg);
+            transition: transform var(--transition-slow);
+            position: relative;
+        }
+
+        .ui-mockup:hover {
+            transform: rotateY(0) rotateX(0);
+        }
+
+        .ui-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+        }
+
+        .ui-header h4 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--text-main);
+        }
+        
+        .ui-header span {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            background: var(--card-color);
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+        }
+
+        .habit-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .habit-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+        }
+
+        .habit-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .habit-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .habit-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            background: var(--card-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+        }
+
+        .habit-text h5 {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .habit-text p {
+            font-size: 0.75rem;
+            margin-top: 2px;
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            position: relative;
+            transition: all var(--transition-fast);
+        }
+
+        /* Micro-interaction animation */
+        .habit-item.active .checkbox {
+            animation: checkPulse 2s infinite;
+        }
+
+        @keyframes checkPulse {
+            0%, 20% {
+                background: transparent;
+                border-color: var(--border-color);
+            }
+            30%, 80% {
+                background: var(--accent-gradient);
+                border-color: transparent;
+            }
+            90%, 100% {
+                background: transparent;
+                border-color: var(--border-color);
+            }
+        }
+
+        .habit-item.active .checkbox::after {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            width: 10px;
+            height: 7px;
+            border-left: 2px solid white;
+            border-bottom: 2px solid white;
+            transform: rotate(-45deg) scale(0);
+            opacity: 0;
+            animation: checkMark 2s infinite;
+        }
+
+        @keyframes checkMark {
+            0%, 20% { transform: rotate(-45deg) scale(0); opacity: 0; }
+            30%, 80% { transform: rotate(-45deg) scale(1); opacity: 1; }
+            90%, 100% { transform: rotate(-45deg) scale(0); opacity: 0; }
+        }
+
+        /* === Logo Wall === */
+        .logo-wall {
+            padding: 40px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .logo-wall p {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 32px;
+        }
+
+        .logos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: clamp(32px, 5vw, 64px);
+            opacity: 0.6;
+            filter: grayscale(100%);
+        }
+
+        .logo-item {
+            font-size: 1.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-main);
+        }
+        
+        .logo-item svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Specific typographic styles for fake logos */
+        .l-streaks { font-weight: 700; letter-spacing: -0.05em; }
+        .l-habitica { font-family: monospace; font-size: 1.1rem; }
+        .l-atomic { text-transform: uppercase; font-weight: 800; letter-spacing: 0.1em; font-size: 1rem; }
+        .l-way { font-family: var(--font-serif); font-style: italic; font-size: 1.5rem; }
+
+        /* === Features / Bento Grid === */
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .bento-card {
+            background: var(--card-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 48px;
+            position: relative;
+            overflow: hidden;
+            transition: all var(--transition-slow);
+        }
+
+        .bento-card:hover {
+            transform: translateY(-4px);
+            background: var(--surface-color);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+            border-color: rgba(0,0,0,0.12);
+        }
+
+        .bento-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            color: var(--text-main);
+            transition: color var(--transition-fast);
+        }
+        
+        .bento-card:hover .bento-icon {
+            color: var(--accent-rose);
+        }
+
+        .bento-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke-width: 1.5;
+            fill: none;
+            stroke: currentColor;
+        }
+
+        /* === Metrics Strip === */
+        .metrics {
+            background: var(--text-main);
+            color: var(--surface-color);
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            position: relative;
+        }
+
+        .metric-item h4 {
+            font-family: var(--font-serif);
+            font-size: clamp(3rem, 5vw, 4rem);
+            margin-bottom: 8px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .metric-item p {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* === Testimonial === */
+        .testimonial {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quote {
+            font-size: clamp(2rem, 4vw, 3rem);
+            line-height: 1.2;
+            color: var(--text-main);
+            margin-bottom: 40px;
+        }
+
+        .author {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--card-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+        
+        .author-info {
+            text-align: left;
+        }
+        
+        .author-info strong {
+            display: block;
+            font-weight: 500;
+        }
+        
+        .author-info span {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* === Pricing === */
+        .pricing-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 64px;
+        }
+
+        .toggle-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+        
+        .toggle-label.active {
+            color: var(--text-main);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 28px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--border-color);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        input:checked + .slider {
+            background-color: var(--text-main);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        
+        .badge-discount {
+            background: var(--accent-glow);
+            color: var(--accent-rose);
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .price-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .price-card.popular {
+            background: var(--bg-color);
+            border: 1px solid transparent;
+            box-shadow: 0 24px 48px rgba(0,0,0,0.05);
+        }
+        
+        .price-card.popular::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: calc(var(--radius-lg) + 1px);
+            background: var(--accent-gradient);
+            z-index: -1;
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-gradient);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tier-name {
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+        }
+
+        .tier-price {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+        }
+
+        .tier-price span {
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .tier-desc {
+            font-size: 0.9rem;
+            margin-bottom: 32px;
+            min-height: 44px;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 40px;
+            flex-grow: 1;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+            color: var(--text-main);
+        }
+
+        .feature-list svg {
+            width: 18px;
+            height: 18px;
+            color: var(--accent-rose);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .price-card .btn {
+            width: 100%;
+        }
+
+        /* === Final CTA === */
+        .final-cta {
+            position: relative;
+            text-align: center;
+            overflow: hidden;
+            padding: 160px 0;
+        }
+        
+        .final-cta-bg {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .final-cta h2 {
+            margin-bottom: 24px;
+        }
+        
+        .final-cta p {
+            margin-bottom: 40px;
+        }
+
+        /* === Footer === */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 64px 0 40px;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--text-main);
+            text-decoration: none;
+            margin-bottom: 24px;
+            display: inline-block;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-main);
+        }
+
+        .copyright {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* === Mobile Mobile CTA Bar === */
+        .mobile-cta-bar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface-color);
+            border-top: 1px solid var(--border-color);
+            padding: 16px 24px;
+            z-index: 99;
+            box-shadow: 0 -10px 20px rgba(0,0,0,0.05);
+        }
+
+        .mobile-cta-bar .btn {
+            width: 100%;
+        }
+
+        /* === Scroll Animations === */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+
+        /* === Responsive === */
+        @media (max-width: 992px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 48px;
+            }
+            .hero-content {
+                align-items: center;
+            }
+            .hero-actions {
+                justify-content: center;
+            }
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .nav-cta {
+                display: none;
+            }
+            .mobile-cta-bar {
+                display: block;
+            }
+            body {
+                padding-bottom: 80px;
+            }
+            .metrics-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+        }
+
+        /* Accessibility: Reduce Motion */
+        @media (prefers-reduced-motion: reduce) {
+            .mesh-blob, .habit-item.active .checkbox, .habit-item.active .checkbox::after {
+                animation: none;
+            }
+            .reveal {
+                transition: none;
+                opacity: 1;
+                transform: none;
+            }
+            html {
+                scroll-behavior: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Noise Texture Overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-inner">
+            <a href="#" class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2L2 22h20L12 2z" fill="var(--text-main)"/>
+                    <path d="M12 8v8" stroke="var(--surface-color)"/>
+                </svg>
+                Streak
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#testimonials">Wall of Love</a>
+                <a href="#pricing">Pricing</a>
+            </div>
+            <a href="#pricing" class="btn btn-secondary nav-cta">Start free</a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="mesh-bg">
+                <div class="mesh-blob blob-1"></div>
+                <div class="mesh-blob blob-2"></div>
+                <div class="mesh-blob blob-3"></div>
+            </div>
+            
+            <div class="container hero-grid">
+                <div class="hero-content reveal">
+                    <h1>Small habits, <br><em>big change.</em></h1>
+                    <p class="text-lead">Streak helps you build streaks, set reminders, and see your progress without guilt or shame. Gentle accountability for a better you.</p>
+                    <div class="hero-actions">
+                        <a href="#pricing" class="btn btn-gradient">Start free</a>
+                        <a href="#features" class="btn btn-secondary">See how it works</a>
+                    </div>
+                </div>
+                
+                <div class="hero-visual reveal delay-1">
+                    <div class="ui-mockup">
+                        <div class="ui-header">
+                            <h4>Today</h4>
+                            <span>Oct 24</span>
+                        </div>
+                        <div class="habit-list">
+                            <div class="habit-item">
+                                <div class="habit-info">
+                                    <div class="habit-icon">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h4l3-9 5 18 3-9h5"/></svg>
+                                    </div>
+                                    <div class="habit-text">
+                                        <h5>Morning Run</h5>
+                                        <p>3 km • 5 day streak</p>
+                                    </div>
+                                </div>
+                                <div class="checkbox"></div>
+                            </div>
+                            
+                            <div class="habit-item active">
+                                <div class="habit-info">
+                                    <div class="habit-icon">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                                    </div>
+                                    <div class="habit-text">
+                                        <h5>Read 10 pages</h5>
+                                        <p>Atomic Habits • 12 day streak</p>
+                                    </div>
+                                </div>
+                                <div class="checkbox"></div>
+                            </div>
+
+                            <div class="habit-item">
+                                <div class="habit-info">
+                                    <div class="habit-icon">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                                    </div>
+                                    <div class="habit-text">
+                                        <h5>Meditate</h5>
+                                        <p>10 mins • Just starting</p>
+                                    </div>
+                                </div>
+                                <div class="checkbox"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logo Wall -->
+        <section class="logo-wall" id="logos">
+            <div class="container reveal">
+                <p>Used by people switching from</p>
+                <div class="logos">
+                    <div class="logo-item l-streaks">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                        Streaks
+                    </div>
+                    <div class="logo-item l-habitica">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>
+                        Habitica
+                    </div>
+                    <div class="logo-item l-atomic">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+                        Atomic
+                    </div>
+                    <div class="logo-item l-way">
+                        Way of Life
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features / Bento Grid -->
+        <section id="features">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2>Everything you need, nothing you don't.</h2>
+                    <p>Thoughtfully designed features that stay out of your way and let you focus on doing the actual work.</p>
+                </div>
+                
+                <div class="bento-grid">
+                    <div class="bento-card reveal">
+                        <div class="bento-icon">
+                            <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                        </div>
+                        <h3>Unbreakable Streaks</h3>
+                        <p>Watch your progress grow visually. Our algorithm understands life happens—skip a day without losing your hard-earned chain.</p>
+                    </div>
+                    
+                    <div class="bento-card reveal delay-1">
+                        <div class="bento-icon">
+                            <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        </div>
+                        <h3>Smart Reminders</h3>
+                        <p>Gentle nudges exactly when you need them. Set context-aware notifications based on time, location, or previous habits.</p>
+                    </div>
+                    
+                    <div class="bento-card reveal">
+                        <div class="bento-icon">
+                            <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                        </div>
+                        <h3>Mood & Context Notes</h3>
+                        <p>Track how you feel after completing a habit. Discover patterns in your routine and understand what drives your best days.</p>
+                    </div>
+                    
+                    <div class="bento-card reveal delay-1">
+                        <div class="bento-icon">
+                            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+                        </div>
+                        <h3>Beautiful Widgets</h3>
+                        <p>Keep your goals front and center. iOS and macOS widgets that update in real-time, designed to blend perfectly with your home screen.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Metrics Strip -->
+        <section class="metrics">
+            <div class="container metrics-grid">
+                <div class="metric-item reveal">
+                    <h4>6.1M</h4>
+                    <p>Habits Tracked</p>
+                </div>
+                <div class="metric-item reveal delay-1">
+                    <h4>180k</h4>
+                    <p>Active Users</p>
+                </div>
+                <div class="metric-item reveal delay-2">
+                    <h4>4.8/5</h4>
+                    <p>App Store Rating</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonial -->
+        <section id="testimonials">
+            <div class="container">
+                <div class="testimonial reveal">
+                    <div class="quote serif">
+                        "I've tried every tracker out there. Streak is the only one that doesn't make me feel guilty if I miss a day. It actually helps me get back on track. 100 days strong."
+                    </div>
+                    <div class="author">
+                        <div class="avatar">FG</div>
+                        <div class="author-info">
+                            <strong>Felipe Gomez</strong>
+                            <span>High School Teacher</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing -->
+        <section id="pricing">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2>Simple, transparent pricing.</h2>
+                    <p>Start for free, upgrade when you're ready to build more advanced routines.</p>
+                </div>
+                
+                <div class="pricing-toggle reveal">
+                    <span class="toggle-label" id="label-monthly">Monthly</span>
+                    <label class="switch" aria-label="Toggle pricing period">
+                        <input type="checkbox" id="billing-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span class="toggle-label active" id="label-annual">Annually <span class="badge-discount">2 mo free</span></span>
+                </div>
+
+                <div class="pricing-grid">
+                    <!-- Free Tier -->
+                    <div class="price-card reveal">
+                        <div class="tier-name">Free</div>
+                        <div class="tier-price">$0<span>/mo</span></div>
+                        <p class="tier-desc">Perfect for getting started with building basic habits.</p>
+                        
+                        <ul class="feature-list">
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Up to 3 active habits
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Basic reminders
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                7-day history
+                            </li>
+                        </ul>
+                        <button class="btn btn-secondary">Get started</button>
+                    </div>
+
+                    <!-- Pro Tier -->
+                    <div class="price-card popular reveal delay-1">
+                        <div class="popular-badge">Most Popular</div>
+                        <div class="tier-name">Pro</div>
+                        <div class="tier-price" id="price-pro">$5<span>/mo</span></div>
+                        <p class="tier-desc">For those committed to serious self-improvement.</p>
+                        
+                        <ul class="feature-list">
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Unlimited habits
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Smart location reminders
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Advanced analytics
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Home screen widgets
+                            </li>
+                        </ul>
+                        <button class="btn btn-gradient">Start 7-day trial</button>
+                    </div>
+
+                    <!-- Life Tier -->
+                    <div class="price-card reveal delay-2">
+                        <div class="tier-name">Life</div>
+                        <div class="tier-price">$48<span>/once</span></div>
+                        <p class="tier-desc">Pay once, own it forever. A commitment to your future.</p>
+                        
+                        <ul class="feature-list">
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                All Pro features
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Lifetime updates
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Early access to features
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Priority support
+                            </li>
+                        </ul>
+                        <button class="btn btn-secondary">Get Lifetime</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="final-cta">
+            <div class="final-cta-bg"></div>
+            <div class="container reveal">
+                <h2>Ready to build better routines?</h2>
+                <p class="text-lead" style="margin: 0 auto 40px; text-align: center;">Join thousands of others improving their lives, one day at a time.</p>
+                <a href="#pricing" class="btn btn-gradient" style="padding: 16px 32px; font-size: 1.125rem;">Start your journey free</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <a href="#" class="footer-logo">Streak</a>
+            <div class="footer-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Twitter</a>
+                <a href="#">Contact</a>
+            </div>
+            <p class="copyright">© 2024 Streak Inc. Designed for better habits.</p>
+        </div>
+    </footer>
+
+    <!-- Mobile Sticky CTA -->
+    <div class="mobile-cta-bar">
+        <a href="#pricing" class="btn btn-gradient">Start free</a>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Intersection Observer for scroll animations
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); // Run once
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach((elem) => {
+                observer.observe(elem);
+            });
+
+            // Pricing Toggle Logic
+            const toggle = document.getElementById('billing-toggle');
+            const pricePro = document.getElementById('price-pro');
+            const labelMonthly = document.getElementById('label-monthly');
+            const labelAnnual = document.getElementById('label-annual');
+
+            // Default state is annual (checked)
+            const updatePricing = () => {
+                if (toggle.checked) {
+                    // Annual pricing
+                    pricePro.innerHTML = '$4<span>/mo</span>';
+                    labelAnnual.classList.add('active');
+                    labelMonthly.classList.remove('active');
+                } else {
+                    // Monthly pricing
+                    pricePro.innerHTML = '$5<span>/mo</span>';
+                    labelMonthly.classList.add('active');
+                    labelAnnual.classList.remove('active');
+                }
+            };
+
+            toggle.addEventListener('change', updatePricing);
+            
+            // Allow clicking labels to toggle
+            labelMonthly.addEventListener('click', () => {
+                toggle.checked = false;
+                updatePricing();
+            });
+            
+            labelAnnual.addEventListener('click', () => {
+                toggle.checked = true;
+                updatePricing();
+            });
+            
+            // Initial call
+            updatePricing();
+        });
+    </script>
+</body>
+</html>

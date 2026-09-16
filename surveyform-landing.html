@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surveyform | Ask. Listen. Learn.</title>
+    <meta name="description" content="Surveyform gives you beautiful surveys, branching logic, and analytics that do the thinking for you.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Color Palette */
+            --bg-base: #FAFAF7;
+            --surface: #FFFFFF;
+            --surface-raised: #F4F4F2;
+            --text-main: #111827;
+            --text-secondary: #4B5563;
+            --text-tertiary: #9CA3AF;
+            --border-light: rgba(0, 0, 0, 0.08);
+            --border-hover: rgba(0, 0, 0, 0.15);
+            
+            /* Accents */
+            --accent-blue: #0EA5E9;
+            --accent-indigo: #6366F1;
+            --gradient-accent: linear-gradient(135deg, var(--accent-blue), var(--accent-indigo));
+            
+            /* Typography */
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-serif: 'Instrument Serif', Georgia, serif;
+            
+            /* Layout & Spacing */
+            --container-max: 1200px;
+            --space-section: clamp(4rem, 10vw, 7.5rem);
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+            
+            /* Effects */
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.05);
+            --shadow-float: 0 20px 40px -10px rgba(0,0,0,0.1);
+            --transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Reset & Base */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Noise Texture */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.4;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            mix-blend-mode: multiply;
+        }
+
+        /* Typography */
+        h1, h2, h3, .serif { font-family: var(--font-serif); font-weight: 400; line-height: 1.05; letter-spacing: -0.02em; }
+        h1 { font-size: clamp(3.5rem, 8vw, 6rem); }
+        h2 { font-size: clamp(2.5rem, 5vw, 4rem); }
+        h3 { font-size: clamp(1.5rem, 3vw, 2rem); font-family: var(--font-sans); font-weight: 600; letter-spacing: -0.01em; }
+        .text-lg { font-size: clamp(1.125rem, 2vw, 1.25rem); color: var(--text-secondary); }
+        .text-sm { font-size: 0.875rem; }
+
+        /* Layout */
+        .container { width: 100%; max-width: var(--container-max); margin: 0 auto; padding: 0 1.5rem; }
+        .section { padding: var(--space-section) 0; }
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 0.75rem 1.5rem; border-radius: 999px;
+            font-weight: 500; font-size: 0.9375rem; text-decoration: none;
+            transition: var(--transition); cursor: pointer; border: none;
+        }
+        .btn-primary {
+            background: var(--text-main); color: var(--surface);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);
+        }
+        .btn-primary:hover {
+            background: #000; transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        .btn-secondary {
+            background: var(--surface); color: var(--text-main);
+            border: 1px solid var(--border-light);
+        }
+        .btn-secondary:hover {
+            border-color: var(--border-hover); background: var(--bg-base);
+            transform: translateY(-2px);
+        }
+        .btn-accent {
+            background: var(--gradient-accent); color: white;
+            position: relative; overflow: hidden;
+        }
+        .btn-accent::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(255,255,255,0.2), transparent);
+            opacity: 0; transition: var(--transition);
+        }
+        .btn-accent:hover::before { opacity: 1; }
+        .btn-accent:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(99, 102, 241, 0.2); }
+
+        /* Nav */
+        .nav-wrap { position: sticky; top: 1rem; z-index: 100; padding: 0 1.5rem; }
+        .nav {
+            max-width: var(--container-max); margin: 0 auto;
+            background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-light); border-radius: 999px;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .logo { font-family: var(--font-sans); font-weight: 600; font-size: 1.125rem; color: var(--text-main); text-decoration: none; letter-spacing: -0.02em; }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9375rem; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text-main); }
+        
+        @media (max-width: 768px) {
+            .nav-links, .nav .btn { display: none; }
+            .nav { padding: 1rem 1.5rem; }
+        }
+
+        /* Hero */
+        .hero { position: relative; padding-top: clamp(4rem, 10vw, 8rem); overflow: hidden; }
+        .mesh-bg {
+            position: absolute; inset: 0; z-index: -1;
+            background-color: var(--bg-base);
+            overflow: hidden;
+        }
+        .mesh-blob {
+            position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4;
+            animation: float 20s infinite ease-in-out alternate;
+        }
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--accent-blue); animation-delay: 0s; }
+        .blob-2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: var(--accent-indigo); animation-delay: -5s; }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(10%, 10%) scale(1.1); }
+        }
+
+        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .hero-content { max-width: 540px; }
+        .hero-content p { margin: 1.5rem 0 2.5rem; }
+        .hero-actions { display: flex; gap: 1rem; align-items: center; }
+
+        /* CSS Mockup */
+        .mockup-wrapper { perspective: 1000px; position: relative; }
+        .mockup {
+            background: var(--surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-float);
+            transform: rotateY(-5deg) rotateX(2deg);
+            transition: var(--transition);
+            overflow: hidden;
+        }
+        .mockup:hover { transform: rotateY(0deg) rotateX(0deg) translateY(-10px); }
+        .m-header {
+            padding: 1rem; border-bottom: 1px solid var(--border-light);
+            display: flex; gap: 0.35rem; align-items: center; background: var(--bg-base);
+        }
+        .m-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border-light); }
+        .m-body { padding: 2rem; }
+        .m-skel-title { height: 24px; width: 70%; background: var(--surface-raised); border-radius: 4px; margin-bottom: 2rem; }
+        .m-option {
+            display: flex; align-items: center; gap: 1rem; padding: 1rem;
+            border: 1px solid var(--border-light); border-radius: var(--radius-md); margin-bottom: 1rem;
+            transition: var(--transition);
+        }
+        .m-option:hover { border-color: var(--accent-blue); background: rgba(14, 165, 233, 0.02); }
+        .m-radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border-light); }
+        .m-option:nth-child(2) .m-radio { border-color: var(--accent-blue); background: var(--accent-blue); box-shadow: inset 0 0 0 3px var(--surface); }
+        .m-skel-line { height: 12px; width: 40%; background: var(--surface-raised); border-radius: 4px; }
+        .m-option:nth-child(2) .m-skel-line { width: 60%; }
+        
+        .mockup-chip {
+            position: absolute; right: -2rem; top: 20%;
+            background: var(--surface); padding: 0.75rem 1rem; border-radius: var(--radius-md);
+            border: 1px solid var(--border-light); box-shadow: var(--shadow-md);
+            display: flex; align-items: center; gap: 0.75rem;
+            animation: floatUp 6s ease-in-out infinite alternate;
+        }
+        .mockup-chip-icon { width: 24px; height: 24px; border-radius: 50%; background: var(--gradient-accent); display: flex; align-items: center; justify-content: center; color: white; }
+        .mockup-chip-text { font-size: 0.75rem; font-weight: 500; }
+        
+        @keyframes floatUp { from { transform: translateY(0); } to { transform: translateY(-15px); } }
+
+        @media (max-width: 992px) {
+            .hero-grid { grid-template-columns: 1fr; gap: 3rem; }
+            .hero-content { text-align: center; margin: 0 auto; }
+            .hero-actions { justify-content: center; }
+            .mockup-wrapper { padding: 0 1rem; }
+            .mockup { transform: none; }
+            .mockup:hover { transform: translateY(-5px); }
+            .mockup-chip { right: 1rem; top: -1rem; }
+        }
+
+        /* Logos */
+        .logos { border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); padding: 3rem 0; background: var(--surface); }
+        .logos p { text-align: center; font-size: 0.875rem; color: var(--text-tertiary); margin-bottom: 2rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+        .logo-grid { display: flex; justify-content: center; align-items: center; gap: clamp(2rem, 6vw, 4rem); flex-wrap: wrap; opacity: 0.5; filter: grayscale(100%); transition: var(--transition); }
+        .logo-grid:hover { opacity: 0.8; }
+        .logo-item { font-family: var(--font-sans); font-weight: 700; font-size: 1.25rem; letter-spacing: -0.03em; color: var(--text-main); }
+        
+        /* Bento Features */
+        .bento-header { text-align: center; max-width: 600px; margin: 0 auto 4rem; }
+        .bento-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+        .bento-card {
+            background: var(--surface-raised); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: 2.5rem;
+            display: flex; flex-direction: column;
+            transition: var(--transition);
+            position: relative; overflow: hidden;
+        }
+        .bento-card:hover { transform: translateY(-4px); background: var(--surface); box-shadow: var(--shadow-md); border-color: var(--border-hover); }
+        .icon-wrap {
+            width: 48px; height: 48px; border-radius: var(--radius-sm);
+            background: var(--surface); border: 1px solid var(--border-light);
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 1.5rem; color: var(--text-main);
+        }
+        .bento-card h3 { margin-bottom: 0.75rem; font-size: 1.25rem; }
+        .bento-card p { color: var(--text-secondary); font-size: 0.9375rem; }
+        
+        @media (max-width: 768px) {
+            .bento-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Metrics */
+        .metrics-strip { background: var(--text-main); color: var(--surface); padding: 4rem 0; border-radius: var(--radius-xl); margin: 0 1.5rem; }
+        .metrics-grid { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 2rem; text-align: center; }
+        .metric-val { font-family: var(--font-serif); font-size: clamp(3rem, 5vw, 4rem); line-height: 1; margin-bottom: 0.5rem; }
+        .metric-label { font-size: 0.875rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
+
+        /* Testimonial */
+        .testimonial-content { text-align: center; max-width: 800px; margin: 0 auto; }
+        .quote { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.1; margin-bottom: 2.5rem; color: var(--text-main); }
+        .author { display: flex; align-items: center; justify-content: center; gap: 1rem; }
+        .avatar { width: 48px; height: 48px; background: var(--surface-raised); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--text-secondary); border: 1px solid var(--border-light); }
+        .author-info { text-align: left; }
+        .author-name { font-weight: 600; font-size: 0.9375rem; }
+        .author-title { font-size: 0.875rem; color: var(--text-secondary); }
+
+        /* Pricing */
+        .pricing-header { text-align: center; margin-bottom: 3rem; }
+        .toggle-wrap { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1.5rem; font-size: 0.9375rem; font-weight: 500; }
+        .toggle { position: relative; width: 44px; height: 24px; background: var(--surface-raised); border-radius: 999px; cursor: pointer; border: 1px solid var(--border-light); transition: var(--transition); }
+        .toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; background: var(--text-main); border-radius: 50%; transition: var(--transition); }
+        .toggle.active::after { transform: translateX(20px); background: var(--accent-indigo); }
+        .badge-discount { font-size: 0.75rem; background: rgba(14, 165, 233, 0.1); color: var(--accent-blue); padding: 0.25rem 0.5rem; border-radius: 999px; font-weight: 600; }
+
+        .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; align-items: start; }
+        .price-card { background: var(--surface); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 2.5rem; display: flex; flex-direction: column; position: relative; transition: var(--transition); }
+        .price-card:hover { border-color: var(--border-hover); box-shadow: var(--shadow-md); }
+        .price-card.popular { border: 1px solid transparent; background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--gradient-accent) border-box; box-shadow: var(--shadow-float); transform: translateY(-8px); }
+        .popular-badge { position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%); background: var(--gradient-accent); color: white; font-size: 0.75rem; font-weight: 600; padding: 0.25rem 1rem; border-radius: 999px; }
+        
+        .tier-name { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .tier-desc { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 2rem; min-height: 42px; }
+        .price { font-family: var(--font-serif); font-size: 3.5rem; line-height: 1; margin-bottom: 0.5rem; display: flex; align-items: baseline; gap: 0.25rem; }
+        .price span { font-family: var(--font-sans); font-size: 0.9375rem; color: var(--text-tertiary); font-weight: 400; }
+        .features-list { list-style: none; margin: 2rem 0; flex-grow: 1; }
+        .features-list li { display: flex; gap: 0.75rem; font-size: 0.9375rem; margin-bottom: 1rem; color: var(--text-secondary); }
+        .features-list svg { flex-shrink: 0; color: var(--text-main); }
+        
+        @media (max-width: 992px) {
+            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+            .price-card.popular { transform: none; }
+        }
+
+        /* CTA Bottom */
+        .cta-band { margin: var(--space-section) 1.5rem; padding: 6rem 2rem; background: var(--surface); border: 1px solid var(--border-light); border-radius: var(--radius-xl); text-align: center; position: relative; overflow: hidden; }
+        .cta-band::before { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 60%; height: 50%; background: var(--gradient-accent); filter: blur(100px); opacity: 0.15; z-index: 0; pointer-events: none; }
+        .cta-band-content { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+        .cta-band h2 { margin-bottom: 1.5rem; }
+
+        /* Footer */
+        .footer { border-top: 1px solid var(--border-light); padding: 3rem 0; background: var(--surface); }
+        .footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem; }
+        .footer-links { display: flex; gap: 1.5rem; }
+        .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.875rem; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--text-main); }
+
+        /* Mobile Sticky CTA */
+        .mobile-cta { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: var(--surface); border-top: 1px solid var(--border-light); padding: 1rem 1.5rem; z-index: 100; box-shadow: 0 -4px 12px rgba(0,0,0,0.05); }
+        @media (max-width: 768px) {
+            .mobile-cta { display: flex; gap: 1rem; }
+            .mobile-cta .btn { flex: 1; }
+            .footer { padding-bottom: 6rem; } /* space for sticky cta */
+        }
+
+        /* Animations */
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.is-visible { opacity: 1; transform: translateY(0); }
+        @media (prefers-reduced-motion: reduce) {
+            .reveal { transition: none; opacity: 1; transform: none; }
+            .mesh-blob, .mockup-chip { animation: none; }
+            .mockup { transform: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="nav-wrap">
+        <header class="nav">
+            <a href="#" class="logo">Surveyform</a>
+            <nav class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#customers">Customers</a>
+                <a href="#pricing">Pricing</a>
+            </nav>
+            <a href="#" class="btn btn-primary">Start free</a>
+        </header>
+    </div>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="section hero">
+            <div class="mesh-bg">
+                <div class="mesh-blob blob-1"></div>
+                <div class="mesh-blob blob-2"></div>
+            </div>
+            <div class="container hero-grid">
+                <div class="hero-content reveal">
+                    <h1>Ask. Listen. Learn.</h1>
+                    <p class="text-lg">Surveyform gives you beautiful surveys, branching logic, and analytics that do the thinking for you. Stop sending forms people hate.</p>
+                    <div class="hero-actions">
+                        <a href="#" class="btn btn-primary">Start free</a>
+                        <a href="#demo" class="btn btn-secondary">See a survey</a>
+                    </div>
+                </div>
+                
+                <div class="mockup-wrapper reveal" style="transition-delay: 0.1s;">
+                    <div class="mockup">
+                        <div class="m-header">
+                            <div class="m-dot" style="background:#ff5f56"></div>
+                            <div class="m-dot" style="background:#ffbd2e"></div>
+                            <div class="m-dot" style="background:#27c93f"></div>
+                        </div>
+                        <div class="m-body">
+                            <div class="m-skel-title"></div>
+                            <div class="m-option">
+                                <div class="m-radio"></div>
+                                <div class="m-skel-line"></div>
+                            </div>
+                            <div class="m-option">
+                                <div class="m-radio"></div>
+                                <div class="m-skel-line"></div>
+                            </div>
+                            <div class="m-option">
+                                <div class="m-radio"></div>
+                                <div class="m-skel-line"></div>
+                            </div>
+                            <div class="btn btn-primary" style="width: 100%; margin-top: 1rem; pointer-events:none;">Submit response</div>
+                        </div>
+                    </div>
+                    <div class="mockup-chip">
+                        <div class="mockup-chip-icon">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div class="mockup-chip-text">Logic verified</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logo Wall -->
+        <section class="logos">
+            <div class="container reveal">
+                <p>Migrate easily from legacy tools</p>
+                <div class="logo-grid">
+                    <div class="logo-item">Typeform</div>
+                    <div class="logo-item" style="font-weight: 500;">SurveyMonkey</div>
+                    <div class="logo-item" style="letter-spacing: 0.05em;">TALLY</div>
+                    <div class="logo-item" style="font-family: serif; font-style: italic;">Fillout</div>
+                    <div class="logo-item">QuestionPro</div>
+                    <div class="logo-item" style="text-transform: uppercase; font-weight: 400;">Qualtrics</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Bento -->
+        <section id="features" class="section">
+            <div class="container">
+                <div class="bento-header reveal">
+                    <h2>Everything you need, <br><span class="serif">nothing you don't.</span></h2>
+                </div>
+                
+                <div class="bento-grid">
+                    <!-- Card 1 -->
+                    <article class="bento-card reveal">
+                        <div class="icon-wrap">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M6 3v12"></path>
+                                <path d="M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
+                                <path d="M6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
+                                <path d="M15 18a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>
+                                <path d="M6 15c0-3.5 3.5-3 3.5-3s3.5-.5 3.5-3"></path>
+                            </svg>
+                        </div>
+                        <h3>Branching Logic</h3>
+                        <p>Ask the right questions based on previous answers. Build complex paths without a computer science degree.</p>
+                    </article>
+                    
+                    <!-- Card 2 -->
+                    <article class="bento-card reveal" style="transition-delay: 0.1s;">
+                        <div class="icon-wrap">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="20" x2="18" y2="10"></line>
+                                <line x1="12" y1="20" x2="12" y2="4"></line>
+                                <line x1="6" y1="20" x2="6" y2="14"></line>
+                                <path d="M3 20h18"></path>
+                            </svg>
+                        </div>
+                        <h3>Auto Analytics</h3>
+                        <p>Stop exporting to CSV. We automatically categorize text responses and chart your multiple choice data instantly.</p>
+                    </article>
+
+                    <!-- Card 3 -->
+                    <article class="bento-card reveal">
+                        <div class="icon-wrap">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+                                <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                                <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                                <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                            </svg>
+                        </div>
+                        <h3>Native NPS</h3>
+                        <p>Built-in Net Promoter Score blocks. Track sentiment over time with specialized dashboards designed for product teams.</p>
+                    </article>
+
+                    <!-- Card 4 -->
+                    <article class="bento-card reveal" style="transition-delay: 0.1s;">
+                        <div class="icon-wrap">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="16 18 22 12 16 6"></polyline>
+                                <polyline points="8 6 2 12 8 18"></polyline>
+                            </svg>
+                        </div>
+                        <h3>Seamless Embeds</h3>
+                        <p>Popovers, slide-ins, or inline blocks. Paste one line of code and integrate beautifully into your React or HTML site.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Metrics Section -->
+        <section class="section pt-0">
+            <div class="container reveal">
+                <div class="metrics-strip">
+                    <div class="metrics-grid">
+                        <div>
+                            <div class="metric-val">190k</div>
+                            <div class="metric-label">Surveys Published</div>
+                        </div>
+                        <div>
+                            <div class="metric-val">4.7</div>
+                            <div class="metric-label">App Store Rating</div>
+                        </div>
+                        <div>
+                            <div class="metric-val">1.2M</div>
+                            <div class="metric-label">Responses Analyzed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonial Section -->
+        <section id="customers" class="section">
+            <div class="container reveal">
+                <div class="testimonial-content">
+                    <div class="quote serif">"Since switching to Surveyform, our completion rate hit 82%. The UI is so clean that users actually enjoy giving us feedback."</div>
+                    <div class="author">
+                        <div class="avatar" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        </div>
+                        <div class="author-info">
+                            <div class="author-name">Dana Brooks</div>
+                            <div class="author-title">Lead UX Researcher, TechFlow</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="section">
+            <div class="container reveal">
+                <div class="pricing-header">
+                    <h2>Simple pricing for everyone</h2>
+                    <div class="toggle-wrap">
+                        <span id="label-monthly">Monthly</span>
+                        <div class="toggle" id="billing-toggle" role="switch" aria-checked="false" tabindex="0"></div>
+                        <span id="label-annual">Annually <span class="badge-discount">2 months free</span></span>
+                    </div>
+                </div>
+
+                <div class="pricing-grid">
+                    <!-- Free -->
+                    <div class="price-card">
+                        <h3 class="tier-name">Free</h3>
+                        <p class="tier-desc">Perfect for testing the waters and small projects.</p>
+                        <div class="price">$0<span>/mo</span></div>
+                        <ul class="features-list">
+                            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to 100 responses</li>
+                            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Unlimited questions</li>
+                            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Standard templates</li>
+                        </ul>
+                        <a href="#" class="btn btn-secondary" style="width: 100%;">Get started</a>
+                    </div>
+
+                    <!-- Pro (Middle) -->
+                    <div class="price-card popular">
+                        <div class="popular-badge">Most popular</div>
+                        <h3 class="tier-name">Plus</h3>
+                        <p class="tier-desc">For growing teams that need deeper insights.</p>
+                        <div class="price" data-monthly="25" data-annual="20">$<span class="price-val" style="font-family: inherit; font-size: inherit; color: inherit;">25</span><span>/mo</span></div>
+                        <ul class="features-list">
+                            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to 2,500 responses</li>
+                            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Advanced branching logic</li>
+                            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Remove Surveyform branding</li>
+                            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> CSV & PDF exports</li>
+                        </ul>
+                        <a href="#" class="btn btn-accent" style="width: 100%;">Start 14-day trial</a>
+                    </div>
+
+                    <!-- Pro -->
+                    <div class="price-card">
+                        <h3 class="tier-name">Pro</h3>
+                        <p class="tier-desc">Maximum power for dedicated research teams.</p>
+                        <div class="price" data-monthly="59" data-annual="49">$<span class="price-val" style="font-family: inherit; font-size: inherit; color: inherit;">59</span><span>/mo</span></div>
+                        <ul class="features-list">
+                            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Unlimited responses</li>
+                            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Custom domain & CSS</li>
+                            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Webhooks & API access</li>
+                            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Priority support</li>
+                        </ul>
+                        <a href="#" class="btn btn-secondary" style="width: 100%;">Upgrade to Pro</a>
+                    </div>
+                </div>
+                <p class="text-sm" style="text-align: center; margin-top: 1.5rem; color: var(--text-tertiary); display: none;" id="annual-note">Prices shown reflect billed annually rate.</p>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="reveal">
+            <div class="cta-band">
+                <div class="cta-band-content">
+                    <h2>Ready to start listening?</h2>
+                    <p class="text-lg" style="margin-bottom: 2rem;">Join thousands of teams building better products through better feedback.</p>
+                    <a href="#" class="btn btn-primary">Create your first survey</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="logo" style="font-size: 1rem;">Surveyform</div>
+            <div class="footer-links">
+                <a href="#">Templates</a>
+                <a href="#">Help Center</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+            <div class="text-sm" style="color: var(--text-tertiary);">© 2024 Surveyform Inc.</div>
+        </div>
+    </footer>
+
+    <!-- Mobile Sticky CTA -->
+    <div class="mobile-cta">
+        <a href="#" class="btn btn-primary">Start free</a>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Intersection Observer for scroll reveal animations
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach((el) => {
+                observer.observe(el);
+            });
+
+            // Pricing Toggle Logic
+            const toggle = document.getElementById('billing-toggle');
+            const priceVals = document.querySelectorAll('.price-val');
+            const annualNote = document.getElementById('annual-note');
+
+            const updatePrices = (isAnnual) => {
+                priceVals.forEach(val => {
+                    const parent = val.closest('.price');
+                    const priceData = isAnnual ? parent.dataset.annual : parent.dataset.monthly;
+                    if(priceData) {
+                        val.textContent = priceData;
+                    }
+                });
+                annualNote.style.display = isAnnual ? 'block' : 'none';
+            };
+
+            toggle.addEventListener('click', () => {
+                const isChecked = toggle.classList.toggle('active');
+                toggle.setAttribute('aria-checked', isChecked);
+                updatePrices(isChecked);
+            });
+
+            // Accessibility: allow toggling with keyboard
+            toggle.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggle.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

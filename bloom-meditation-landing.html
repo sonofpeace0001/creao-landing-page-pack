@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloom | A calmer mind, ten minutes a day</title>
+    <meta name="description" content="Bloom delivers daily guided meditations, sleep stories, and breathwork built around your stress patterns.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Colors */
+            --bg-base: #0A0A0A;
+            --bg-surface: #141414;
+            --bg-surface-elevated: #1F1F1F;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A1A1AA;
+            --text-muted: #71717A;
+            
+            /* Accents */
+            --accent-start: #7C3AED;
+            --accent-end: #C084FC;
+            --accent-glow: rgba(124, 58, 237, 0.5);
+            
+            /* Borders */
+            --border-light: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+            
+            /* Typography */
+            --font-head: 'Instrument Serif', serif;
+            --font-body: 'Inter', sans-serif;
+            
+            /* Layout */
+            --max-width: 1200px;
+            --section-pad: clamp(5rem, 12vw, 7.5rem);
+            --radius-sm: 0.5rem;
+            --radius-md: 1rem;
+            --radius-lg: 1.5rem;
+            
+            /* Easing */
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Reset & Base */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 { font-family: var(--font-head); font-weight: 400; line-height: 1.1; }
+        a { color: inherit; text-decoration: none; }
+        ul { list-style: none; }
+        button { border: none; background: none; font-family: inherit; cursor: pointer; }
+
+        /* Typography Utilities */
+        .text-gradient {
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .accent-gradient {
+            background: linear-gradient(135deg, var(--accent-start) 0%, var(--accent-end) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Layout Utilities */
+        .container {
+            width: 100%;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        section { padding: var(--section-pad) 0; position: relative; z-index: 10; }
+
+        /* Background Effects */
+        .noise {
+            position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .mesh-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100vh;
+            overflow: hidden; pointer-events: none; z-index: 0;
+        }
+
+        .mesh-blob {
+            position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.15;
+            animation: float 20s infinite alternate ease-in-out;
+            will-change: transform;
+        }
+
+        .blob-1 { top: -10%; left: 10%; width: 50vw; height: 50vw; background: var(--accent-start); }
+        .blob-2 { bottom: 10%; right: -10%; width: 40vw; height: 40vw; background: var(--accent-end); animation-delay: -10s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(5%, 10%) scale(1.1); }
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 0.75rem 1.5rem; border-radius: 99px; font-weight: 500; font-size: 0.9375rem;
+            transition: all 0.3s var(--ease-out-expo); white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--text-primary); color: var(--bg-base);
+            box-shadow: 0 0 0 rgba(255,255,255,0);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -8px rgba(255,255,255,0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05); color: var(--text-primary);
+            border: 1px solid var(--border-light); backdrop-filter: blur(8px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08); border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Navigation */
+        .nav-wrapper {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+            padding: 1.5rem 0;
+            background: linear-gradient(to bottom, rgba(10,10,10,0.8) 0%, rgba(10,10,10,0) 100%);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .nav-inner {
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .logo { font-family: var(--font-head); font-size: 2rem; color: var(--text-primary); letter-spacing: -0.02em; }
+
+        .nav-links { display: none; gap: 2.5rem; }
+        .nav-links a { font-size: 0.9375rem; color: var(--text-secondary); transition: color 0.2s ease; }
+        .nav-links a:hover { color: var(--text-primary); }
+
+        @media (min-width: 768px) { .nav-links { display: flex; } }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center;
+            padding-top: 6rem; /* Offset for nav */
+        }
+
+        .hero-grid {
+            display: grid; grid-template-columns: 1fr; gap: 4rem; align-items: center;
+        }
+
+        @media (min-width: 1024px) {
+            .hero-grid { grid-template-columns: 1fr 1fr; gap: 6rem; }
+        }
+
+        .hero-content h1 {
+            font-size: clamp(3.5rem, 8vw, 6rem); letter-spacing: -0.03em;
+            margin-bottom: 1.5rem; color: var(--text-primary);
+        }
+
+        .hero-content p {
+            font-size: clamp(1.125rem, 2vw, 1.25rem); color: var(--text-secondary);
+            margin-bottom: 2.5rem; max-width: 480px;
+        }
+
+        .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+        /* CSS-Only UI Mockup */
+        .mockup-wrapper {
+            position: relative; width: 100%; max-width: 400px; margin: 0 auto;
+            perspective: 1000px;
+        }
+
+        .mockup-device {
+            background: var(--bg-surface); border: 1px solid var(--border-light);
+            border-radius: 2rem; padding: 1.5rem; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.8);
+            transform: rotateY(-5deg) rotateX(5deg);
+            transition: transform 0.5s var(--ease-out-expo);
+            position: relative; overflow: hidden;
+        }
+
+        .mockup-wrapper:hover .mockup-device { transform: rotateY(0deg) rotateX(0deg); }
+
+        /* Inner UI elements */
+        .mockup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; }
+        .mockup-pill { background: var(--bg-surface-elevated); padding: 0.25rem 0.75rem; border-radius: 99px; font-size: 0.75rem; color: var(--text-secondary); }
+        .mockup-icon { width: 24px; height: 24px; color: var(--text-secondary); }
+        
+        .mockup-player { text-align: center; margin-bottom: 3rem; position: relative; }
+        
+        /* Breathing interaction */
+        .breathing-ring {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 160px; height: 160px; border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            animation: breathe 8s infinite ease-in-out; pointer-events: none;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.3; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+        }
+
+        .player-btn {
+            width: 80px; height: 80px; border-radius: 50%; background: var(--bg-surface-elevated);
+            border: 1px solid var(--border-light); margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center;
+            position: relative; z-index: 2; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+        }
+
+        .player-btn svg { width: 32px; height: 32px; color: var(--text-primary); margin-left: 4px; }
+        
+        .mockup-text h4 { font-size: 1.5rem; margin-bottom: 0.25rem; font-family: var(--font-body); font-weight: 500; }
+        .mockup-text p { font-size: 0.875rem; color: var(--text-secondary); }
+
+        .mockup-progress { height: 4px; background: var(--bg-surface-elevated); border-radius: 2px; overflow: hidden; margin-bottom: 1rem; }
+        .mockup-progress-fill { width: 45%; height: 100%; background: linear-gradient(90deg, var(--accent-start), var(--accent-end)); }
+        
+        .floating-card {
+            position: absolute; bottom: -20px; right: -30px; background: rgba(20,20,20,0.9); backdrop-filter: blur(10px);
+            border: 1px solid var(--border-light); padding: 1rem; border-radius: var(--radius-md);
+            display: flex; align-items: center; gap: 0.75rem; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+            animation: float 6s infinite alternate ease-in-out;
+        }
+        
+        .floating-card svg { width: 20px; height: 20px; color: var(--accent-end); }
+        .floating-card span { font-size: 0.875rem; font-weight: 500; }
+
+        @media (max-width: 1023px) { .floating-card { right: 0; bottom: -10px; } }
+
+        /* Logo Wall */
+        .logo-wall { border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); padding: 3rem 0; overflow: hidden; background: linear-gradient(90deg, var(--bg-base) 0%, transparent 15%, transparent 85%, var(--bg-base) 100%); }
+        .logo-track { display: flex; gap: 4rem; justify-content: center; align-items: center; flex-wrap: wrap; opacity: 0.5; filter: grayscale(100%); }
+        .logo-item { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; }
+        .logo-item.serif { font-family: var(--font-head); font-style: italic; font-size: 1.5rem; }
+        .logo-item.caps { text-transform: uppercase; letter-spacing: 0.1em; font-size: 1rem; }
+
+        /* Bento Grid */
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-header h2 { font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 1rem; }
+        .section-header p { color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+
+        .bento-grid { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+        @media (min-width: 768px) { .bento-grid { grid-template-columns: repeat(2, 1fr); } }
+        
+        .bento-card {
+            background: var(--bg-surface); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: 2.5rem;
+            transition: all 0.4s var(--ease-out-expo); position: relative; overflow: hidden;
+        }
+
+        .bento-card:hover {
+            transform: translateY(-4px); border-color: var(--border-hover);
+            box-shadow: 0 20px 40px -20px rgba(0,0,0,0.5);
+        }
+
+        .bento-icon {
+            width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--bg-surface-elevated);
+            display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;
+            color: var(--text-primary); border: 1px solid var(--border-light);
+        }
+
+        .bento-icon svg { width: 24px; height: 24px; stroke-width: 1.5; stroke: currentColor; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+        
+        .bento-card h3 { font-family: var(--font-body); font-size: 1.25rem; font-weight: 500; margin-bottom: 0.75rem; }
+        .bento-card p { color: var(--text-secondary); font-size: 0.9375rem; }
+
+        /* Metrics Strip */
+        .metrics-strip { padding: 4rem 0; background: var(--bg-surface); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); }
+        .metrics-grid { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 3rem; text-align: center; }
+        .metric-val { font-family: var(--font-head); font-size: clamp(3rem, 6vw, 4.5rem); line-height: 1; margin-bottom: 0.5rem; }
+        .metric-label { color: var(--text-secondary); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
+
+        /* Testimonial */
+        .testimonial-section { text-align: center; }
+        .testimonial-content { max-width: 800px; margin: 0 auto; }
+        .quote-mark { font-family: var(--font-head); font-size: 6rem; color: var(--accent-start); line-height: 0; margin-bottom: 2rem; display: block; opacity: 0.5; }
+        .testimonial-text { font-family: var(--font-head); font-size: clamp(2rem, 4vw, 3rem); line-height: 1.2; margin-bottom: 3rem; }
+        
+        .author { display: flex; align-items: center; justify-content: center; gap: 1rem; }
+        .avatar {
+            width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--text-primary); font-size: 1rem;
+        }
+        .author-info { text-align: left; }
+        .author-name { font-weight: 500; display: block; }
+        .author-title { color: var(--text-secondary); font-size: 0.875rem; }
+
+        /* Pricing */
+        .pricing-toggle {
+            display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 4rem;
+        }
+
+        .toggle-label { font-size: 0.9375rem; color: var(--text-secondary); transition: color 0.3s ease; }
+        .toggle-label.active { color: var(--text-primary); font-weight: 500; }
+        .badge { background: rgba(124, 58, 237, 0.2); color: #D8B4FE; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 99px; margin-left: 0.5rem; border: 1px solid rgba(124, 58, 237, 0.3); }
+
+        .switch {
+            position: relative; width: 56px; height: 30px; background: var(--bg-surface-elevated);
+            border-radius: 99px; cursor: pointer; border: 1px solid var(--border-light);
+            transition: background 0.3s ease;
+        }
+
+        .switch-knob {
+            position: absolute; top: 3px; left: 3px; width: 22px; height: 22px;
+            background: var(--text-primary); border-radius: 50%;
+            transition: transform 0.3s var(--ease-out-expo);
+        }
+
+        .switch[aria-checked="true"] { background: var(--accent-start); border-color: var(--accent-start); }
+        .switch[aria-checked="true"] .switch-knob { transform: translateX(26px); }
+
+        .pricing-grid { display: grid; gap: 2rem; grid-template-columns: 1fr; align-items: center; }
+        @media (min-width: 1024px) { .pricing-grid { grid-template-columns: repeat(3, 1fr); } }
+
+        .pricing-card {
+            background: var(--bg-surface); border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg); padding: 3rem 2rem;
+            display: flex; flex-direction: column; height: 100%; position: relative;
+        }
+
+        .pricing-card.highlight {
+            background: linear-gradient(to bottom, var(--bg-surface), #1A1423);
+            border-color: rgba(124, 58, 237, 0.3);
+            transform: scale(1.02);
+        }
+        
+        .pricing-card.highlight::before {
+            content: ''; position: absolute; inset: -1px; border-radius: var(--radius-lg);
+            padding: 1px; background: linear-gradient(to bottom, var(--accent-start), transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+        }
+
+        .popular-tag {
+            position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            color: white; font-size: 0.75rem; font-weight: 600; padding: 0.25rem 1rem;
+            border-radius: 99px; text-transform: uppercase; letter-spacing: 0.05em;
+        }
+
+        .tier-name { font-size: 1.25rem; font-weight: 500; margin-bottom: 0.5rem; }
+        .tier-desc { color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 2rem; min-height: 40px; }
+        .tier-price { font-family: var(--font-head); font-size: 3.5rem; line-height: 1; margin-bottom: 0.5rem; }
+        .tier-period { font-size: 1rem; color: var(--text-secondary); font-family: var(--font-body); font-weight: 400; }
+        .tier-billing { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 2rem; height: 20px; }
+        
+        .feature-list { margin-bottom: 2.5rem; flex-grow: 1; }
+        .feature-item { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; font-size: 0.9375rem; color: var(--text-secondary); }
+        .feature-item svg { width: 18px; height: 18px; color: var(--text-primary); flex-shrink: 0; margin-top: 2px; }
+
+        .pricing-card .btn { width: 100%; margin-top: auto; }
+
+        @media (max-width: 1023px) { .pricing-card.highlight { transform: none; } }
+
+        /* Final CTA */
+        .cta-band {
+            text-align: center; padding: 8rem 1.5rem; position: relative; overflow: hidden;
+            background: linear-gradient(to top, rgba(124, 58, 237, 0.1), transparent);
+        }
+        
+        .cta-glow {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 600px; height: 600px; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
+            filter: blur(60px); z-index: -1; pointer-events: none; opacity: 0.5;
+        }
+
+        .cta-band h2 { font-size: clamp(3rem, 6vw, 4.5rem); margin-bottom: 1.5rem; }
+        .cta-band p { color: var(--text-secondary); font-size: 1.125rem; margin-bottom: 2.5rem; max-width: 500px; margin-inline: auto; }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-light); padding: 3rem 0;
+            background: var(--bg-base); font-size: 0.875rem; color: var(--text-muted);
+        }
+
+        .footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; }
+        .footer-links { display: flex; gap: 1.5rem; }
+        .footer-links a:hover { color: var(--text-primary); }
+
+        /* Mobile Sticky CTA */
+        .mobile-cta {
+            display: none; position: fixed; bottom: 0; left: 0; width: 100%;
+            padding: 1rem 1.5rem; background: rgba(20,20,20,0.85); backdrop-filter: blur(12px);
+            border-top: 1px solid var(--border-light); z-index: 99;
+            transform: translateY(100%); transition: transform 0.4s var(--ease-out-expo);
+        }
+
+        .mobile-cta.visible { transform: translateY(0); }
+        .mobile-cta .btn { width: 100%; }
+
+        @media (max-width: 768px) { .mobile-cta { display: block; } }
+
+        /* Reveal Animations */
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+
+        /* Accessibility: Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+            .mesh-blob, .floating-card, .breathing-ring { animation: none !important; }
+            .reveal { opacity: 1; transform: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    
+    <div class="mesh-bg">
+        <div class="mesh-blob blob-1"></div>
+        <div class="mesh-blob blob-2"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav-wrapper">
+        <div class="container nav-inner">
+            <a href="#" class="logo" aria-label="Bloom Home">Bloom</a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#testimonials">Stories</a>
+                <a href="#pricing">Pricing</a>
+            </div>
+            <a href="#pricing" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">Try Free</a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <header class="hero container">
+            <div class="hero-grid">
+                <div class="hero-content reveal">
+                    <h1>A calmer mind, <span class="accent-gradient">ten minutes</span> a day.</h1>
+                    <p>Bloom delivers daily guided meditations, sleep stories, and breathwork built around your stress patterns.</p>
+                    <div class="hero-ctas">
+                        <a href="#pricing" class="btn btn-primary">Try Bloom free</a>
+                        <button class="btn btn-secondary">
+                            <svg style="width:16px;height:16px;margin-right:8px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                            Hear a sample
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hero-visual reveal delay-1">
+                    <div class="mockup-wrapper">
+                        <div class="mockup-device">
+                            <div class="mockup-header">
+                                <svg class="mockup-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                                <span class="mockup-pill">Daily Session</span>
+                                <svg class="mockup-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                            </div>
+                            
+                            <div class="mockup-player">
+                                <div class="breathing-ring"></div>
+                                <div class="player-btn">
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                                </div>
+                                <div class="mockup-text">
+                                    <h4>Morning Clarity</h4>
+                                    <p>Guided Breathwork • 10 min</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mockup-progress">
+                                <div class="mockup-progress-fill"></div>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-muted)">
+                                <span>04:12</span>
+                                <span>10:00</span>
+                            </div>
+                        </div>
+                        
+                        <div class="floating-card">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                            <span>Stress reduced by 40%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Logo Wall -->
+        <section class="logo-wall reveal">
+            <div class="container logo-track">
+                <span class="logo-item" style="font-family: sans-serif;">Calm</span>
+                <span class="logo-item serif">Headspace</span>
+                <span class="logo-item caps">Insight Timer</span>
+                <span class="logo-item" style="font-weight: 300;">Waking Up</span>
+                <span class="logo-item" style="letter-spacing: 0;">balance</span>
+                <span class="logo-item" style="font-family: monospace; font-size: 1rem;">Simple Habit</span>
+            </div>
+        </section>
+
+        <!-- Bento Features -->
+        <section id="features" class="container">
+            <div class="section-header reveal">
+                <h2>Designed for the busy mind</h2>
+                <p>Everything you need to find focus during the day and deep rest at night, packed into an intuitive, beautiful interface.</p>
+            </div>
+            
+            <div class="bento-grid">
+                <!-- Card 1 -->
+                <div class="bento-card reveal">
+                    <div class="bento-icon">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    </div>
+                    <h3>Daily 10-min sessions</h3>
+                    <p>Short, impactful guided meditations designed to fit seamlessly into your morning routine or commute.</p>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="bento-card reveal delay-1">
+                    <div class="bento-icon">
+                        <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    </div>
+                    <h3>Sleep stories</h3>
+                    <p>Drift off effortlessly with immersive soundscapes and soothing narratives engineered for deep REM sleep.</p>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="bento-card reveal">
+                    <div class="bento-icon">
+                        <svg viewBox="0 0 24 24"><path d="M4 14a4 4 0 0 1 4-4h8a4 4 0 0 0 0-8"/><path d="M4 22a4 4 0 0 1 4-4h8a4 4 0 0 0 0-8"/></svg>
+                    </div>
+                    <h3>Breathwork</h3>
+                    <p>Immediate state-change exercises to lower heart rate and reduce cortisol before high-stakes meetings.</p>
+                </div>
+                
+                <!-- Card 4 -->
+                <div class="bento-card reveal delay-1">
+                    <div class="bento-icon">
+                        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    </div>
+                    <h3>Stress tracking</h3>
+                    <p>Connects with Apple Health to correlate your meditation consistency with your actual physiological stress markers.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Metrics -->
+        <section class="metrics-strip reveal">
+            <div class="container metrics-grid">
+                <div>
+                    <div class="metric-val">1.8M</div>
+                    <div class="metric-label">Sessions / Week</div>
+                </div>
+                <div>
+                    <div class="metric-val">220k</div>
+                    <div class="metric-label">Active Members</div>
+                </div>
+                <div>
+                    <div class="metric-val">4.9</div>
+                    <div class="metric-label">App Store Rating</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonial -->
+        <section id="testimonials" class="testimonial-section container reveal">
+            <div class="testimonial-content">
+                <span class="quote-mark">"</span>
+                <p class="testimonial-text">I sleep better than I have in years. Bloom stripped away the noise and gave me exactly what my brain needed to shut down.</p>
+                <div class="author">
+                    <div class="avatar">AB</div>
+                    <div class="author-info">
+                        <span class="author-name">Aisha Bello</span>
+                        <span class="author-title">Registered Nurse</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing -->
+        <section id="pricing" class="container">
+            <div class="section-header reveal">
+                <h2>Simple, transparent pricing</h2>
+                <p>Invest in your peace of mind. Cancel anytime.</p>
+            </div>
+
+            <div class="pricing-toggle reveal">
+                <span class="toggle-label" id="label-monthly">Monthly</span>
+                <button class="switch" id="billing-toggle" role="switch" aria-checked="false" aria-label="Toggle annual billing">
+                    <span class="switch-knob"></span>
+                </button>
+                <span class="toggle-label active" id="label-annual">Annually <span class="badge">2 mo free</span></span>
+            </div>
+
+            <div class="pricing-grid">
+                <!-- Free Tier -->
+                <div class="pricing-card reveal">
+                    <h3 class="tier-name">Free</h3>
+                    <p class="tier-desc">Perfect to get a feel for the basics.</p>
+                    <div class="tier-price">$0<span class="tier-period">/mo</span></div>
+                    <div class="tier-billing">&nbsp;</div>
+                    
+                    <ul class="feature-list">
+                        <li class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> 10 basic meditations</li>
+                        <li class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> 2 sleep stories</li>
+                        <li class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Basic timer</li>
+                    </ul>
+                    
+                    <button class="btn btn-secondary">Get Started</button>
+                </div>
+
+                <!-- Plus Tier (Middle) -->
+                <div class="pricing-card highlight reveal delay-1">
+                    <div class="popular-tag">Most Popular</div>
+                    <h3 class="tier-name text-gradient">Plus</h3>
+                    <p class="tier-desc">Everything you need for a daily habit.</p>
+                    <div class="tier-price" id="price-plus">$59<span class="tier-period" id="period-plus">/yr</span></div>
+                    <div class="tier-billing" id="billing-plus">Billed annually at $59</div>
+                    
+                    <ul class="feature-list">
+                        <li class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Unlimited meditations</li>
+                        <li class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Full sleep story library</li>
+                        <li class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Breathwork exercises</li>
+                        <li class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Apple Health integration</li>
+                    </ul>
+                    
+                    <button class="btn btn-primary">Start 7-day free trial</button>
+                </div>
+
+                <!-- Yearly/Max Tier -->
+                <div class="pricing-card reveal delay-2">
+                    <h3 class="tier-name">Family</h3>
+                    <p class="tier-desc">Share calm with up to 5 members.</p>
+                    <div class="tier-price" id="price-family">$99<span class="tier-period" id="period-family">/yr</span></div>
+                    <div class="tier-billing" id="billing-family">Billed annually at $99</div>
+                    
+                    <ul class="feature-list">
+                        <li class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Everything in Plus</li>
+                        <li class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> 5 premium accounts</li>
+                        <li class="feature-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Shared progress tracking</li>
+                    </ul>
+                    
+                    <button class="btn btn-secondary">Choose Family</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Band -->
+        <section class="cta-band reveal">
+            <div class="cta-glow"></div>
+            <div class="container">
+                <h2>Ready to find your focus?</h2>
+                <p>Join over 220,000 members who have transformed their relationship with stress using Bloom.</p>
+                <a href="#pricing" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.125rem;">Try Bloom free for 7 days</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="container">
+        <div class="footer-inner">
+            <div>&copy; 2023 Bloom Meditation Inc.</div>
+            <div class="footer-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Sticky CTA -->
+    <div class="mobile-cta" id="mobile-cta">
+        <a href="#pricing" class="btn btn-primary">Try Bloom Free</a>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Intersection Observer for scroll reveals
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const revealObserver = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            });
+        }, revealOptions);
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Pricing Toggle Logic
+        const toggleBtn = document.getElementById('billing-toggle');
+        const labelMonthly = document.getElementById('label-monthly');
+        const labelAnnual = document.getElementById('label-annual');
+        
+        const pricePlus = document.getElementById('price-plus');
+        const periodPlus = document.getElementById('period-plus');
+        const billingPlus = document.getElementById('billing-plus');
+        
+        const priceFamily = document.getElementById('price-family');
+        const periodFamily = document.getElementById('period-family');
+        const billingFamily = document.getElementById('billing-family');
+
+        let isAnnual = false; // Based on prompt: default to specific numbers ($12, $59). I'll default to monthly view visually but numbers map.
+        // Wait, the prompt says "Plus $12, Yearly $59".
+        // Let's set default state to Annual to show $59, but wait, $12 is monthly.
+        // Let's set default state to Monthly.
+        
+        // Let's initialize strictly
+        toggleBtn.setAttribute('aria-checked', 'false');
+        isAnnual = false;
+        
+        function updatePricing() {
+            if (isAnnual) {
+                toggleBtn.setAttribute('aria-checked', 'true');
+                labelAnnual.classList.add('active');
+                labelMonthly.classList.remove('active');
+                
+                pricePlus.innerHTML = '$59<span class="tier-period">/yr</span>';
+                billingPlus.innerText = 'Billed annually ($4.91/mo)';
+                
+                priceFamily.innerHTML = '$99<span class="tier-period">/yr</span>';
+                billingFamily.innerText = 'Billed annually ($8.25/mo)';
+            } else {
+                toggleBtn.setAttribute('aria-checked', 'false');
+                labelMonthly.classList.add('active');
+                labelAnnual.classList.remove('active');
+                
+                pricePlus.innerHTML = '$12<span class="tier-period">/mo</span>';
+                billingPlus.innerText = 'Billed monthly';
+                
+                priceFamily.innerHTML = '$18<span class="tier-period">/mo</span>';
+                billingFamily.innerText = 'Billed monthly';
+            }
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            isAnnual = !isAnnual;
+            updatePricing();
+        });
+        
+        // Initialize pricing state
+        updatePricing();
+
+        // Mobile Sticky CTA Logic
+        const mobileCta = document.getElementById('mobile-cta');
+        const heroSection = document.querySelector('.hero');
+        
+        window.addEventListener('scroll', () => {
+            if (window.innerWidth <= 768) {
+                if (window.scrollY > heroSection.offsetHeight * 0.8) {
+                    mobileCta.classList.add('visible');
+                } else {
+                    mobileCta.classList.remove('visible');
+                }
+            }
+        }, { passive: true });
+    </script>
+</body>
+</html>

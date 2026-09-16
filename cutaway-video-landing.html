@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cutaway | AI Video Editor for Short-Form Creators</title>
+    <meta name="description" content="Edit faster. Post more. Cutaway trims, captions, and restyles your videos automatically.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Colors */
+            --bg-base: #0A0A0A;
+            --bg-surface: #141414;
+            --bg-surface-hover: #1A1A1A;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A1A1AA;
+            --text-muted: #71717A;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(255, 255, 255, 0.15);
+            --accent-start: #EF4444;
+            --accent-end: #F97316;
+            
+            /* Typography */
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-serif: 'Instrument Serif', Georgia, serif;
+            
+            /* Spacing & Layout */
+            --max-width: 1200px;
+            --section-padding: clamp(60px, 10vw, 120px);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 24px;
+            
+            /* Effects */
+            --transition-smooth: 400ms cubic-bezier(0.16, 1, 0.3, 1);
+            --glass-bg: rgba(10, 10, 10, 0.6);
+        }
+
+        /* Reset & Base */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        /* Noise Texture */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+            opacity: 0;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px 0 rgba(239, 68, 68, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:hover::before {
+            opacity: 1;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-surface);
+            border-color: var(--border-highlight);
+        }
+
+        /* Navigation */
+        .nav-wrapper {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            transition: transform 0.3s ease;
+        }
+
+        nav {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Layout Utility */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .section {
+            padding: var(--section-padding) 0;
+        }
+
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            padding-top: calc(var(--section-padding) + 80px);
+            padding-bottom: var(--section-padding);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero-mesh {
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.15) 0%, rgba(249, 115, 22, 0.05) 40%, transparent 70%);
+            filter: blur(60px);
+            z-index: 0;
+            border-radius: 50%;
+            animation: floatMesh 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatMesh {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-5%, 10%) scale(1.1); }
+            100% { transform: translate(5%, -5%) scale(0.9); }
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 540px;
+        }
+
+        .hero-title {
+            font-size: clamp(3.5rem, 6vw, 5.5rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* CSS Mockup Interaction */
+        .mockup-wrapper {
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .mockup {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transform: rotateY(-5deg) rotateX(5deg);
+            transition: transform 0.5s ease;
+        }
+
+        .mockup-wrapper:hover .mockup {
+            transform: rotateY(0deg) rotateX(0deg) translateY(-5px);
+        }
+
+        .mockup-header {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 1.5rem;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border-color);
+        }
+
+        .mockup-body {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mockup-preview {
+            aspect-ratio: 9/16;
+            background: var(--bg-base);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            width: 60%;
+        }
+        
+        .mockup-face {
+            width: 60%;
+            height: 40%;
+            border-radius: 40px;
+            border: 2px dashed var(--border-highlight);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mockup-timeline {
+            background: var(--bg-base);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            position: relative;
+        }
+
+        .track {
+            height: 24px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 4px;
+            margin-bottom: 8px;
+            display: flex;
+            gap: 4px;
+            padding: 2px;
+        }
+
+        .clip {
+            background: var(--border-highlight);
+            border-radius: 2px;
+            height: 100%;
+        }
+
+        .clip.active {
+            background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .clip.active::after {
+            content: '';
+            position: absolute;
+            top:0; left:-100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: scan 2s infinite linear;
+        }
+
+        @keyframes scan {
+            100% { left: 200%; }
+        }
+
+        .playhead {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: white;
+            left: 30%;
+            z-index: 10;
+        }
+        
+        .playhead::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        /* Logo Wall */
+        .logos {
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 4rem 0;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.01), transparent);
+        }
+
+        .logos-title {
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .logos-track {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: clamp(2rem, 5vw, 4rem);
+            align-items: center;
+            opacity: 0.6;
+        }
+
+        .logo-item {
+            font-weight: 600;
+            font-size: 1.25rem;
+            letter-spacing: -0.03em;
+            color: var(--text-secondary);
+            filter: grayscale(100%);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logo-item svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        /* Features Bento Grid */
+        .features-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .features-header h2 {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            margin-bottom: 1rem;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            grid-auto-rows: minmax(280px, auto);
+        }
+
+        .bento-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+        }
+
+        .bento-card:hover {
+            border-color: var(--border-highlight);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+        }
+
+        .bento-card.large {
+            grid-column: span 2;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-base);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .feature-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor;
+            stroke-width: 1.5;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .bento-card h3 {
+            font-family: var(--font-sans);
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .bento-card p {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+        }
+        
+        .bento-bg-graphic {
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            width: 150px;
+            height: 150px;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+        
+        .bento-card:hover .bento-bg-graphic {
+            opacity: 0.1;
+        }
+
+        /* Metrics Strip */
+        .metrics {
+            padding: 3rem 0;
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            text-align: center;
+            divide-x: 1px solid var(--border-color);
+        }
+
+        .metric-item {
+            position: relative;
+        }
+        
+        .metric-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: -1rem;
+            top: 10%;
+            height: 80%;
+            width: 1px;
+            background: var(--border-color);
+        }
+
+        .metric-value {
+            font-family: var(--font-serif);
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            margin-bottom: 0.25rem;
+            background: linear-gradient(180deg, #FFF, #AAA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Testimonial */
+        .testimonial-card {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(180deg, rgba(20,20,20,0) 0%, rgba(20,20,20,0.5) 100%);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+        
+        .quote-mark {
+            font-family: var(--font-serif);
+            font-size: 6rem;
+            color: var(--border-highlight);
+            position: absolute;
+            top: -1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            line-height: 1;
+            z-index: 0;
+        }
+
+        .testimonial-text {
+            font-family: var(--font-serif);
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            line-height: 1.3;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--bg-surface-hover), var(--bg-surface));
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-sans);
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .author-info {
+            text-align: left;
+        }
+
+        .author-name {
+            font-weight: 500;
+            font-size: 0.9375rem;
+        }
+
+        .author-title {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Pricing */
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .pricing-header h2 {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .toggle-wrapper {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--bg-surface);
+            padding: 0.5rem;
+            border-radius: 9999px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 3rem;
+        }
+
+        .toggle-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.25rem 0.75rem;
+            transition: color 0.2s;
+        }
+
+        .toggle-label.active {
+            color: var(--text-primary);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--bg-base);
+            border: 1px solid var(--border-color);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--text-secondary);
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+            background-color: var(--text-primary);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .price-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: var(--transition-smooth);
+        }
+        
+        .price-card:hover {
+            border-color: var(--border-highlight);
+        }
+
+        .price-card.popular {
+            background: linear-gradient(var(--bg-surface), var(--bg-surface)) padding-box,
+                        linear-gradient(135deg, var(--accent-start), var(--accent-end)) border-box;
+            border: 1px solid transparent;
+            transform: scale(1.05);
+            z-index: 2;
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+        }
+        
+        .price-card.popular:hover {
+            transform: scale(1.05) translateY(-4px);
+        }
+
+        .badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .plan-name {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-price {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .plan-period {
+            font-family: var(--font-sans);
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-left: 0.25rem;
+        }
+
+        .plan-desc {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 2.5rem;
+            flex-grow: 1;
+        }
+
+        .feature-list li {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-list svg {
+            width: 16px;
+            height: 16px;
+            color: var(--text-primary);
+            flex-shrink: 0;
+        }
+
+        .price-card .btn {
+            width: 100%;
+        }
+
+        /* Final CTA */
+        .cta-bottom {
+            position: relative;
+            text-align: center;
+            overflow: hidden;
+            padding: 8rem 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .cta-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, transparent 60%);
+            filter: blur(40px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .cta-bottom-content {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cta-bottom h2 {
+            font-size: clamp(3rem, 5vw, 4.5rem);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 0;
+            background: var(--bg-base);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Mobile Sticky CTA */
+        .mobile-cta-bar {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid var(--border-color);
+            padding: 1rem 1.5rem;
+            z-index: 99;
+            text-align: center;
+        }
+
+        /* Media Queries */
+        @media (max-width: 1024px) {
+            .pricing-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .price-card.popular {
+                transform: none;
+            }
+            .price-card.popular:hover {
+                transform: translateY(-4px);
+            }
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            .nav-wrapper .btn-primary {
+                display: none;
+            }
+            
+            .hero-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 3rem;
+            }
+            
+            .hero-content {
+                margin: 0 auto;
+            }
+            
+            .hero-cta {
+                justify-content: center;
+            }
+            
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+            .bento-card.large {
+                grid-column: 1;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                divide-x: none;
+                divide-y: 1px solid var(--border-color);
+            }
+            
+            .metric-item:not(:last-child)::after {
+                display: none;
+            }
+            .metric-item {
+                padding-top: 2rem;
+            }
+            .metric-item:first-child {
+                padding-top: 0;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .mobile-cta-bar {
+                display: block;
+            }
+            
+            .mobile-cta-bar .btn {
+                width: 100%;
+            }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            ::before,
+            ::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            
+            .reveal {
+                opacity: 1;
+                transform: none;
+            }
+            .hero-mesh {
+                animation: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="noise"></div>
+
+    <div class="nav-wrapper" id="navbar">
+        <nav>
+            <a href="#" class="logo" aria-label="Cutaway Home">Cutaway</a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#customers">Customers</a>
+                <a href="#pricing">Pricing</a>
+            </div>
+            <a href="#pricing" class="btn btn-primary">Start free</a>
+        </nav>
+    </div>
+
+    <header class="hero section container">
+        <div class="hero-mesh"></div>
+        <div class="hero-grid">
+            <div class="hero-content reveal">
+                <h1 class="hero-title">Edit faster.<br><span class="text-gradient">Post more.</span></h1>
+                <p class="hero-subtitle">Cutaway trims, captions, and restyles your videos automatically so you can post 3x more content.</p>
+                <div class="hero-cta">
+                    <a href="#pricing" class="btn btn-primary">Start free</a>
+                    <button class="btn btn-secondary">Watch a demo</button>
+                </div>
+            </div>
+            
+            <div class="mockup-wrapper reveal" style="transition-delay: 200ms;">
+                <div class="mockup">
+                    <div class="mockup-header">
+                        <div class="dot" style="background:#EF4444"></div>
+                        <div class="dot" style="background:#F59E0B"></div>
+                        <div class="dot" style="background:#10B981"></div>
+                    </div>
+                    <div class="mockup-body">
+                        <div class="mockup-preview">
+                            <div class="mockup-face">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>
+                            </div>
+                        </div>
+                        <div class="mockup-timeline">
+                            <div class="playhead"></div>
+                            <div class="track">
+                                <div class="clip" style="width: 20%"></div>
+                                <div class="clip active" style="width: 15%"></div>
+                                <div class="clip" style="width: 10%"></div>
+                                <div class="clip active" style="width: 25%"></div>
+                                <div class="clip" style="width: 30%"></div>
+                            </div>
+                            <div class="track">
+                                <div class="clip" style="width: 100%; background: rgba(255,255,255,0.1)"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="logos reveal">
+        <div class="container">
+            <h2 class="logos-title">Trusted by creators using</h2>
+            <div class="logos-track">
+                <!-- Using stylized SVG/Text to simulate logos without external assets -->
+                <div class="logo-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2zm0 6l5 10H7l5-10z"/></svg> CapCut
+                </div>
+                <div class="logo-item">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4V4zm2 2v12h12V6H6zm2 2h8v2H8V8zm0 4h8v2H8v-2z"/></svg> Descript
+                </div>
+                <div class="logo-item">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 8l6 4-6 4V8z"/></svg> Veed
+                </div>
+                <div class="logo-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 100-16 8 8 0 000 16z"/></svg> Opus
+                </div>
+                <div class="logo-item">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4V4zm2 2v12h12V6H6z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 8h8v8H8z"/></svg> Premiere
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="section container">
+        <div class="features-header reveal">
+            <h2>Everything you need. <br><span class="text-gradient">Nothing you don't.</span></h2>
+        </div>
+        
+        <div class="bento-grid">
+            <div class="bento-card large reveal">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><path d="M9 10h.01"></path><path d="M15 10h.01"></path><path d="M12 10h.01"></path></svg>
+                </div>
+                <h3>Auto captions that convert</h3>
+                <p>Generate perfectly timed, stylized captions in 50+ languages with 99% accuracy. Choose from trending styles or build your own.</p>
+                <svg class="bento-bg-graphic" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1"><path d="M10 50h80M30 30v40M70 30v40"/></svg>
+            </div>
+            
+            <div class="bento-card reveal" style="transition-delay: 100ms;">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg>
+                </div>
+                <h3>Smart trim</h3>
+                <p>Instantly remove silences, filler words, and bad takes with AI that understands pacing.</p>
+            </div>
+            
+            <div class="bento-card reveal" style="transition-delay: 200ms;">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                </div>
+                <h3>B-roll suggestions</h3>
+                <p>Our engine reads your script and automatically inserts relevant B-roll clips and sound effects.</p>
+            </div>
+            
+            <div class="bento-card large reveal" style="transition-delay: 300ms;">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                </div>
+                <h3>Multi-platform export</h3>
+                <p>One click to render optimized versions for TikTok, Shorts, and Reels with safe-zones automatically applied.</p>
+                <svg class="bento-bg-graphic" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1"><circle cx="50" cy="50" r="40"/><circle cx="50" cy="50" r="20"/></svg>
+            </div>
+        </div>
+    </section>
+
+    <section class="metrics reveal">
+        <div class="container">
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <div class="metric-value">9M+</div>
+                    <div class="metric-label">Clips edited</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">52k</div>
+                    <div class="metric-label">Creators</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value">4.7/5</div>
+                    <div class="metric-label">App Store Rating</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="customers" class="section container reveal">
+        <div class="testimonial-card">
+            <div class="quote-mark">"</div>
+            <p class="testimonial-text">It cut my edit time from 2 hours to 12 minutes. I can finally focus on recording instead of staring at a timeline.</p>
+            <div class="author">
+                <div class="avatar" aria-label="Tara Lin">TL</div>
+                <div class="author-info">
+                    <div class="author-name">Tara Lin</div>
+                    <div class="author-title">YouTuber, 1.2M Subs</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="section container">
+        <div class="pricing-header reveal">
+            <h2>Simple pricing.<br>Unlimited potential.</h2>
+            
+            <div class="toggle-wrapper">
+                <span class="toggle-label active" id="label-monthly">Monthly</span>
+                <label class="switch" aria-label="Toggle billing period">
+                    <input type="checkbox" id="billing-toggle">
+                    <span class="slider"></span>
+                </label>
+                <span class="toggle-label" id="label-annual">Annually <span style="color:var(--accent-end); font-size: 0.75rem;">(2 mos free)</span></span>
+            </div>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- Free Plan -->
+            <div class="price-card reveal">
+                <div class="plan-name">Free</div>
+                <div class="plan-price">$0<span class="plan-period">/mo</span></div>
+                <div class="plan-desc">Perfect to test the waters.</div>
+                <ul class="feature-list">
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> 5 exports per month</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Basic auto-captions</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> 720p export quality</li>
+                    <li style="color: var(--text-muted);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Watermarked</li>
+                </ul>
+                <button class="btn btn-secondary">Get started</button>
+            </div>
+
+            <!-- Creator Plan (Popular) -->
+            <div class="price-card popular reveal" style="transition-delay: 100ms;">
+                <div class="badge">Most Popular</div>
+                <div class="plan-name">Creator</div>
+                <div class="plan-price">$<span class="price-amt" data-monthly="19" data-annual="15">19</span><span class="plan-period">/mo</span></div>
+                <div class="plan-desc">Everything you need to grow.</div>
+                <ul class="feature-list">
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Unlimited exports</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Smart trim & silences</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> 4K export quality</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> No watermark</li>
+                </ul>
+                <button class="btn btn-primary">Start 7-day trial</button>
+            </div>
+
+            <!-- Pro Plan -->
+            <div class="price-card reveal" style="transition-delay: 200ms;">
+                <div class="plan-name">Pro</div>
+                <div class="plan-price">$<span class="price-amt" data-monthly="49" data-annual="39">49</span><span class="plan-period">/mo</span></div>
+                <div class="plan-desc">For power users and agencies.</div>
+                <ul class="feature-list">
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Everything in Creator</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> AI B-roll generation</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Custom brand fonts</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Priority support</li>
+                </ul>
+                <button class="btn btn-secondary">Upgrade to Pro</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-bottom reveal">
+        <div class="cta-glow"></div>
+        <div class="cta-bottom-content container">
+            <h2>Ready to reclaim your time?</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Join 52,000+ creators editing faster with Cutaway.</p>
+            <a href="#pricing" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1rem;">Start creating for free</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-logo">Cutaway</div>
+            <div class="footer-links">
+                <a href="#">Twitter</a>
+                <a href="#">Terms</a>
+                <a href="#">Privacy</a>
+                <a href="#">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Sticky CTA -->
+    <div class="mobile-cta-bar">
+        <a href="#pricing" class="btn btn-primary">Start free</a>
+    </div>
+
+    <script>
+        // Scroll Reveal Logic
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach((el) => {
+            observer.observe(el);
+        });
+
+        // Pricing Toggle Logic
+        const toggle = document.getElementById('billing-toggle');
+        const priceAmts = document.querySelectorAll('.price-amt');
+        const labelMonthly = document.getElementById('label-monthly');
+        const labelAnnual = document.getElementById('label-annual');
+
+        toggle.addEventListener('change', (e) => {
+            const isAnnual = e.target.checked;
+            
+            if (isAnnual) {
+                labelAnnual.classList.add('active');
+                labelMonthly.classList.remove('active');
+            } else {
+                labelMonthly.classList.add('active');
+                labelAnnual.classList.remove('active');
+            }
+
+            priceAmts.forEach(price => {
+                // Simple fade effect
+                price.style.opacity = 0;
+                setTimeout(() => {
+                    price.textContent = isAnnual ? price.dataset.annual : price.dataset.monthly;
+                    price.style.opacity = 1;
+                }, 200);
+            });
+        });
+
+        // Navbar blur on scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 10) {
+                navbar.style.borderBottom = '1px solid var(--border-color)';
+                navbar.style.background = 'rgba(10, 10, 10, 0.8)';
+            } else {
+                navbar.style.borderBottom = '1px solid transparent';
+                navbar.style.background = 'transparent';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Splitlab | Test. Learn. Convert.</title>
+    <meta name="description" content="A/B testing for marketers. Run experiments, find statistically significant winners, and auto-promote them.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Colors */
+            --bg-color: #FAFAF7;
+            --surface-color: #FFFFFF;
+            --card-color: #F4F4F2;
+            --text-main: #111827;
+            --text-muted: #4B5563;
+            --text-light: #9CA3AF;
+            --border-color: rgba(0, 0, 0, 0.08);
+            
+            /* Gradients */
+            --accent-grad: linear-gradient(135deg, #7C3AED 0%, #EC4899 100%);
+            --accent-grad-hover: linear-gradient(135deg, #6D28D9 0%, #DB2777 100%);
+            
+            /* Typography */
+            --font-body: 'Inter', -apple-system, sans-serif;
+            --font-head: 'Satoshi', -apple-system, sans-serif;
+            
+            /* Spacing & Layout */
+            --container-max: 1200px;
+            --section-pad: clamp(80px, 10vw, 120px);
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            
+            /* Transitions */
+            --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            :root {
+                --transition-smooth: none;
+            }
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Noise Texture */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.4;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            mix-blend-mode: multiply;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, .brand {
+            font-family: var(--font-head);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); }
+        h2 { font-size: clamp(2rem, 4vw, 3rem); }
+        h3 { font-size: clamp(1.25rem, 2vw, 1.5rem); }
+        
+        p { color: var(--text-muted); font-size: 1.125rem; }
+
+        .text-gradient {
+            background: var(--accent-grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 999px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--text-main);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            background: #000;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.5);
+            color: var(--text-main);
+            border-color: var(--border-color);
+            backdrop-filter: blur(8px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-color);
+            transform: translateY(-2px);
+            border-color: rgba(0,0,0,0.15);
+        }
+
+        /* Nav */
+        .nav-wrap {
+            position: fixed;
+            top: 24px;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 0 24px;
+        }
+
+        nav {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px 8px 24px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+        }
+
+        .brand {
+            font-size: 1.25rem;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--text-main); }
+
+        /* Hero */
+        .hero {
+            position: relative;
+            padding-top: 200px;
+            padding-bottom: var(--section-pad);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 30%, rgba(236, 72, 153, 0.08) 0%, transparent 40%);
+            animation: mesh 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes mesh {
+            0% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1.2) rotate(15deg); }
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            z-index: 1;
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            max-width: 480px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        /* CSS UI Mockup */
+        .ui-mockup {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4/3;
+            background: var(--surface-color);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: 
+                0 24px 48px -12px rgba(0,0,0,0.1),
+                0 0 0 1px inset rgba(255,255,255,0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: perspective(1000px) rotateY(-5deg) rotateX(5deg);
+            transition: var(--transition-smooth);
+        }
+
+        .ui-mockup:hover {
+            transform: perspective(1000px) rotateY(0deg) rotateX(0deg) translateY(-10px);
+            box-shadow: 0 32px 64px -12px rgba(0,0,0,0.15);
+        }
+
+        .ui-header {
+            height: 48px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 8px;
+            background: #FAFAFA;
+        }
+
+        .ui-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border-color);
+        }
+
+        .ui-body {
+            flex: 1;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            position: relative;
+        }
+
+        .ui-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 120px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 16px;
+        }
+
+        .ui-bar-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 60px;
+        }
+
+        .ui-bar {
+            width: 100%;
+            border-radius: 4px;
+            background: var(--card-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ui-bar-fill {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--text-main);
+            border-radius: 4px;
+        }
+
+        .ui-bar-fill.accent {
+            background: var(--accent-grad);
+        }
+
+        /* Micro-animations for UI mockup */
+        .bar-1 { height: 40%; animation: grow1 3s ease-out forwards; }
+        .bar-2 { height: 85%; animation: grow2 3s ease-out forwards; }
+
+        @keyframes grow1 { from { height: 0; } to { height: 45%; } }
+        @keyframes grow2 { from { height: 0; } to { height: 88%; } }
+
+        .ui-tooltip {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .ui-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10B981;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Logo Wall */
+        .logos {
+            padding: 60px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .logos p {
+            text-align: center;
+            font-size: 0.875rem;
+            margin-bottom: 32px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .logo-grid {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 32px;
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+
+        .logo-item {
+            font-family: var(--font-head);
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--text-main);
+        }
+
+        /* Bento Grid */
+        .bento {
+            padding: var(--section-pad) 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .bento-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+        }
+
+        .bento-card:hover {
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.05);
+            transform: translateY(-4px);
+            border-color: rgba(0,0,0,0.15);
+        }
+
+        .bento-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at top right, rgba(124, 58, 237, 0.03), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .bento-card:hover::before { opacity: 1; }
+
+        .bento-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--card-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            color: var(--text-main);
+        }
+
+        .bento-card h3 { margin-bottom: 12px; }
+        .bento-card p { font-size: 1rem; }
+
+        /* Metrics */
+        .metrics {
+            padding: 80px 0;
+            background: var(--surface-color);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            text-align: center;
+        }
+
+        .metric-val {
+            font-family: var(--font-head);
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Testimonial */
+        .testimonial {
+            padding: var(--section-pad) 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .test-card {
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .test-quote {
+            font-family: var(--font-head);
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 500;
+            line-height: 1.3;
+            margin-bottom: 40px;
+            color: var(--text-main);
+        }
+
+        .test-author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--card-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .author-info { text-align: left; }
+        .author-name { font-weight: 600; color: var(--text-main); }
+        .author-role { font-size: 0.875rem; color: var(--text-muted); }
+
+        /* Pricing */
+        .pricing {
+            padding: var(--section-pad) 0;
+        }
+
+        .pricing-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 64px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--card-color);
+            transition: .4s;
+            border-radius: 34px;
+            border: 1px solid var(--border-color);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--surface-color);
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        input:checked + .slider { background-color: var(--text-main); }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        .toggle-label { font-size: 0.95rem; font-weight: 500; color: var(--text-muted); }
+        .toggle-label.active { color: var(--text-main); }
+        .badge-discount {
+            background: rgba(124, 58, 237, 0.1);
+            color: #7C3AED;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-weight: 600;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            align-items: center;
+        }
+
+        .price-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            position: relative;
+        }
+
+        .price-card.popular {
+            border: 2px solid transparent;
+            background: linear-gradient(var(--surface-color), var(--surface-color)) padding-box,
+                        var(--accent-grad) border-box;
+            transform: scale(1.05);
+            box-shadow: 0 24px 48px -12px rgba(124, 58, 237, 0.15);
+            z-index: 2;
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-grad);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 999px;
+        }
+
+        .plan-name { font-size: 1.25rem; font-weight: 600; margin-bottom: 8px; }
+        .plan-desc { font-size: 0.9rem; margin-bottom: 24px; min-height: 44px; }
+        .plan-price { font-family: var(--font-head); font-size: 3rem; font-weight: 700; margin-bottom: 8px; display: flex; align-items: baseline; gap: 4px; }
+        .plan-price span { font-size: 1rem; font-weight: 400; color: var(--text-muted); font-family: var(--font-body); }
+        
+        .feature-list { list-style: none; margin: 32px 0; display: flex; flex-direction: column; gap: 16px; }
+        .feature-list li { display: flex; align-items: center; gap: 12px; font-size: 0.95rem; color: var(--text-muted); }
+        .check-icon { width: 16px; height: 16px; color: #10B981; }
+
+        .price-card .btn { width: 100%; }
+
+        /* Final CTA */
+        .final-cta {
+            padding: 120px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-box {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 80px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: 50%; transform: translateX(-50%);
+            width: 80%; height: 200%;
+            background: radial-gradient(ellipse at center, rgba(124, 58, 237, 0.15), transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-box h2 { margin-bottom: 24px; }
+        .cta-box .hero-cta { justify-content: center; margin-top: 32px; }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.875rem;
+        }
+
+        /* Mobile Sticky CTA */
+        .mobile-sticky-cta {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 16px 24px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid var(--border-color);
+            z-index: 1000;
+        }
+        
+        .mobile-sticky-cta .btn { width: 100%; }
+
+        /* Scroll Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Media Queries */
+        @media (max-width: 992px) {
+            .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 48px; }
+            .hero-content { align-items: center; }
+            .hero-content p { margin: 0 auto; }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+            .price-card.popular { transform: none; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links, .nav-cta { display: none; }
+            .bento-grid { grid-template-columns: 1fr; }
+            .metrics-grid { grid-template-columns: 1fr; gap: 40px; }
+            h1 { font-size: 2.5rem; }
+            .mobile-sticky-cta { display: block; }
+            .hero { padding-bottom: 80px; }
+            .final-cta { padding-bottom: 160px; } /* Space for mobile CTA */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="noise"></div>
+
+    <div class="nav-wrap">
+        <nav>
+            <a href="#" class="brand">Splitlab</a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#customers">Customers</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+            </ul>
+            <div class="nav-cta">
+                <a href="#" class="btn btn-primary">Start free</a>
+            </div>
+        </nav>
+    </div>
+
+    <section class="hero container">
+        <div class="hero-bg"></div>
+        <div class="hero-grid">
+            <div class="hero-content reveal">
+                <h1>Test. Learn. <span class="text-gradient">Convert.</span></h1>
+                <p>Splitlab runs experiments on your pages, shows statistically significant winners, and auto-promotes them.</p>
+                <div class="hero-cta">
+                    <a href="#" class="btn btn-primary">Start free</a>
+                    <a href="#demo" class="btn btn-secondary">See a test</a>
+                </div>
+            </div>
+            
+            <div class="hero-visual reveal" style="transition-delay: 0.2s;">
+                <div class="ui-mockup">
+                    <div class="ui-header">
+                        <div class="ui-dot"></div>
+                        <div class="ui-dot"></div>
+                        <div class="ui-dot"></div>
+                    </div>
+                    <div class="ui-body">
+                        <div class="ui-tooltip">
+                            Variant B <span class="ui-badge">+23%</span>
+                        </div>
+                        <div style="font-size: 0.875rem; font-weight: 500;">Checkout Conversion</div>
+                        <div class="ui-row">
+                            <div class="ui-bar-wrap">
+                                <div class="ui-bar" style="height: 100px;">
+                                    <div class="ui-bar-fill bar-1"></div>
+                                </div>
+                                <span style="font-size: 0.75rem; color: var(--text-light)">Control</span>
+                            </div>
+                            <div class="ui-bar-wrap">
+                                <div class="ui-bar" style="height: 100px;">
+                                    <div class="ui-bar-fill accent bar-2"></div>
+                                </div>
+                                <span style="font-size: 0.75rem; color: var(--text-main); font-weight: 600;">Var B</span>
+                            </div>
+                            <div class="ui-bar-wrap">
+                                <div class="ui-bar" style="height: 100px;">
+                                    <div class="ui-bar-fill" style="height: 35%;"></div>
+                                </div>
+                                <span style="font-size: 0.75rem; color: var(--text-light)">Var C</span>
+                            </div>
+                        </div>
+                        <div style="height: 1px; background: var(--border-color); width: 100%; margin-top: auto;"></div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-light);">
+                            <span>Significance: 99%</span>
+                            <span>Auto-promoted</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="customers" class="logos reveal">
+        <div class="container">
+            <p>Trusted by growth teams moving from</p>
+            <div class="logo-grid">
+                <div class="logo-item">Optimizely</div>
+                <div class="logo-item" style="letter-spacing: -1px;">VWO</div>
+                <div class="logo-item">AB Tasty</div>
+                <div class="logo-item">Convert</div>
+                <div class="logo-item" style="font-weight: 500;">GrowthBook</div>
+                <div class="logo-item">PostHog</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="bento container reveal">
+        <div class="section-header">
+            <h2>Everything to build a high-velocity testing culture.</h2>
+            <p style="margin-top: 16px;">No code required for marketing, deep APIs for engineering.</p>
+        </div>
+        
+        <div class="bento-grid">
+            <div class="bento-card reveal">
+                <div class="bento-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+                </div>
+                <h3>Visual Editor</h3>
+                <p>Change copy, swap images, or hide elements without asking engineering for a deploy.</p>
+            </div>
+            
+            <div class="bento-card reveal" style="transition-delay: 0.1s;">
+                <div class="bento-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                </div>
+                <h3>Stats Engine</h3>
+                <p>Sequential testing by default. Stop peeking errors and trust your data to make calls faster.</p>
+            </div>
+            
+            <div class="bento-card reveal" style="transition-delay: 0.2s;">
+                <div class="bento-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                </div>
+                <h3>Auto-promote</h3>
+                <p>When a variant hits 99% significance, Splitlab automatically routes 100% of traffic to the winner.</p>
+            </div>
+            
+            <div class="bento-card reveal" style="transition-delay: 0.3s;">
+                <div class="bento-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                </div>
+                <h3>Audience Targeting</h3>
+                <p>Target experiments by UTM parameters, device type, location, or custom user attributes.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="metrics reveal">
+        <div class="container metrics-grid">
+            <div>
+                <div class="metric-val">12k+</div>
+                <div class="metric-label">Teams experimenting</div>
+            </div>
+            <div>
+                <div class="metric-val">4.8</div>
+                <div class="metric-label">Average rating</div>
+            </div>
+            <div>
+                <div class="metric-val">2.1M</div>
+                <div class="metric-label">Experiments run</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonial container reveal">
+        <div class="test-card">
+            <h3 class="test-quote">"We replaced our legacy testing tool with Splitlab. The auto-promote feature alone found a 23% lift in our checkout flow in one week, with zero dev effort."</h3>
+            <div class="test-author">
+                <div class="avatar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="currentColor" font-size="12" font-family="var(--font-head)">EC</text></svg>
+                </div>
+                <div class="author-info">
+                    <div class="author-name">Elise Carter</div>
+                    <div class="author-role">Head of Growth, Acme Corp</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing container reveal">
+        <div class="section-header">
+            <h2>Simple, transparent pricing.</h2>
+            <p style="margin-top: 16px;">Start for free, scale when you win.</p>
+        </div>
+
+        <div class="pricing-toggle">
+            <span class="toggle-label" id="label-monthly">Monthly</span>
+            <label class="switch" aria-label="Toggle billing period">
+                <input type="checkbox" id="billing-toggle" checked>
+                <span class="slider"></span>
+            </label>
+            <span class="toggle-label active" id="label-annual">Annually <span class="badge-discount">2 months free</span></span>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- Free -->
+            <div class="price-card reveal">
+                <div class="plan-name">Free</div>
+                <div class="plan-desc">For individuals learning to experiment.</div>
+                <div class="plan-price"><span class="currency">$</span><span class="price-val" data-monthly="0" data-annual="0">0</span><span>/mo</span></div>
+                <a href="#" class="btn btn-secondary" style="margin-top: 16px;">Get started</a>
+                <ul class="feature-list">
+                    <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to 10,000 MTUs</li>
+                    <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Visual editor</li>
+                    <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> 2 concurrent active tests</li>
+                </ul>
+            </div>
+
+            <!-- Pro (Highlighted) -->
+            <div class="price-card popular reveal" style="transition-delay: 0.1s;">
+                <div class="popular-badge">Most popular</div>
+                <div class="plan-name">Growth</div>
+                <div class="plan-desc">For teams scaling their conversion rates.</div>
+                <div class="plan-price"><span class="currency">$</span><span class="price-val" data-monthly="49" data-annual="39">39</span><span>/mo</span></div>
+                <a href="#" class="btn btn-primary" style="margin-top: 16px;">Start 14-day trial</a>
+                <ul class="feature-list">
+                    <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to 100,000 MTUs</li>
+                    <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Auto-promote winners</li>
+                    <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Unlimited active tests</li>
+                    <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Advanced targeting</li>
+                </ul>
+            </div>
+
+            <!-- Enterprise -->
+            <div class="price-card reveal" style="transition-delay: 0.2s;">
+                <div class="plan-name">Pro</div>
+                <div class="plan-desc">For organizations with high traffic volume.</div>
+                <div class="plan-price"><span class="currency">$</span><span class="price-val" data-monthly="149" data-annual="119">119</span><span>/mo</span></div>
+                <a href="#" class="btn btn-secondary" style="margin-top: 16px;">Start 14-day trial</a>
+                <ul class="feature-list">
+                    <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Up to 1,000,000 MTUs</li>
+                    <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Custom roles & permissions</li>
+                    <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> SSO / SAML</li>
+                    <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Dedicated success manager</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="final-cta container reveal">
+        <div class="cta-box">
+            <h2>Stop guessing. Start optimizing.</h2>
+            <p>Join thousands of marketing teams growing faster with Splitlab.</p>
+            <div class="hero-cta">
+                <a href="#" class="btn btn-primary">Start free today</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Splitlab Inc. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Mobile Sticky CTA -->
+    <div class="mobile-sticky-cta">
+        <a href="#" class="btn btn-primary">Start free</a>
+    </div>
+
+    <script>
+        // Scroll Reveal Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // Optional: stop observing once revealed
+                        // observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach((el) => {
+                observer.observe(el);
+            });
+
+            // Pricing Toggle Logic
+            const toggle = document.getElementById('billing-toggle');
+            const priceElements = document.querySelectorAll('.price-val');
+            const labelMonthly = document.getElementById('label-monthly');
+            const labelAnnual = document.getElementById('label-annual');
+
+            toggle.addEventListener('change', (e) => {
+                const isAnnual = e.target.checked;
+                
+                if (isAnnual) {
+                    labelAnnual.classList.add('active');
+                    labelMonthly.classList.remove('active');
+                } else {
+                    labelMonthly.classList.add('active');
+                    labelAnnual.classList.remove('active');
+                }
+
+                priceElements.forEach(el => {
+                    // Create a subtle fade effect on number change
+                    el.style.opacity = 0;
+                    setTimeout(() => {
+                        el.textContent = isAnnual ? el.getAttribute('data-annual') : el.getAttribute('data-monthly');
+                        el.style.opacity = 1;
+                    }, 200);
+                });
+            });
+
+            // Smooth transition for price numbers
+            priceElements.forEach(el => {
+                el.style.transition = 'opacity 0.2s ease';
+            });
+        });
+    </script>
+</body>
+</html>

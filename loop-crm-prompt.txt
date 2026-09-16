@@ -1,0 +1,47 @@
+Research the top 5 premium SaaS landing pages in the CRM space (Linear, Vercel, Framer, Raycast, Arc grade).
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Loop, lightweight CRM for freelancers.
+
+Audience: solo freelancers and small studios.
+Hero headline: "Close clients. Not tabs."
+Subheadline: "Loop brings your leads, proposals, and payments into one calm workflow built for freelancers."
+Primary CTA: "Start free". Secondary CTA: "See the workflow".
+
+Design system:
+- Light theme, off-white #FAFAF7, surfaces #FFFFFF, soft #F4F4F2 cards
+- Accent gradient from #06B6D4 to #3B82F6
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)
+- split-hero layout
+
+Sections:
+1. Sticky glass nav with "Loop" wordmark + 3 nav links + primary CTA
+2. split-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction
+3. Logo wall: HubSpot, Pipedrive, Folk, Attio, Copper, Notion in muted monochrome
+4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):
+   - Lead pipeline (custom inline SVG line icon, no emoji, no stock)
+   - Proposals (custom inline SVG line icon, no emoji, no stock)
+   - Invoicing (custom inline SVG line icon, no emoji, no stock)
+   - Client portal (custom inline SVG line icon, no emoji, no stock)
+5. Metrics strip: 18k freelancers | $52M invoiced | 4.8 rating
+6. Testimonial card: "Loop replaced four tools for me. - Sam Okafor, Designer" with a generated SVG monogram avatar
+7. Pricing:       - Solo $0
+      - Pro $14
+      - Studio $34 with the middle tier highlighted (gradient border + "Most popular" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

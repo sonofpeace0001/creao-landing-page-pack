@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scribble - Notes that actually think with you</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Colors */
+            --bg-color: #FAFAF7;
+            --surface-color: #FFFFFF;
+            --card-color: #F4F4F2;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-tertiary: #94A3B8;
+            --accent-dark: #0F172A;
+            --accent-emerald: #10B981;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --glass-bg: rgba(250, 250, 247, 0.7);
+            
+            /* Typography */
+            --font-sans: 'Inter', system-ui, sans-serif;
+            --font-serif: 'Instrument Serif', Georgia, serif;
+            
+            /* Layout */
+            --max-width: 1200px;
+            --section-pad-y: clamp(80px, 10vw, 160px);
+            --section-pad-x: clamp(24px, 5vw, 48px);
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            
+            /* Easing */
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+            --transition: 0.4s var(--ease-out);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            /* While requested light theme, setting up a safe fallback just in case, but forcing variables to light as requested */
+            :root {
+                --border-color: rgba(0, 0, 0, 0.08); /* Requested 8% black for light theme */
+            }
+        }
+
+        /* Reset & Base */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Noise Texture */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Typography */
+        h1, h2, h3, .font-serif {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        h1 { font-size: clamp(3.5rem, 6vw, 5.5rem); }
+        h2 { font-size: clamp(2.5rem, 4vw, 3.5rem); }
+        h3 { font-size: clamp(1.5rem, 2vw, 2rem); }
+        
+        p {
+            color: var(--text-secondary);
+            font-size: clamp(1.125rem, 1.5vw, 1.25rem);
+            font-weight: 300;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+            font-weight: 400;
+        }
+
+        /* Utilities */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 var(--section-pad-x);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent-dark), var(--accent-emerald));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 99px;
+            font-weight: 500;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: transform var(--transition), box-shadow var(--transition);
+            cursor: pointer;
+            border: none;
+            font-family: var(--font-sans);
+        }
+
+        .btn:active { transform: scale(0.98); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-dark), var(--accent-emerald));
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            background-color: var(--surface-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-tertiary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+        }
+
+        /* Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.75rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo::before {
+            content: '';
+            display: block;
+            width: 12px;
+            height: 12px;
+            background: var(--accent-emerald);
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .header-cta { display: none; }
+        }
+
+        /* Hero Section */
+        .hero {
+            padding-top: calc(80px + var(--section-pad-y));
+            padding-bottom: var(--section-pad-y);
+            position: relative;
+        }
+
+        .hero-mesh {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            opacity: 0.6;
+        }
+
+        .mesh-blob {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.5;
+            animation: float 20s infinite ease-in-out alternate;
+        }
+
+        .blob-1 {
+            top: -10%; left: 10%; width: 50vw; height: 50vw;
+            background: radial-gradient(circle, rgba(16,185,129,0.15) 0%, rgba(250,250,247,0) 70%);
+        }
+        .blob-2 {
+            bottom: -20%; right: -10%; width: 60vw; height: 60vw;
+            background: radial-gradient(circle, rgba(15,23,42,0.1) 0%, rgba(250,250,247,0) 70%);
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(5%, 10%) scale(1.1); }
+            100% { transform: translate(-5%, 5%) scale(0.9); }
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        @media (max-width: 992px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero-content h1 {
+            margin-bottom: 24px;
+        }
+
+        .hero-content h1 i {
+            color: var(--accent-emerald);
+        }
+
+        .hero-content p {
+            margin-bottom: 40px;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 16px;
+        }
+
+        /* CSS-Only Product Mockup */
+        .mockup-wrapper {
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .mockup {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(255,255,255,0.5);
+            overflow: hidden;
+            display: flex;
+            height: 480px;
+            transform: rotateY(-5deg) rotateX(2deg);
+            transition: transform 0.5s ease-out;
+        }
+
+        .mockup:hover {
+            transform: rotateY(0deg) rotateX(0deg);
+        }
+
+        .mockup-sidebar {
+            width: 30%;
+            background: rgba(244, 244, 242, 0.5);
+            border-right: 1px solid var(--border-color);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .mockup-item {
+            height: 12px;
+            border-radius: 4px;
+            background: var(--border-color);
+            width: 100%;
+        }
+        .mockup-item.short { width: 60%; }
+        .mockup-item.active { background: rgba(16, 185, 129, 0.2); }
+
+        .mockup-main {
+            flex: 1;
+            padding: 40px;
+            position: relative;
+        }
+
+        .mockup-title {
+            height: 32px;
+            width: 50%;
+            background: var(--border-color);
+            border-radius: 6px;
+            margin-bottom: 32px;
+        }
+
+        .mockup-line {
+            height: 12px;
+            width: 100%;
+            background: var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 12px;
+            opacity: 0.6;
+        }
+        .mockup-line:nth-child(3) { width: 85%; }
+        .mockup-line:nth-child(4) { width: 70%; }
+        
+        .mockup-link-node {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 12px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 12px;
+            margin-top: 24px;
+            position: relative;
+        }
+
+        .mockup-link-node::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent-emerald);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .mockup-link-text {
+            height: 8px;
+            width: 80px;
+            background: var(--accent-emerald);
+            opacity: 0.5;
+            border-radius: 4px;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        /* Logo Wall */
+        .logo-wall {
+            padding: 40px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            background: var(--surface-color);
+        }
+
+        .logo-wall-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 32px;
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+
+        .partner-logo {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            font-size: 1.25rem;
+            letter-spacing: -0.03em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .partner-logo svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Bento Grid Features */
+        .features {
+            padding: var(--section-pad-y) 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .bento-grid { grid-template-columns: 1fr; }
+        }
+
+        .bento-card {
+            background: var(--card-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 48px;
+            transition: all var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bento-card:hover {
+            transform: translateY(-4px);
+            background: var(--surface-color);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 24px;
+            color: var(--accent-dark);
+        }
+
+        .feature-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke-width: 1.5;
+            fill: none;
+            stroke: currentColor;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .bento-card h3 {
+            font-family: var(--font-sans);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+        }
+
+        .bento-card p {
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        /* Metrics Strip */
+        .metrics {
+            padding: 80px 0;
+            background: var(--surface-color);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            text-align: center;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .metric-item {
+            padding: 40px 24px;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .metric-item:last-child { border-right: none; }
+
+        .metric-value {
+            font-family: var(--font-serif);
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            color: var(--text-primary);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 640px) {
+            .metrics-grid { grid-template-columns: 1fr; }
+            .metric-item { border-right: none; border-bottom: 1px solid var(--border-color); }
+            .metric-item:last-child { border-bottom: none; }
+        }
+
+        /* Testimonial */
+        .testimonial {
+            padding: var(--section-pad-y) 0;
+        }
+
+        .testimonial-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .testimonial blockquote {
+            font-family: var(--font-serif);
+            font-size: clamp(2rem, 3vw, 2.5rem);
+            line-height: 1.2;
+            color: var(--text-primary);
+            margin-bottom: 40px;
+        }
+
+        .author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .author-avatar {
+            width: 48px;
+            height: 48px;
+            background: var(--card-color);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            color: var(--accent-dark);
+        }
+
+        .author-info {
+            text-align: left;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: var(--section-pad-y) 0;
+            background: var(--surface-color);
+        }
+
+        .billing-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 64px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 28px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--card-color);
+            border: 1px solid var(--border-color);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--text-primary);
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-emerald);
+            border-color: var(--accent-emerald);
+        }
+        
+        input:checked + .slider:before {
+            background-color: white;
+            transform: translateX(24px);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 860px) {
+            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+        }
+
+        .price-card {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 40px 32px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .price-card.highlight {
+            background: var(--surface-color);
+            border: 1px solid transparent;
+            background-clip: padding-box;
+            box-shadow: 0 24px 48px rgba(0,0,0,0.05);
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 860px) {
+            .price-card.highlight { transform: none; }
+        }
+
+        .price-card.highlight::after {
+            content: '';
+            position: absolute;
+            top: -1px; bottom: -1px; left: -1px; right: -1px;
+            background: linear-gradient(135deg, var(--accent-dark), var(--accent-emerald));
+            z-index: -1;
+            border-radius: calc(var(--radius-lg) + 1px);
+        }
+
+        .badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .tier-name {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .price {
+            font-family: var(--font-serif);
+            font-size: 3.5rem;
+            color: var(--text-primary);
+            line-height: 1;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .period {
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            color: var(--text-tertiary);
+            margin-left: 4px;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-bottom: 40px;
+            flex: 1;
+        }
+
+        .features-list li {
+            margin-bottom: 12px;
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .features-list li::before {
+            content: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2310B981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+        }
+
+        .price-card .btn { width: 100%; }
+
+        /* CTA Band */
+        .cta-band {
+            padding: var(--section-pad-y) 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-band-inner {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 80px 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .cta-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(16,185,129,0.15) 0%, rgba(255,255,255,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .cta-band h2 {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 32px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 48px 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            background: var(--bg-color);
+        }
+
+        .footer-logo {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            margin-bottom: 16px;
+            display: inline-block;
+        }
+
+        /* Mobile Sticky CTA */
+        .mobile-cta {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px 24px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid var(--border-color);
+            display: none;
+            z-index: 100;
+        }
+
+        .mobile-cta .btn { width: 100%; }
+
+        @media (max-width: 768px) {
+            .mobile-cta { display: block; }
+            body { padding-bottom: 80px; } /* Space for sticky bar */
+        }
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal { transition: none; opacity: 1; transform: none; }
+            .mesh-blob { animation: none; }
+            .mockup { transition: none; transform: none; }
+            .mockup-link-node::before { animation: none; }
+            *, ::before, ::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise-overlay"></div>
+
+    <header>
+        <div class="container nav-inner">
+            <a href="#" class="logo" aria-label="Scribble Home">Scribble</a>
+            <nav class="nav-links" aria-label="Main navigation">
+                <a href="#features">Features</a>
+                <a href="#testimonials">Manifesto</a>
+                <a href="#pricing">Pricing</a>
+            </nav>
+            <div class="header-cta">
+                <a href="#" class="btn btn-secondary" style="margin-right: 12px; border: none;">Log in</a>
+                <a href="#" class="btn btn-primary">Start free</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero container reveal">
+            <div class="hero-mesh">
+                <div class="mesh-blob blob-1"></div>
+                <div class="mesh-blob blob-2"></div>
+            </div>
+            
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <h1>Notes that <i>actually</i> think with you.</h1>
+                    <p>Scribble links your ideas, surfaces connections, and keeps your second brain calm and fast. Built for writers, researchers, and thinkers.</p>
+                    <div class="hero-ctas">
+                        <a href="#" class="btn btn-primary">Start free</a>
+                        <a href="#" class="btn btn-secondary">See a note</a>
+                    </div>
+                </div>
+                
+                <div class="mockup-wrapper">
+                    <div class="mockup">
+                        <div class="mockup-sidebar">
+                            <div class="mockup-item"></div>
+                            <div class="mockup-item short"></div>
+                            <div class="mockup-item active"></div>
+                            <div class="mockup-item"></div>
+                            <div class="mockup-item short"></div>
+                        </div>
+                        <div class="mockup-main">
+                            <div class="mockup-title"></div>
+                            <div class="mockup-line"></div>
+                            <div class="mockup-line"></div>
+                            <div class="mockup-line"></div>
+                            <div class="mockup-line"></div>
+                            <div class="mockup-link-node">
+                                <div class="mockup-link-text"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="logo-wall reveal">
+            <div class="container logo-wall-inner">
+                <div class="partner-logo">
+                    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    Obsidian
+                </div>
+                <div class="partner-logo">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" fill="none" stroke-width="2"/><path d="M9 21V9" stroke="currentColor" stroke-width="2"/></svg>
+                    Notion
+                </div>
+                <div class="partner-logo">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="2"/><path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    Bear
+                </div>
+                <div class="partner-logo">
+                    <svg viewBox="0 0 24 24"><path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 100-16 8 8 0 000 16z" fill="currentColor"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+                    Roam
+                </div>
+                <div class="partner-logo">
+                    <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" fill="none" stroke-width="2"/><path d="M12 8v4l3 3" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round"/></svg>
+                    Reflect
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features container reveal">
+            <div class="section-header">
+                <h2>Designed for clarity.</h2>
+                <p>Everything you need to build a knowledge base, without the clutter.</p>
+            </div>
+            
+            <div class="bento-grid">
+                <div class="bento-card">
+                    <div class="feature-icon">
+                        <!-- Bidirectional links icon -->
+                        <svg viewBox="0 0 24 24">
+                            <path d="M8 12h8M12 8l4 4-4 4M12 8L8 12l4 4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="5" cy="12" r="3"/>
+                            <circle cx="19" cy="12" r="3"/>
+                        </svg>
+                    </div>
+                    <h3>Bidirectional links</h3>
+                    <p>Connect thoughts instantly. Backlinks are generated automatically, creating a web of context around every idea.</p>
+                </div>
+                
+                <div class="bento-card">
+                    <div class="feature-icon">
+                        <!-- Daily notes icon -->
+                        <svg viewBox="0 0 24 24">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                            <circle cx="12" cy="15" r="1"/>
+                        </svg>
+                    </div>
+                    <h3>Daily notes</h3>
+                    <p>A fresh page every morning. Let go of organizational anxiety and just start writing. Structure emerges naturally.</p>
+                </div>
+
+                <div class="bento-card">
+                    <div class="feature-icon">
+                        <!-- Search icon -->
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            <line x1="11" y1="8" x2="11" y2="14"/>
+                            <line x1="8" y1="11" x2="14" y2="11"/>
+                        </svg>
+                    </div>
+                    <h3>Full-text search</h3>
+                    <p>Find exactly what you're looking for in milliseconds. Instant, typo-tolerant search across your entire vault.</p>
+                </div>
+
+                <div class="bento-card">
+                    <div class="feature-icon">
+                        <!-- Local first icon -->
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20 16V6a2 2 0 00-2-2H6a2 2 0 00-2 2v10"/>
+                            <path d="M4 16h16v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4z"/>
+                            <line x1="8" y1="20" x2="16" y2="20"/>
+                        </svg>
+                    </div>
+                    <h3>Local-first</h3>
+                    <p>Your data lives on your device in plain text markdown. It's yours forever, fast offline, and private by default.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="metrics reveal">
+            <div class="container">
+                <div class="metrics-grid">
+                    <div class="metric-item">
+                        <div class="metric-value">2.1M</div>
+                        <div class="text-sm">Notes connected daily</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">74k</div>
+                        <div class="text-sm">Active thinkers</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">4.8</div>
+                        <div class="text-sm">Average rating</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="testimonial container reveal">
+            <div class="testimonial-inner">
+                <blockquote>"I used to spend more time organizing my notes than actually writing them. With Scribble, my second brain finally clicked. It's elegant, fast, and stays out of the way."</blockquote>
+                <div class="author">
+                    <div class="author-avatar" aria-label="Omar Said Monogram">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+                            <text x="50%" y="50%" text-anchor="middle" dy=".3em" stroke="none" fill="currentColor" font-size="10px" font-family="sans-serif">OS</text>
+                        </svg>
+                    </div>
+                    <div class="author-info">
+                        <div class="author-name">Omar Said</div>
+                        <div class="text-sm">Independent Researcher</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing" class="pricing reveal">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Simple pricing.</h2>
+                    <p>Start for free, upgrade when you need supercharged syncing.</p>
+                </div>
+                
+                <div class="billing-toggle">
+                    <span class="text-sm" id="label-monthly">Monthly</span>
+                    <label class="toggle-switch" aria-label="Toggle annual billing">
+                        <input type="checkbox" id="billing-checkbox">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="text-sm" id="label-annual">Annual <span style="color:var(--accent-emerald); font-weight:500;">(2 months free)</span></span>
+                </div>
+
+                <div class="pricing-grid">
+                    <div class="price-card">
+                        <div class="tier-name">Free</div>
+                        <div class="price">$0 <span class="period">/forever</span></div>
+                        <ul class="features-list">
+                            <li>Unlimited local notes</li>
+                            <li>Bidirectional linking</li>
+                            <li>Markdown export</li>
+                            <li>Community support</li>
+                        </ul>
+                        <a href="#" class="btn btn-secondary">Get started</a>
+                    </div>
+                    
+                    <div class="price-card highlight">
+                        <div class="badge">Most popular</div>
+                        <div class="tier-name">Pro</div>
+                        <div class="price">$<span id="price-pro">8</span> <span class="period" id="period-pro">/mo</span></div>
+                        <ul class="features-list">
+                            <li>Everything in Free</li>
+                            <li>End-to-end encrypted sync</li>
+                            <li>Version history (30 days)</li>
+                            <li>Publish to web</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary">Start free trial</a>
+                    </div>
+
+                    <div class="price-card">
+                        <div class="tier-name">Lifetime</div>
+                        <div class="price">$80 <span class="period">/one-time</span></div>
+                        <ul class="features-list">
+                            <li>Everything in Pro</li>
+                            <li>Pay once, own forever</li>
+                            <li>Early access to betas</li>
+                            <li>Priority support</li>
+                        </ul>
+                        <a href="#" class="btn btn-secondary">Get Lifetime</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-band reveal">
+            <div class="container">
+                <div class="cta-band-inner">
+                    <div class="cta-glow"></div>
+                    <h2 class="font-serif">Ready to think clearer?</h2>
+                    <a href="#" class="btn btn-primary" style="position:relative; z-index:1;">Start your free vault</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <a href="#" class="footer-logo">Scribble</a>
+            <p class="text-sm">&copy; 2023 Scribble Inc. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div class="mobile-cta">
+        <a href="#" class="btn btn-primary">Start free</a>
+    </div>
+
+    <script>
+        // Scroll Reveal Animation
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach((el) => {
+            observer.observe(el);
+        });
+
+        // Pricing Toggle Logic
+        const billingCheckbox = document.getElementById('billing-checkbox');
+        const pricePro = document.getElementById('price-pro');
+        const periodPro = document.getElementById('period-pro');
+        const labelMonthly = document.getElementById('label-monthly');
+        const labelAnnual = document.getElementById('label-annual');
+
+        billingCheckbox.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                // Annual selected (10 months instead of 12 for the year due to 2 months free)
+                pricePro.innerText = '80';
+                periodPro.innerText = '/yr';
+                labelAnnual.style.color = 'var(--text-primary)';
+                labelMonthly.style.color = 'var(--text-tertiary)';
+            } else {
+                // Monthly selected
+                pricePro.innerText = '8';
+                periodPro.innerText = '/mo';
+                labelMonthly.style.color = 'var(--text-primary)';
+                labelAnnual.style.color = 'var(--text-tertiary)';
+            }
+        });
+        
+        // Initial state colors
+        labelMonthly.style.color = 'var(--text-primary)';
+        labelAnnual.style.color = 'var(--text-tertiary)';
+    </script>
+</body>
+</html>

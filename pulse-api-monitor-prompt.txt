@@ -1,0 +1,47 @@
+Research the top 5 premium SaaS landing pages in the API monitoring space (Linear, Vercel, Framer, Raycast, Arc grade).
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Pulse API Monitor, API uptime and performance monitoring.
+
+Audience: engineering teams running APIs.
+Hero headline: "Know before your users do."
+Subheadline: "Pulse monitors your endpoints, alerts you on downtime, and tracks latency from 30 global regions."
+Primary CTA: "Start free". Secondary CTA: "See a monitor".
+
+Design system:
+- Dark theme, background #0A0A0A, surfaces #141414
+- Accent gradient from #10B981 to #F43F5E
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white (dark) or 8% black (light)
+- centered-hero layout
+
+Sections:
+1. Sticky glass nav with "Pulse API Monitor" wordmark + 3 nav links + primary CTA
+2. centered-hero: headline on one side, floating product UI mockup (built in CSS only, no real image) on the other, with a subtle animated micro-interaction
+3. Logo wall: Datadog, Pingdom, Uptime Robot, Better Stack, Checkly, Statuspage in muted monochrome
+4. Bento grid: 4 feature cards with custom inline SVG line icons (no emoji, no stock):
+   - Uptime monitoring (custom inline SVG line icon, no emoji, no stock)
+   - Latency tracking (custom inline SVG line icon, no emoji, no stock)
+   - Status pages (custom inline SVG line icon, no emoji, no stock)
+   - Alerting (custom inline SVG line icon, no emoji, no stock)
+5. Metrics strip: 31k teams | 99.99% uptime | 4.8 rating
+6. Testimonial card: "Pulse caught an outage before our users did. - Hanna Berg, SRE" with a generated SVG monogram avatar
+7. Pricing:       - Free
+      - Pro $29
+      - Team $99 with the middle tier highlighted (gradient border + "Most popular" badge) and a monthly/annual toggle that updates prices with JS (annual = 2 months free)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

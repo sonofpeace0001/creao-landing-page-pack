@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentrylite | Errors, fixed faster.</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS Variables */
+        :root {
+            --bg: #0A0A0A;
+            --surface: #141414;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+            --text-main: #FAFAFA;
+            --text-muted: #A1A1AA;
+            --accent-start: #F43F5E;
+            --accent-end: #F97316;
+            --font-body: 'Inter', system-ui, sans-serif;
+            --font-display: 'Instrument Serif', serif;
+            --max-width: 1200px;
+            --section-pad: clamp(80px, 10vw, 120px);
+            --radius-md: 12px;
+            --radius-lg: 24px;
+            --transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Reset & Base */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Noise Texture */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Typography */
+        h1, h2, h3, .serif {
+            font-family: var(--font-display);
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        h1 { font-size: clamp(3.5rem, 8vw, 6rem); }
+        h2 { font-size: clamp(2.5rem, 5vw, 4rem); }
+        h3 { font-size: clamp(1.5rem, 3vw, 2.5rem); }
+        
+        .text-muted { color: var(--text-muted); }
+        .text-gradient {
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Layout Utilities */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section {
+            padding: var(--section-pad) 0;
+            position: relative;
+        }
+
+        .flex { display: flex; }
+        .grid { display: grid; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .flex-col { flex-direction: column; }
+        .gap-2 { gap: 8px; }
+        .gap-4 { gap: 16px; }
+        .gap-8 { gap: 32px; }
+        .gap-16 { gap: 64px; }
+        .text-center { text-align: center; }
+
+        /* Buttons & Links */
+        a { text-decoration: none; color: inherit; transition: color var(--transition); }
+        a:hover { color: #fff; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 99px;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            transition: all var(--transition);
+            cursor: pointer;
+            border: none;
+            outline: none;
+            text-decoration: none;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(244, 63, 94, 0.2);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(8px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--border-hover);
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 72px;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-style: italic;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* Hero */
+        .hero {
+            padding-top: calc(72px + var(--section-pad));
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero-mesh {
+            position: absolute;
+            top: -20%; left: -10%;
+            width: 120%; height: 120%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(244, 63, 94, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(249, 115, 22, 0.1) 0%, transparent 40%);
+            filter: blur(60px);
+            animation: meshFloat 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes meshFloat {
+            0% { transform: scale(1) translate(0, 0); }
+            50% { transform: scale(1.1) translate(2%, 2%); }
+            100% { transform: scale(1) translate(-2%, -2%); }
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin: 24px 0 40px;
+            max-width: 480px;
+        }
+
+        /* CSS Mockup */
+        .mockup-wrapper {
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .mockup {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+            transform: rotateY(-5deg) rotateX(5deg);
+            transition: transform 0.5s ease;
+        }
+
+        .mockup:hover {
+            transform: rotateY(0deg) rotateX(0deg);
+        }
+
+        .mockup-header {
+            height: 40px;
+            background: rgba(0,0,0,0.3);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 8px;
+        }
+
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: #333; }
+        .dot:nth-child(1) { background: #FF5F56; }
+        .dot:nth-child(2) { background: #FFBD2E; }
+        .dot:nth-child(3) { background: #27C93F; }
+
+        .mockup-body {
+            display: flex;
+            height: 320px;
+        }
+
+        .mockup-sidebar {
+            width: 120px;
+            border-right: 1px solid var(--border);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .mockup-line { height: 8px; border-radius: 4px; background: rgba(255,255,255,0.05); width: 100%; }
+        .mockup-line.short { width: 60%; }
+
+        .mockup-code {
+            flex: 1;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-family: monospace;
+        }
+
+        .code-row { display: flex; gap: 16px; align-items: center; opacity: 0.6; }
+        .code-num { color: #555; font-size: 12px; width: 20px; text-align: right; }
+        .code-text { height: 10px; border-radius: 2px; background: rgba(255,255,255,0.1); width: 60%; }
+        
+        .code-row.error {
+            opacity: 1;
+            background: rgba(244, 63, 94, 0.1);
+            border-radius: 4px;
+            padding: 4px;
+            margin-left: -4px;
+            position: relative;
+        }
+        
+        .code-row.error .code-text {
+            background: var(--accent-start);
+            box-shadow: 0 0 12px rgba(244, 63, 94, 0.5);
+            width: 80%;
+        }
+
+        .error-pulse {
+            position: absolute;
+            right: 12px;
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--accent-start);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(244, 63, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
+        }
+
+        /* Logo Wall */
+        .logo-wall-wrapper {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(90deg, rgba(20,20,20,0) 0%, rgba(20,20,20,0.5) 50%, rgba(20,20,20,0) 100%);
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .logo-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #666;
+            margin-bottom: 24px;
+        }
+
+        .logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: clamp(32px, 5vw, 64px);
+            opacity: 0.4;
+            filter: grayscale(100%);
+        }
+
+        .logos svg {
+            height: 24px;
+            fill: currentColor;
+            color: white;
+        }
+
+        /* Bento Grid */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 64px;
+        }
+
+        .bento-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            transition: all var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bento-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 100%;
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .bento-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-hover);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .bento-card:hover::before {
+            opacity: 1;
+        }
+
+        .bento-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            color: var(--accent-start);
+        }
+
+        .bento-card h3 {
+            font-size: 1.25rem;
+            font-family: var(--font-body);
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: white;
+            letter-spacing: normal;
+        }
+
+        .bento-card p {
+            color: var(--text-muted);
+            font-size: 0.9375rem;
+        }
+
+        /* Metrics */
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            margin: 64px auto;
+            max-width: 900px;
+        }
+
+        .metric-item {
+            background: var(--bg);
+            padding: 48px 24px;
+            text-align: center;
+        }
+
+        .metric-num {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* Testimonial */
+        .testimonial {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .testimonial blockquote {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            line-height: 1.2;
+            color: white;
+            margin-bottom: 32px;
+            position: relative;
+        }
+        
+        .testimonial blockquote::before, .testimonial blockquote::after {
+            content: '"';
+            color: var(--border-hover);
+        }
+
+        .author {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .author-info { text-align: left; }
+        .author-name { color: white; font-weight: 500; font-size: 0.9375rem; }
+        .author-title { color: var(--text-muted); font-size: 0.875rem; }
+
+        /* Pricing */
+        .billing-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin: 40px 0 64px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 52px;
+            height: 28px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 34px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px; left: 2px;
+            width: 22px; height: 22px;
+            background: white;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .billing-toggle.annual .toggle-switch::after {
+            transform: translateX(24px);
+            background: var(--accent-start);
+        }
+
+        .toggle-label { font-size: 0.9375rem; color: var(--text-muted); cursor: pointer; transition: color 0.2s;}
+        .billing-toggle.annual .label-annual { color: white; }
+        .billing-toggle:not(.annual) .label-monthly { color: white; }
+
+        .badge-save {
+            font-size: 0.75rem;
+            background: rgba(244, 63, 94, 0.1);
+            color: var(--accent-start);
+            padding: 4px 8px;
+            border-radius: 99px;
+            margin-left: 8px;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            align-items: center;
+        }
+
+        .price-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            position: relative;
+        }
+
+        .price-card.popular {
+            background: var(--bg);
+            border: none;
+            padding: 41px; /* +1px for fake border */
+            transform: scale(1.05);
+            z-index: 2;
+        }
+
+        .price-card.popular::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            z-index: -1;
+            margin: -1px;
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 99px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .plan-name { font-size: 1.25rem; color: white; margin-bottom: 8px; }
+        .plan-price { font-family: var(--font-display); font-size: 3rem; color: white; margin-bottom: 8px; display: flex; align-items: baseline; gap: 4px;}
+        .plan-period { font-size: 1rem; color: var(--text-muted); font-family: var(--font-body); }
+        .plan-desc { color: var(--text-muted); font-size: 0.9375rem; margin-bottom: 32px; height: 44px;}
+
+        .feature-list { list-style: none; margin-bottom: 40px; display: flex; flex-direction: column; gap: 16px;}
+        .feature-list li { display: flex; align-items: center; gap: 12px; font-size: 0.9375rem; color: var(--text-muted); }
+        .feature-list svg { width: 16px; height: 16px; color: white; flex-shrink: 0;}
+        
+        .price-card .btn { width: 100%; }
+
+        /* CTA Band */
+        .cta-band {
+            margin: 120px 24px;
+            padding: 80px 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-glow {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px; height: 300px;
+            background: var(--accent-start);
+            filter: blur(150px);
+            opacity: 0.2;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .cta-band > * { position: relative; z-index: 1; }
+        .cta-band h2 { margin-bottom: 24px; }
+        
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 40px 0;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Mobile CTA Bar */
+        .mobile-cta-bar {
+            display: none;
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            padding: 16px 24px;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid var(--border);
+            z-index: 99;
+        }
+        
+        .mobile-cta-bar .btn { width: 100%; }
+
+        /* Scroll Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s var(--transition), transform 0.8s var(--transition);
+        }
+        .reveal.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero-grid { grid-template-columns: 1fr; text-align: center; }
+            .hero-content p { margin: 24px auto 40px; }
+            .hero .flex.gap-4 { justify-content: center; }
+            .mockup { max-width: 600px; margin: 0 auto; transform: none; }
+            .bento-grid { grid-template-columns: 1fr; }
+            .pricing-grid { grid-template-columns: 1fr; gap: 40px; max-width: 400px; margin: 0 auto;}
+            .price-card.popular { transform: none; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-cta { display: none; }
+            .mobile-cta-bar { display: block; }
+            .metrics { grid-template-columns: 1fr; }
+            .metric-item { padding: 32px 24px; border-bottom: 1px solid var(--border); }
+            .metric-item:last-child { border-bottom: none; }
+            h1 { font-size: 3rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            .hero-mesh, .error-pulse, .reveal { animation: none; transition: none; opacity: 1; transform: none; }
+            .bento-card:hover { transform: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sticky Nav -->
+    <nav>
+        <div class="container flex justify-between items-center" style="width: 100%;">
+            <a href="#" class="logo">Sentrylite</a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#customers">Customers</a>
+                <a href="#pricing">Pricing</a>
+            </div>
+            <a href="#" class="btn btn-primary nav-cta">Start free</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="section hero">
+        <div class="hero-mesh"></div>
+        <div class="container hero-grid reveal">
+            <div class="hero-content">
+                <h1>Errors, <br> <span class="text-gradient serif">fixed faster.</span></h1>
+                <p>Sentrylite captures errors, shows the exact line, and groups them so you triage in minutes not hours.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="btn btn-primary">Start free</a>
+                    <a href="#" class="btn btn-secondary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        See a trace
+                    </a>
+                </div>
+            </div>
+            <div class="mockup-wrapper">
+                <div class="mockup">
+                    <div class="mockup-header">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                    <div class="mockup-body">
+                        <div class="mockup-sidebar">
+                            <div class="mockup-line"></div>
+                            <div class="mockup-line short"></div>
+                            <div class="mockup-line"></div>
+                            <div class="mockup-line short"></div>
+                        </div>
+                        <div class="mockup-code">
+                            <div class="code-row">
+                                <div class="code-num">41</div>
+                                <div class="code-text"></div>
+                            </div>
+                            <div class="code-row">
+                                <div class="code-num">42</div>
+                                <div class="code-text" style="width: 40%"></div>
+                            </div>
+                            <div class="code-row error">
+                                <div class="code-num">43</div>
+                                <div class="code-text"></div>
+                                <div class="error-pulse"></div>
+                            </div>
+                            <div class="code-row">
+                                <div class="code-num">44</div>
+                                <div class="code-text" style="width: 70%"></div>
+                            </div>
+                            <div class="code-row">
+                                <div class="code-num">45</div>
+                                <div class="code-text" style="width: 50%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Logo Wall -->
+    <section id="customers" class="logo-wall-wrapper reveal">
+        <div class="container">
+            <div class="logo-label">Trusted by engineers migrating from</div>
+            <div class="logos">
+                <!-- Abstracted SVGs representing industry tools -->
+                <svg viewBox="0 0 100 30"><path d="M10,15 A5,5 0 1,0 20,15 A5,5 0 1,0 10,15 M25,5 L25,25 M30,10 L30,25 M35,15 L35,25" stroke="currentColor" stroke-width="3" fill="none"/><text x="45" y="22" font-family="Inter" font-weight="600" font-size="16" letter-spacing="-0.5">Sentry</text></svg>
+                
+                <svg viewBox="0 0 100 30"><rect x="10" y="5" width="10" height="20" rx="2" fill="currentColor"/><rect x="25" y="10" width="10" height="15" rx="2" fill="currentColor"/><text x="42" y="22" font-family="Inter" font-weight="600" font-size="16" letter-spacing="-0.5">Rollbar</text></svg>
+                
+                <svg viewBox="0 0 100 30"><circle cx="15" cy="15" r="8" fill="none" stroke="currentColor" stroke-width="3"/><path d="M15,7 L15,1 M23,15 L29,15 M15,23 L15,29 M7,15 L1,15" stroke="currentColor" stroke-width="2"/><text x="35" y="22" font-family="Inter" font-weight="600" font-size="16" letter-spacing="-0.5">Bugsnag</text></svg>
+                
+                <svg viewBox="0 0 100 30"><path d="M10,25 L15,10 L20,20 L25,5 L30,25" stroke="currentColor" stroke-width="3" fill="none" stroke-linejoin="round"/><text x="38" y="22" font-family="Inter" font-weight="600" font-size="16" letter-spacing="-0.5">Datadog</text></svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Bento -->
+    <section id="features" class="section container">
+        <div class="text-center reveal">
+            <h2>Everything you need. <br><span class="text-muted serif">Nothing you don't.</span></h2>
+        </div>
+        
+        <div class="bento-grid">
+            <div class="bento-card reveal">
+                <div class="bento-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line></svg>
+                </div>
+                <h3>Error capture</h3>
+                <p>Instantly catch unhandled exceptions across your entire stack. We normalize payloads so every error looks clean and readable.</p>
+            </div>
+            
+            <div class="bento-card reveal">
+                <div class="bento-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="10" x2="3" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="21" y1="18" x2="3" y2="18"></line></svg>
+                </div>
+                <h3>Stack traces</h3>
+                <p>De-minified, clearly structured stack traces pointing exactly to the faulty line of code in your repository.</p>
+            </div>
+            
+            <div class="bento-card reveal">
+                <div class="bento-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                </div>
+                <h3>Release tracking</h3>
+                <p>Correlate spikes in errors to specific deployments. Know immediately if your latest commit broke production.</p>
+            </div>
+            
+            <div class="bento-card reveal">
+                <div class="bento-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                </div>
+                <h3>Slack alerts</h3>
+                <p>Smart routing sends critical issues to the right channel without the noise. Configure thresholds to prevent alert fatigue.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics -->
+    <section class="container reveal">
+        <div class="metrics">
+            <div class="metric-item">
+                <div class="metric-num">120k</div>
+                <div class="metric-label">Developers shipping fast</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-num">4.8</div>
+                <div class="metric-label">Average rating on G2</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-num">99.9%</div>
+                <div class="metric-label">Uptime SLA</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial -->
+    <section class="section container reveal">
+        <div class="testimonial">
+            <blockquote>We find and fix bugs before users even have a chance to report them. It's completely changed how we ship.</blockquote>
+            <div class="author">
+                <div class="avatar">TW</div>
+                <div class="author-info">
+                    <div class="author-name">Theo Walsh</div>
+                    <div class="author-title">Lead Engineer</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="section container">
+        <div class="text-center reveal">
+            <h2>Simple pricing.</h2>
+            <p class="text-muted" style="margin-top: 16px;">Scale without the surprise bills.</p>
+            
+            <div class="billing-toggle" id="billingToggle">
+                <span class="toggle-label label-monthly" onclick="toggleBilling()">Monthly</span>
+                <div class="toggle-switch" onclick="toggleBilling()"></div>
+                <span class="toggle-label label-annual" onclick="toggleBilling()">Annually <span class="badge-save">2 months free</span></span>
+            </div>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- Free -->
+            <div class="price-card reveal">
+                <div class="plan-name">Free</div>
+                <div class="plan-price">$0<span class="plan-period">/mo</span></div>
+                <div class="plan-desc">For side projects and small teams getting started.</div>
+                <ul class="feature-list">
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> 5,000 events/mo</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> 1 seat included</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Community support</li>
+                </ul>
+                <a href="#" class="btn btn-secondary">Get started</a>
+            </div>
+
+            <!-- Team -->
+            <div class="price-card popular reveal">
+                <div class="popular-badge">Most Popular</div>
+                <div class="plan-name">Team</div>
+                <div class="plan-price">$<span class="price-val" data-monthly="26" data-annual="21">26</span><span class="plan-period">/mo</span></div>
+                <div class="plan-desc">For growing startups that need to ship with confidence.</div>
+                <ul class="feature-list">
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> 100,000 events/mo</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> 5 seats included</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Slack integrations</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Priority support</li>
+                </ul>
+                <a href="#" class="btn btn-primary">Start 14-day trial</a>
+            </div>
+
+            <!-- Business -->
+            <div class="price-card reveal">
+                <div class="plan-name">Business</div>
+                <div class="plan-price">$<span class="price-val" data-monthly="80" data-annual="66">80</span><span class="plan-period">/mo</span></div>
+                <div class="plan-desc">For large scale applications with complex workflows.</div>
+                <ul class="feature-list">
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> 1,000,000 events/mo</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Unlimited seats</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Advanced RBAC</li>
+                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> 24/7 Phone support</li>
+                </ul>
+                <a href="#" class="btn btn-secondary">Contact sales</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="container">
+        <div class="cta-band reveal">
+            <div class="cta-glow"></div>
+            <h2>Ready to ship <span class="serif text-gradient">faster?</span></h2>
+            <p class="text-muted" style="margin-bottom: 32px;">Join 120,000+ developers catching bugs before users do.</p>
+            <a href="#" class="btn btn-primary">Start free today</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="container">
+        <div class="flex justify-between items-center" style="flex-wrap: wrap; gap: 16px;">
+            <div class="logo" style="font-size: 1.25rem;">Sentrylite</div>
+            <div>&copy; 2023 Sentrylite Inc. All rights reserved.</div>
+            <div class="flex gap-4">
+                <a href="#">Terms</a>
+                <a href="#">Privacy</a>
+                <a href="#">Twitter</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Sticky CTA -->
+    <div class="mobile-cta-bar">
+        <a href="#" class="btn btn-primary">Start free</a>
+    </div>
+
+    <script>
+        // Pricing Toggle Logic
+        let isAnnual = false;
+        function toggleBilling() {
+            const toggle = document.getElementById('billingToggle');
+            const prices = document.querySelectorAll('.price-val');
+            
+            isAnnual = !isAnnual;
+            toggle.classList.toggle('annual', isAnnual);
+            
+            prices.forEach(price => {
+                const newPrice = isAnnual ? price.getAttribute('data-annual') : price.getAttribute('data-monthly');
+                // Simple animation effect
+                price.style.opacity = 0;
+                setTimeout(() => {
+                    price.textContent = newPrice;
+                    price.style.opacity = 1;
+                }, 200);
+            });
+        }
+
+        // Scroll Reveal Intersection Observer
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Bento Grid Mouse Hover Glow Effect
+            const cards = document.querySelectorAll('.bento-card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
