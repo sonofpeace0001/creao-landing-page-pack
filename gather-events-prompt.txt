@@ -1,0 +1,49 @@
+Research the top 5 premium local service business sites &mdash; look at Mindy Weiss, Yifti, Joy Proctor grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Gather, Wedding & Event Planning: Gather plans weddings and events end to end - vendors, timeline, and day-of coordination - so you're a guest at your own party.
+
+Audience: couples planning a wedding or a major event.
+Hero headline: "Your day, without the spreadsheet spiral."
+Subheadline: "Gather plans weddings and events end to end - vendors, timeline, and day-of coordination - so you're a guest at your own party."
+Primary CTA: "Check availability". Secondary CTA: "See real weddings".
+
+Design system:
+- Light (warm off-white) theme, background #FAFAF7, surfaces #FFFFFF
+- Accent gradient from #BE185D to #F59E0B
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% black
+- centered-hero layout with a full-width dashboard mockup below the fold
+
+Sections:
+1. Sticky glass nav with "Gather" wordmark + 3 nav links (Services, Real Weddings, Inquire) + primary CTA
+2. hero: headline on one side, a full-width wedding-planning dashboard mockup (built in CSS only, no real image) below the hero text, showing vendor and timeline status
+3. Certifications strip: Featured in — Vogue Weddings, Martha Stewart Weddings, Brides, The Knot, Style Me Pretty, Green Wedding Shoes
+4. Bento grid: 4 service cards with custom inline SVG line icons (no emoji, no stock):
+   - Full vendor sourcing (We source and negotiate with every vendor, from florist to band)
+   - Day-of coordination included (A lead planner on-site from setup to last dance, every package)
+   - Custom timeline & budget tracker (See exactly where every dollar and every hour goes, in real time)
+   - Trusted vendor network (200+ vetted vendors across venues, catering, and florals)
+5. Metrics strip: 4.9★ 380+ reviews | 200+ weddings planned | 94% of budgets held to plan
+6. Testimonial card: "We showed up and got married. Every single detail was handled, and it was still somehow under budget. - Theo Marks, Client" with a generated SVG monogram avatar
+7. Services & pricing:
+      - Day-Of Coordination: $1800 starting — Starting price; Timeline & vendor management; Lead coordinator on-site
+      - Full Planning (highlighted, "Most popular"-style badge): $5500 starting — Starting price; Full vendor sourcing; Budget tracking included
+      - Elopement & Micro-Wedding: $1200 starting — Starting price; Up to 20 guests; Full coordination included
+   as flat, upfront prices with no monthly/annual toggle (this is a local service business, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

@@ -1,0 +1,49 @@
+Research the top 5 premium local service business sites &mdash; look at Yardzen, Tilly, LawnStarter grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Grove, Landscaping & Lawn Care: Grove designs, installs, and maintains landscapes built for your actual climate - less watering, less mowing, more of your weekend back.
+
+Audience: homeowners planning a landscape redesign or ongoing lawn care.
+Hero headline: "A yard that takes care of itself."
+Subheadline: "Grove designs, installs, and maintains landscapes built for your actual climate - less watering, less mowing, more of your weekend back."
+Primary CTA: "Get a free quote". Secondary CTA: "See our projects".
+
+Design system:
+- Light (warm off-white) theme, background #FAFAF7, surfaces #FFFFFF
+- Accent gradient from #15803D to #65A30D
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% black
+- split-hero layout (even two-column split, wider text column)
+
+Sections:
+1. Sticky glass nav with "Grove" wordmark + 3 nav links (Services, Projects, Quote) + primary CTA
+2. hero: headline on one side, floating project-timeline UI mockup (built in CSS only, no real image) on the other, showing installation progress
+3. Certifications strip: Certified & trusted by — NALP Certified, EPA WaterSense, Google Guaranteed, Angi Super Service, BBB A+, Houzz Best Of
+4. Bento grid: 4 service cards with custom inline SVG line icons (no emoji, no stock):
+   - Native & drought-tolerant design (Landscapes built around plants that actually belong here)
+   - Smart irrigation included (Weather-based drip systems cut water use by up to 60%)
+   - Licensed & insured crews (Every crew lead is licensed with 8+ years in the field)
+   - Seasonal maintenance plans (Mowing, pruning, and cleanup on a schedule you set once)
+5. Metrics strip: 4.8★ 1,400+ reviews | 60% avg. water savings | 15yr in business
+6. Testimonial card: "Cut our water bill in half and the yard looks better than it ever did with the old sprinkler system. - Jordan Alvarez, Homeowner" with a generated SVG monogram avatar
+7. Services & pricing:
+      - Lawn Care Visit: $65 starting — Mow, edge & blow; Seasonal fertilization; Starting price
+      - Landscape Design (highlighted, "Most popular"-style badge): $2400 starting — Custom design plan; Native plant selection; Starting price
+      - Full Maintenance Plan: $220 starting — Weekly or bi-weekly visits; Seasonal cleanups; Irrigation checks included
+   as flat, upfront prices with no monthly/annual toggle (this is a local service business, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

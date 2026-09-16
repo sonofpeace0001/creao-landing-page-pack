@@ -1,0 +1,49 @@
+Research the top 5 premium local service business sites &mdash; look at Rita Hazan, Nine Zero One, Sharon Dorram grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Parlor, Hair Salon & Color Studio: Parlor is a color-focused studio - precision cuts, custom formulation, and a chair you'll actually want to sit in for three hours.
+
+Audience: clients booking a color-focused hair appointment.
+Hero headline: "Color that actually holds up."
+Subheadline: "Parlor is a color-focused studio - precision cuts, custom formulation, and a chair you'll actually want to sit in for three hours."
+Primary CTA: "Book now". Secondary CTA: "See stylists".
+
+Design system:
+- Light (warm off-white) theme, background #FAFAF7, surfaces #FFFFFF
+- Accent gradient from #171717 to #EC4899
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% black
+- centered-hero layout with a full-width dashboard mockup below the fold
+
+Sections:
+1. Sticky glass nav with "Parlor" wordmark + 3 nav links (Services, Stylists, Book) + primary CTA
+2. hero: headline on one side, a full-width weekly-openings dashboard mockup (built in CSS only, no real image) below the hero text, showing appointment slots and stock status
+3. Certifications strip: Products we trust — Oribe, Olaplex, Davines, R+Co, Kevin Murphy, IGK
+4. Bento grid: 4 service cards with custom inline SVG line icons (no emoji, no stock):
+   - Custom color formulation (Every color is mixed for your exact tone, never off a chart)
+   - Olaplex bonded into every service (Every color and lightening service is bond-protected)
+   - Senior stylists only (Every colorist has 8+ years behind the chair)
+   - Free color consult (15 minutes with your stylist before anything touches your hair)
+5. Metrics strip: 4.9★ 2,400+ reviews | 8yr avg. stylist experience | 90min avg. color session
+6. Testimonial card: "First salon where the color actually matched what I asked for. Booked for the rest of the year. - Nina Farrow, Client since 2023" with a generated SVG monogram avatar
+7. Services & pricing:
+      - Cut & Style: $75 starting — Consultation included; Wash & blowout; Precision cut
+      - Balayage (highlighted, "Most popular"-style badge): $220 starting — Full balayage; Toner included; Olaplex bond treatment
+      - Full Color Transformation: $350 starting — Color correction or transformation; 2 stylists on complex work; Complimentary touch-up
+   as flat, upfront prices with no monthly/annual toggle (this is a local service business, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

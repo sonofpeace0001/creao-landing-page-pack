@@ -1,0 +1,49 @@
+Research the top 5 premium local service business sites &mdash; look at Handy, MaidThis, The Maids grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Pristine, Cleaning Service: Pristine sends the same two-person crew every visit, background-checked and insured, with a 200-point checklist you can actually see.
+
+Audience: homeowners hiring a recurring house cleaning service.
+Hero headline: "A clean home, without the small talk."
+Subheadline: "Pristine sends the same two-person crew every visit, background-checked and insured, with a 200-point checklist you can actually see."
+Primary CTA: "Get a free quote". Secondary CTA: "See the checklist".
+
+Design system:
+- Light (warm off-white) theme, background #FAFAF7, surfaces #FFFFFF
+- Accent gradient from #0284C7 to #38BDF8
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% black
+- split-hero layout (even two-column split, wider text column)
+
+Sections:
+1. Sticky glass nav with "Pristine" wordmark + 3 nav links (Services, Reviews, Book) + primary CTA
+2. hero: headline on one side, floating checklist UI mockup (built in CSS only, no real image) on the other, showing a completed room checklist
+3. Certifications strip: Insured & trusted by — Google Guaranteed, BBB A+, Bonded &amp; Insured, Nextdoor Fave, Angi Super Service, Thumbtack Top Pro
+4. Bento grid: 4 service cards with custom inline SVG line icons (no emoji, no stock):
+   - Same crew, every visit (No rotating strangers. You get to know your two-person team)
+   - 200-point checklist (Every visit follows the same checklist, texted to you after)
+   - Background-checked & insured (Every cleaner is background-checked, bonded, and insured)
+   - Eco-friendly products (Non-toxic, pet-safe products used on every visit, standard)
+5. Metrics strip: 4.9★ 1,900+ reviews | 200-pt checklist, every visit | 100% bonded & insured
+6. Testimonial card: "Same two women every other week for a year now. They know exactly how we like things. - Priya Desai, Customer" with a generated SVG monogram avatar
+7. Services & pricing:
+      - One-Time Clean: $150 starting — Starting price; 200-point checklist; Same-week scheduling
+      - Bi-Weekly (highlighted, "Most popular"-style badge): $120 starting — Per visit; Same crew every time; 10% off recurring
+      - Deep Clean / Move-Out: $280 starting — Inside appliances & cabinets; Satisfaction guarantee; Starting price
+   as flat, upfront prices with no monthly/annual toggle (this is a local service business, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.
