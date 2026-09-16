@@ -7,16 +7,46 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+(function(){
+  try{
+    var saved=localStorage.getItem('creao-theme');
+    var theme=saved||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');
+    document.documentElement.setAttribute('data-theme',theme);
+  }catch(e){}
+})();
+</script>
 <style>
 :root{
   --bg:#0A0A0A;--surface:#141414;--surface2:#1A1A1A;--text:#FAFAFA;--muted:#A1A1AA;
   --border:rgba(255,255,255,0.08);--accent:#6366F1;--accent2:#A855F7;
+  --toolbar-bg:rgba(10,10,10,.72);--veil:rgba(10,10,10,.55);--wash:rgba(255,255,255,.04);
+  --wash-hover:rgba(255,255,255,.1);--hairline:rgba(255,255,255,.16);--hairline-2:rgba(255,255,255,.2);
+  --tag-bg:rgba(0,0,0,.5);--tag-border:rgba(255,255,255,.18);--shadow:rgba(0,0,0,.7);--shadow-2:rgba(0,0,0,.6);
+  --scheme:dark;
 }
+html[data-theme="light"]{
+  --bg:#FAFAF7;--surface:#FFFFFF;--surface2:#F4F4F1;--text:#18181B;--muted:#52525B;
+  --border:rgba(0,0,0,0.08);
+  --toolbar-bg:rgba(250,250,247,.82);--veil:rgba(24,24,27,.35);--wash:rgba(0,0,0,.035);
+  --wash-hover:rgba(0,0,0,.07);--hairline:rgba(0,0,0,.14);--hairline-2:rgba(0,0,0,.18);
+  --tag-bg:rgba(255,255,255,.72);--tag-border:rgba(0,0,0,.12);--shadow:rgba(24,24,27,.12);--shadow-2:rgba(24,24,27,.1);
+  --scheme:light;
+}
+html[data-theme="light"] .thumb .theme-tag,html[data-theme="light"] .thumb .layout-tag{color:var(--text)}
 *{margin:0;padding:0;box-sizing:border-box}
+html{color-scheme:var(--scheme)}
 body{
   background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;
-  -webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden;transition:background .3s,color .3s;
 }
+.theme-toggle{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;flex-shrink:0;
+  border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;transition:border-color .2s,background .2s}
+.theme-toggle:hover{border-color:var(--hairline-2)}
+.theme-toggle svg{width:18px;height:18px}
+.theme-toggle .icon-moon{display:none}
+html[data-theme="light"] .theme-toggle .icon-sun{display:none}
+html[data-theme="light"] .theme-toggle .icon-moon{display:block}
 .mesh{position:fixed;inset:0;z-index:-1;opacity:.5;pointer-events:none;
   background:
     radial-gradient(60% 50% at 15% 10%,rgba(99,102,241,.18),transparent 60%),
@@ -37,7 +67,7 @@ header .stats div{text-align:center}
 header .stats b{display:block;font-family:'Instrument Serif',serif;font-size:40px;color:var(--text)}
 header .stats span{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
 .toolbar{position:sticky;top:0;z-index:10;backdrop-filter:blur(16px);
-  background:rgba(10,10,10,.72);border-bottom:1px solid var(--border);padding:16px 0;margin:40px 0 0}
+  background:var(--toolbar-bg);border-bottom:1px solid var(--border);padding:16px 0;margin:40px 0 0}
 .toolbar .inner{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
 .toolbar input{flex:1;min-width:220px;background:var(--surface);border:var(--border);border-radius:10px;
   padding:12px 16px;color:var(--text);font-size:14px;font-family:inherit;outline:none}
@@ -48,15 +78,15 @@ header .stats span{font-size:13px;color:var(--muted);text-transform:uppercase;le
 .card{background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden;
   transition:transform .3s cubic-bezier(.4,0,.2,1),border-color .3s,box-shadow .3s;opacity:0;transform:translateY(20px)}
 .card.show{opacity:1;transform:translateY(0)}
-.card:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.16);box-shadow:0 24px 60px -20px rgba(0,0,0,.7)}
+.card:hover{transform:translateY(-6px);border-color:var(--hairline);box-shadow:0 24px 60px -20px var(--shadow)}
 .thumb{position:relative;aspect-ratio:3/4;overflow:hidden;background:var(--surface2);border-bottom:1px solid var(--border)}
 .thumb-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;
   display:block;opacity:0;transition:opacity .4s,transform .5s cubic-bezier(.4,0,.2,1)}
 .thumb-img.loaded{opacity:1}
 .thumb:hover .thumb-img{transform:scale(1.04)}
-.thumb-veil{position:absolute;inset:0;background:linear-gradient(180deg,transparent 72%,rgba(10,10,10,.55));pointer-events:none}
+.thumb-veil{position:absolute;inset:0;background:linear-gradient(180deg,transparent 72%,var(--veil));pointer-events:none}
 .thumb .theme-tag,.thumb .layout-tag{position:absolute;font-size:10px;padding:4px 9px;border-radius:999px;
-  background:rgba(0,0,0,.5);color:#fff;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);
+  background:var(--tag-bg);color:#fff;backdrop-filter:blur(8px);border:1px solid var(--tag-border);
   letter-spacing:.04em;text-transform:uppercase;z-index:2}
 .thumb .theme-tag{top:12px;left:12px}
 .thumb .layout-tag{top:12px;right:12px}
@@ -69,8 +99,8 @@ header .stats span{font-size:13px;color:var(--muted);text-transform:uppercase;le
 .actions{display:flex;gap:10px}
 .btn-view,.btn-copy{flex:1;text-align:center;font-size:13px;padding:11px 12px;border-radius:10px;cursor:pointer;
   font-family:inherit;border:1px solid var(--border);transition:all .25s;text-decoration:none}
-.btn-view{background:rgba(255,255,255,.04);color:var(--text)}
-.btn-view:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)}
+.btn-view{background:var(--wash);color:var(--text)}
+.btn-view:hover{background:var(--wash-hover);border-color:var(--hairline-2)}
 .btn-copy{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;font-weight:500}
 .btn-copy:hover{filter:brightness(1.12)}
 .btn-copy.copied{background:#10B981}
@@ -79,7 +109,7 @@ footer a{color:var(--accent);text-decoration:none}
 .toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(120px);
   background:var(--surface2);border:1px solid var(--border);padding:14px 22px;border-radius:12px;
   color:var(--text);font-size:14px;z-index:100;transition:transform .35s cubic-bezier(.4,0,.2,1);
-  box-shadow:0 20px 50px -10px rgba(0,0,0,.6)}
+  box-shadow:0 20px 50px -10px var(--shadow-2)}
 .toast.show{transform:translateX(-50%) translateY(0)}
 @media(max-width:600px){header{padding:80px 0 40px}.grid{gap:16px}}
 </style>
@@ -88,9 +118,9 @@ footer a{color:var(--accent);text-decoration:none}
 <div class="mesh"></div>
 <header>
   <div class="wrap">
-    <span class="eyebrow">CREAO Premium Pack</span>
+    <span class="eyebrow">Welcome &mdash; CREAO Premium Pack</span>
     <h1>57 Landing Pages.<br><span class="grad">One prompt framework.</span></h1>
-    <p class="sub">Every niche. Every style. Dark and light. Each page is production-ready, fully responsive, and ships with the exact prompt that built it &mdash; copy, edit, and make it yours.</p>
+    <p class="sub">Whatever you're building &mdash; a SaaS product, a local shop, a portfolio, a school &mdash; there's a premium starting point here. Every page is production-ready, fully responsive, and ships with the exact prompt that built it &mdash; copy, edit, and make it yours.</p>
     <div class="stats">
       <div><b>57</b><span>Niches</span></div>
       <div><b>2</b><span>Themes</span></div>
@@ -103,6 +133,10 @@ footer a{color:var(--accent);text-decoration:none}
   <input id="search" type="text" placeholder="Search niche or product (e.g. fitness, CRM, dark)&hellip;">
   <select id="themeFilter"><option value="">All themes</option><option value="dark">Dark</option><option value="light">Light</option></select>
   <span class="count" id="count">57 pages</span>
+  <button class="theme-toggle" id="pageThemeToggle" type="button" aria-label="Toggle light and dark mode" title="Toggle light and dark mode">
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"></path></svg>
+  </button>
 </div></div>
 <main class="wrap"><div class="grid" id="grid">
 <article class="card" data-niche="ai writing" data-theme="dark">
@@ -1113,6 +1147,13 @@ grid.addEventListener('click',e=>{
 });
 const io = new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target);}}),{threshold:.08});
 cards.forEach(c=>io.observe(c));
+
+const pageThemeToggle = document.getElementById('pageThemeToggle');
+pageThemeToggle.addEventListener('click', () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('creao-theme', next); } catch (e) {}
+});
 </script>
 </body>
 </html>
