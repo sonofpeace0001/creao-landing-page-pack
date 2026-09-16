@@ -8,7 +8,7 @@
 
 Catalog gallery with search, theme filter, and one-click "copy prompt":
 
-**https://vercel-deploy-ptw4n0yav-son-of-peaces-projects.vercel.app**
+**https://creao-landing-page-pack.vercel.app**
 
 ## What's inside
 
