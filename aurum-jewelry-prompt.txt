@@ -1,0 +1,49 @@
+Research the top 5 premium fine jewelry and watch brand sites &mdash; look at Mejuri, Catbird, Shinola grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Aurum, Jewelry & Watches: Aurum pieces are cast in recycled 14k gold and sterling silver, hand-finished by third-generation goldsmiths, and guaranteed for life.
+
+Audience: shoppers buying fine jewelry as an investment or gift.
+Hero headline: "Heirlooms, made for now."
+Subheadline: "Aurum pieces are cast in recycled 14k gold and sterling silver, hand-finished by third-generation goldsmiths, and guaranteed for life."
+Primary CTA: "Shop the collection". Secondary CTA: "Book a fitting".
+
+Design system:
+- Dark theme, background #0A0A0A, surfaces #141414
+- Accent gradient from #92400E to #FBBF24
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white
+- centered-hero layout with a full-width dashboard mockup below the fold
+
+Sections:
+1. Sticky glass nav with "Aurum" wordmark + 3 nav links (Shop, Craftsmanship, Reviews) + primary CTA
+2. hero: headline on one side, a full-width order-status dashboard mockup (built in CSS only, no real image) below the hero text, showing engraving and shipping progress
+3. Press mentions: As featured in — Vogue, GQ, Town &amp; Country, Robb Report, W Magazine, Architectural Digest
+4. Bento grid: 4 product cards with custom inline SVG line icons (no emoji, no stock):
+   - Recycled 14k gold (Every gram traced to recycled sources, never newly mined)
+   - Hand-finished in-house (Polished and set by goldsmiths with 30+ years of experience)
+   - Lifetime warranty (Free resizing, replating, and repair for as long as you own it)
+   - Complimentary engraving (Every piece can be personalized at no extra cost)
+5. Metrics strip: 3rd generation family goldsmiths | 4.9★ 5,100+ reviews | Life warranty, every piece
+6. Testimonial card: "My engagement ring from Aurum gets stopped-on-the-street compliments weekly. The craftsmanship is unreal. - Devon Marsh, Verified Buyer" with a generated SVG monogram avatar
+7. Shop the collection:
+      - Rings: $340 starting — 14k recycled gold; Free resizing for life; Complimentary engraving
+      - Necklaces (highlighted, "Most popular"-style badge): $420 starting — Sterling silver & gold; Adjustable chain; Gift box included
+      - Watches: $890 starting — Swiss movement; Sapphire crystal; 5-year warranty
+   as flat, per-category starting prices with no monthly/annual toggle (this is a retail/e-commerce brand, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

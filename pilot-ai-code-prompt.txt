@@ -1,4 +1,4 @@
-Research the top 5 premium SaaS sites in the developer tools space (Linear, Vercel, Raycast, GitHub, Warp grade).
+Research the top 5 premium SaaS sites &mdash; look at Linear, Vercel, Raycast, GitHub, Warp grade for what premium looks like in this space.
 Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
 Then build me a complete, production-ready single-page landing page for Pilot, AI Coding Assistant: Pilot reads your codebase, writes the boring parts, and flags bugs before your reviewer does.
 

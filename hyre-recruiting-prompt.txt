@@ -1,4 +1,4 @@
-Research the top 5 premium SaaS sites in the recruiting and HR tech space (Ashby, Notion, Linear, Ramp grade).
+Research the top 5 premium SaaS sites &mdash; look at Ashby, Notion, Linear, Ramp grade for what premium looks like in this space.
 Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
 Then build me a complete, production-ready single-page landing page for Hyre, Recruiting & ATS: Hyre brings sourcing, interviews, and offers into one calm pipeline - so your best candidates never go cold.
 

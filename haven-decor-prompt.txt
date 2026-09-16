@@ -1,0 +1,49 @@
+Research the top 5 premium curated home-decor marketplace sites &mdash; look at Food52, Yonder, Etsy editorial grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Haven, Home Decor: Haven curates decor from independent makers - ceramics, textiles, and lighting that actually looks like it belongs in your space.
+
+Audience: people decorating a home who want pieces with a story.
+Hero headline: "Make it feel like home."
+Subheadline: "Haven curates decor from independent makers - ceramics, textiles, and lighting that actually looks like it belongs in your space."
+Primary CTA: "Shop now". Secondary CTA: "Shop by room".
+
+Design system:
+- Light (warm off-white) theme, background #FAFAF7, surfaces #FFFFFF
+- Accent gradient from #4D7C0F to #84CC16
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% black
+- split-hero layout (even two-column split, wider text column)
+
+Sections:
+1. Sticky glass nav with "Haven" wordmark + 3 nav links (Shop, Rooms, About) + primary CTA
+2. hero: headline on one side, floating cart UI mockup (built in CSS only, no real image) on the other, showing a handmade product badge
+3. Featured makers: Featured makers — Junko Ito Ceramics, Pale Fox Textiles, Ember Glassworks, North &amp; Vine, Salt Studio, Lark &amp; Loom
+4. Bento grid: 4 product cards with custom inline SVG line icons (no emoji, no stock):
+   - Independent makers only (Every piece is made by a named artisan, never mass-produced)
+   - Curated, not endless (Fewer than 20 new pieces a month, all hand-selected)
+   - Ships carbon-neutral (Every order offset from studio to doorstep)
+   - 30-day easy returns (Try it in your space. Send it back free if it's not right)
+5. Metrics strip: 400+ independent makers featured | 4.8★ 11,000+ reviews | 30d easy returns
+6. Testimonial card: "Every piece I've bought from Haven has a story, and it shows. My living room finally feels finished. - Grace Lin, Verified Buyer" with a generated SVG monogram avatar
+7. Shop by room:
+      - Living room: $38 starting — Ceramics, throws & lighting; Independent makers; Carbon-neutral shipping
+      - Bedroom (highlighted, "Most popular"-style badge): $58 starting — Linens, lighting & art; Hand-selected monthly; 30-day returns
+      - Kitchen & dining: $28 starting — Stoneware & textiles; Dishwasher-safe pieces; Gift-ready packaging
+   as flat, per-category starting prices with no monthly/annual toggle (this is a retail/e-commerce brand, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

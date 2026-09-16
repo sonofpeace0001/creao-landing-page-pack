@@ -1,0 +1,49 @@
+Research the top 5 premium e-commerce sneaker brand sites &mdash; look at On, Tracksmith, Allbirds grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Fleet, Sneakers & Running: Fleet running shoes are engineered with a carbon-plate midsole and recycled knit uppers - race-day speed you can wear every day.
+
+Audience: runners shopping for a new daily trainer or race shoe.
+Hero headline: "Built for the next mile."
+Subheadline: "Fleet running shoes are engineered with a carbon-plate midsole and recycled knit uppers - race-day speed you can wear every day."
+Primary CTA: "Shop now". Secondary CTA: "Find your size".
+
+Design system:
+- Dark theme, background #0A0A0A, surfaces #141414
+- Accent gradient from #EF4444 to #FACC15
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white
+- asymmetric-hero layout
+
+Sections:
+1. Sticky glass nav with "Fleet" wordmark + 3 nav links (Shop, Drops, Reviews) + primary CTA
+2. hero: headline on one side, floating product-spotlight UI mockup (built in CSS only, no real image) on the other, showing a new-drop badge and stock status
+3. Press mentions / as raced in: As raced in — Boston Marathon, NYC Marathon, Chicago Marathon, Berlin Marathon, London Marathon, Western States
+4. Bento grid: 4 product cards with custom inline SVG line icons (no emoji, no stock):
+   - Carbon-plate midsole (Propels every stride without the harsh rebound)
+   - Recycled knit upper (80% recycled materials, zero compromise on fit)
+   - 8mm drop, all-day comfort (Tuned geometry for both tempo runs and easy miles)
+   - Free resole program (Send them back at 400 miles, get 30% off your next pair)
+5. Metrics strip: 2M+ pairs sold | 4.7★ 18,000+ reviews | 400mi average lifespan
+6. Testimonial card: "Shaved four minutes off my marathon PR in these. Never going back to my old brand. - Jordan Pace, 3x Marathoner" with a generated SVG monogram avatar
+7. Shop the lineup:
+      - Mach 3: $145 starting — Daily trainer; Carbon-plate; 8mm drop
+      - Mach 3 Racer (highlighted, "Most popular"-style badge): $185 starting — Featherweight 180g; Full carbon plate; Podium-tested
+      - Trail Mach: $165 starting — Trail lugs; Water-resistant knit; Rock plate
+   as flat, per-category starting prices with no monthly/annual toggle (this is a retail/e-commerce brand, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

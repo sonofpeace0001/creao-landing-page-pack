@@ -1,8 +1,8 @@
-# CREAO Premium Landing Page Pack — 57 Niches
+# CREAO Premium Landing Page Pack — 66 Niches
 
-57 production-ready premium landing pages across different niches and styles — **dark and light**, three layouts — each generated from **one master prompt framework** using [CREAO](https://agent.creao.ai). Every page ships with the exact prompt that built it, so anyone can copy, edit, and make it their own.
+66 production-ready premium landing pages across different niches and styles — **dark and light**, three layouts — each generated from **one master prompt framework** using [CREAO](https://agent.creao.ai). Every page ships with the exact prompt that built it, so anyone can copy, edit, and make it their own.
 
-51 are SaaS products; 6 are local service businesses (plumbing/HVAC, dental, restaurant) built on the same design system — proof the framework isn't just for software.
+51 are SaaS products, 6 are local service businesses (plumbing/HVAC, dental, restaurant), and 9 are retail/e-commerce brands (furniture, sneakers, electronics, apparel, beauty, jewelry, decor, a hardware launch, a subscription box) — all on the same design system. Working toward 100, shipped in themed batches. The gallery itself now has a light/dark toggle.
 
 ## Live demo
 
@@ -12,18 +12,22 @@ Catalog gallery with search, theme filter, and one-click "copy prompt":
 
 ## What's inside
 
-- **`index.html`** — the catalog gallery. Crisp screenshot thumbnails, search, dark/light filter, and copy-prompt buttons.
-- **`<slug>-landing.html`** — 57 standalone, self-contained landing pages (inline CSS + JS, Google Fonts via link). No build step.
+- **`index.html`** — the catalog gallery. Crisp screenshot thumbnails, search, dark/light filter for the pages, a light/dark toggle for the gallery itself, and copy-prompt buttons.
+- **`<slug>-landing.html`** — 66 standalone, self-contained landing pages (inline CSS + JS, Google Fonts via link). No build step.
 - **`<slug>-prompt.txt`** — the exact prompt that built each page. Copy, swap the bracketed values, paste into CREAO.
 - **`<slug>-thumb.jpg`** — preview thumbnail of the page hero.
 
-## The 57 niches
+## The 66 niches
 
 **SaaS (51):** AI writing, fitness, finance, productivity, courses, CRM, newsletter, e-commerce, meal planning, meditation, habits, AI video editing, podcast hosting, social scheduler, email marketing, analytics, HR onboarding, project management, design tool, notes, AI calendar, bookkeeping, invoicing, time tracking, helpdesk, live chat, knowledge base, API docs, API monitoring, error tracking, feature flags, A/B testing, user feedback, surveys, forms, page builder, website builder, web hosting, domains, VPN, password manager, cloud storage, file sharing, video hosting, image CDN, AI image generation, chatbot builder, AI meeting notes, automation, billing, portfolio.
 
 **More tech (3):** AI coding assistant, cybersecurity / attack surface monitoring, recruiting & ATS.
 
 **Local service businesses (3):** plumbing & HVAC, dental practice, restaurant — same design system, swapped for services-and-booking instead of subscription pricing.
+
+**Retail & e-commerce (9):** furniture, sneakers/running, electronics, fashion apparel, skincare/beauty, jewelry & watches, home decor, a smart-home hardware launch, a snack subscription box — flat product pricing (or a real monthly toggle for the subscription box).
+
+**Coming next (toward 100):** real estate & property, institutions & community (church, school, hospital, etc.), and portfolio/creative — shipped in themed batches.
 
 ## How to use
 

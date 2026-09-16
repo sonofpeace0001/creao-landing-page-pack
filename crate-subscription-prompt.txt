@@ -1,0 +1,49 @@
+Research the top 5 premium snack subscription box brand sites &mdash; look at Cratejoy featured boxes, Bokksu, KitNipBox grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Crate, Snack Subscription Box: Crate ships a hand-picked box of small-batch snacks from independent makers across the country - skip, swap, or cancel anytime.
+
+Audience: snack lovers looking to discover small-batch brands.
+Hero headline: "A little surprise, every month."
+Subheadline: "Crate ships a hand-picked box of small-batch snacks from independent makers across the country - skip, swap, or cancel anytime."
+Primary CTA: "Get your first box". Secondary CTA: "See this month's box".
+
+Design system:
+- Light (warm off-white) theme, background #FAFAF7, surfaces #FFFFFF
+- Accent gradient from #16A34A to #FACC15
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% black
+- centered-hero layout with a full-width dashboard mockup below the fold
+
+Sections:
+1. Sticky glass nav with "Crate" wordmark + 3 nav links (How it works, Boxes, Reviews) + primary CTA
+2. hero: headline on one side, a full-width this-month's-box dashboard mockup (built in CSS only, no real image) below the hero text, showing this month's snack lineup by maker
+3. Featured makers: Featured makers this year — Maple &amp; Main, Austin Hot Co., Portland Bake Shop, Brooklyn Bitters, Coastal Cure, Prairie Preserves
+4. Bento grid: 4 product cards with custom inline SVG line icons (no emoji, no stock):
+   - 100% small-batch (Every item is made by a food maker with under 20 employees)
+   - Skip or cancel anytime (No contracts. Manage your box in two clicks)
+   - Free shipping, every box (No matter where you are in the country)
+   - Allergy-friendly options (Filter out nuts, gluten, or dairy right in your account)
+5. Metrics strip: 60k+ boxes shipped monthly | 4.7★ 14,000+ reviews | 200+ small-batch makers
+6. Testimonial card: "I look forward to this box more than my actual mail. Discovered three brands I now order from directly. - Marcus Webb, Subscriber since 2023" with a generated SVG monogram avatar
+7. Choose your box:
+      - Taster: $19/mo — 5 snacks / month; Free shipping; Skip anytime
+      - Classic (highlighted, "Most popular"-style badge): $34/mo — 8 snacks / month; Free shipping; Allergy filters
+      - Family: $54/mo — 14 snacks / month; Free shipping; 2 bonus full-size items
+   with a monthly/annual toggle that updates prices with JS (annual = 2 months free)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

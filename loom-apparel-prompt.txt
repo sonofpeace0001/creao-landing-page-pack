@@ -1,0 +1,49 @@
+Research the top 5 premium e-commerce apparel brand sites &mdash; look at Everlane, Cuyana, COS grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Loom, Fashion Apparel: Loom makes considered basics in natural fibers - cut for movement, made to be worn for a decade, not a season.
+
+Audience: people building a considered, long-lasting wardrobe.
+Hero headline: "Quiet clothes for loud lives."
+Subheadline: "Loom makes considered basics in natural fibers - cut for movement, made to be worn for a decade, not a season."
+Primary CTA: "Shop new arrivals". Secondary CTA: "View lookbook".
+
+Design system:
+- Light (warm off-white) theme, background #FAFAF7, surfaces #FFFFFF
+- Accent gradient from #57534E to #A8A29E
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% black
+- centered-hero layout with a full-width dashboard mockup below the fold
+
+Sections:
+1. Sticky glass nav with "Loom" wordmark + 3 nav links (Shop, Lookbook, About) + primary CTA
+2. hero: headline on one side, a full-width new-arrivals dashboard mockup (built in CSS only, no real image) below the hero text, showing stock status per item
+3. Press mentions: As worn in — Vogue, The Cut, Into The Gloss, Cup of Jo, Refinery29, Man Repeller
+4. Bento grid: 4 product cards with custom inline SVG line icons (no emoji, no stock):
+   - Natural fibers only (Linen, merino, and organic cotton. No synthetics, ever)
+   - Cut for real bodies (Sized 00-24 with the same fit model across the whole line)
+   - Made to mend (Every piece ships with a repair kit and a lifetime mending guarantee)
+   - Small, considered drops (12 pieces a season, not 200. Less waste, better quality)
+5. Metrics strip: 12 pieces per season, not 200 | 4.8★ 9,400+ reviews | 10yr average garment life
+6. Testimonial card: "I've replaced my entire work wardrobe with Loom over two years. Everything still looks new. - Priya Desai, Verified Buyer" with a generated SVG monogram avatar
+7. Shop the essentials:
+      - Tops: $68 starting — Linen & merino; Sized 00–24; Repair kit included
+      - Bottoms (highlighted, "Most popular"-style badge): $98 starting — Wide-leg & tapered; Natural fibers; Lifetime mending
+      - Layers: $128 starting — Coats & knits; Considered drops; Made-to-order options
+   as flat, per-category starting prices with no monthly/annual toggle (this is a retail/e-commerce brand, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

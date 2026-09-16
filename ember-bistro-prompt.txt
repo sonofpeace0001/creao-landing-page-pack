@@ -1,4 +1,4 @@
-Research the top 5 local service business sites in the premium restaurant and hospitality sites (Eater-featured restaurant sites, OpenTable premium pages, boutique hotel sites).
+Research the top 5 premium local service business sites &mdash; look at Eater-featured restaurant sites, OpenTable premium pages, boutique hotel sites for what premium looks like in this space.
 Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
 Then build me a complete, production-ready single-page landing page for Ember, Restaurant: A neighborhood kitchen built around a single live-fire hearth - seasonal plates, natural wine, and a room that feels like a friend's dinner party.
 
