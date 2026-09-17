@@ -1,0 +1,50 @@
+Research the top 5 premium photography studio sites &mdash; look at Jose Villa, Sposto Photography, Jasmine Star grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Shutter, Photographer Portfolio: Shutter shoots weddings, portraits, and brand work on film and digital - a documentary eye, not a posed-smile factory.
+
+Audience: engaged couples and brands booking a photographer.
+Hero headline: "Photos that still feel like that day."
+Subheadline: "Shutter shoots weddings, portraits, and brand work on film and digital - a documentary eye, not a posed-smile factory."
+Primary CTA: "Check availability". Secondary CTA: "View galleries".
+
+Design system:
+- Dark theme, background #0A0A0A, surfaces #141414
+- Accent gradient from #292524 to #F59E0B
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white
+- asymmetric-hero layout
+
+Sections:
+1. Sticky glass nav with "Shutter" wordmark + 3 nav links (Portfolio, Weddings, Book) + primary CTA
+2. hero: headline on one side, floating gallery-delivery UI mockup (built in CSS only, no real image) on the other, showing a delivered wedding gallery with photo count
+3. Featured in: Featured in — Vogue Weddings, The Knot, Style Me Pretty, Rangefinder, Martha Stewart Weddings, Green Wedding Shoes
+4. Bento grid: 4 service cards with custom inline SVG line icons (no emoji, no stock):
+   - Film & digital hybrid (Select frames shot on medium-format film, every session)
+   - Second shooter always included (Every wedding gets two photographers, no upcharge)
+   - 3-week gallery delivery (Full edited gallery in three weeks, not three months)
+   - Engagement session included (Every wedding package includes a full engagement shoot)
+5. Metrics strip: 4.9★ 210+ reviews | 3wk avg. gallery delivery | 140+ weddings shot
+6. Testimonial card: "Every photo looks like a moment we actually lived, not a pose we held for ten minutes. - Jordan Alvarez, Bride" with a generated SVG monogram avatar
+7. Session rates:
+      - Portrait Session: $450 starting — 1.5 hours; 40 edited images; Online gallery
+      - Wedding (highlighted, "Most popular"-style badge): $3200 starting — 8 hours coverage; Second shooter included; Engagement session included
+      - Brand & Editorial: $850 starting — 3 hours; Commercial usage rights; 60 edited images
+   as flat, upfront rates with no monthly/annual toggle (this is a freelance or independent creative practice, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- The hero visual has to signal what this business is at a single glance, even shrunk to a small thumbnail. For a software/service business, use a bold gradient-filled icon badge (custom inline SVG line icon) floating on the corner of the app-style mockup. For a business selling a physical product, skip the fake app screen entirely &mdash; show a large-format, photorealistic AI-generated studio product photo of the actual product (not a generic icon, not a stock photo, not an illustration) floating on a soft accent-colored glow with a blurred shadow beneath it, captioned with a short status tag and the product name. Include 1-2 smaller alternate-angle or alternate-colorway product photos as clickable swatches below the main shot.
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

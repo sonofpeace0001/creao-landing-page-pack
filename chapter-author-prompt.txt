@@ -1,0 +1,50 @@
+Research the top 5 premium debut author book launch sites &mdash; look at major publisher author pages, Reese's Book Club featured author sites grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Chapter, Author & Book Launch: Chapter is the debut novel from a writer who spent a decade as a journalist before deciding fiction was where the truer stories lived.
+
+Audience: readers and book clubs discovering a debut novelist.
+Hero headline: "A novel about the year everything quietly fell apart."
+Subheadline: "Chapter is the debut novel from a writer who spent a decade as a journalist before deciding fiction was where the truer stories lived."
+Primary CTA: "Get the book". Secondary CTA: "Read an excerpt".
+
+Design system:
+- Light (warm off-white) theme, background #FAFAF7, surfaces #FFFFFF
+- Accent gradient from #1E3A8A to #F59E0B
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% black
+- split-hero layout (even two-column split, wider text column)
+
+Sections:
+1. Sticky glass nav with "Chapter" wordmark + 3 nav links (The Book, Events, About) + primary CTA
+2. hero: headline on one side, floating starred-review UI mockup (built in CSS only, no real image) on the other, showing a critic's quote badge
+3. Reviewed & featured in: Reviewed & featured in — Kirkus Reviews, Publishers Weekly, The New York Times, NPR Books, Book of the Month, Reese's Book Club
+4. Bento grid: 4 service cards with custom inline SVG line icons (no emoji, no stock):
+   - Starred reviews across the board (Kirkus, Publishers Weekly, and Library Journal all gave it a starred review)
+   - Book club discussion guide (Free downloadable guide with questions for your book club)
+   - Signed copies available (Every copy ordered directly comes signed, while supplies last)
+   - Now touring nationally (20-city book tour with readings and signings)
+5. Metrics strip: 4.6★ 3,200+ reader reviews | 4 starred trade reviews | 20 city book tour
+6. Testimonial card: "Read it in one sitting and immediately bought copies for three friends. Rare for a debut to hit this hard. - Priya Desai, Reader" with a generated SVG monogram avatar
+7. Get the book:
+      - Paperback: $18 starting — Free shipping over $35; Includes book club guide; Ships in 2-3 days
+      - Signed Hardcover (highlighted, "Most popular"-style badge): $32 starting — Signed by the author; Collector's edition jacket; Ships in 2-3 days
+      - Book a Reading: Contact — For book clubs & events; Virtual or in-person; Q&A included
+   as flat, upfront rates with no monthly/annual toggle (this is a freelance or independent creative practice, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- The hero visual has to signal what this business is at a single glance, even shrunk to a small thumbnail. For a software/service business, use a bold gradient-filled icon badge (custom inline SVG line icon) floating on the corner of the app-style mockup. For a business selling a physical product, skip the fake app screen entirely &mdash; show a large-format, photorealistic AI-generated studio product photo of the actual product (not a generic icon, not a stock photo, not an illustration) floating on a soft accent-colored glow with a blurred shadow beneath it, captioned with a short status tag and the product name. Include 1-2 smaller alternate-angle or alternate-colorway product photos as clickable swatches below the main shot.
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

@@ -1,0 +1,50 @@
+Research the top 5 premium keynote speaker and executive coaching practice sites &mdash; look at top TEDx speaker personal sites, BigSpeak roster pages grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Podium, Speaker & Coach: Podium books keynotes and runs executive coaching on decision-making under pressure - 15 years leading teams before a single slide.
+
+Audience: event organizers and executives booking a keynote speaker or coach.
+Hero headline: "The talk that actually changes how a room thinks."
+Subheadline: "Podium books keynotes and runs executive coaching on decision-making under pressure - 15 years leading teams before a single slide."
+Primary CTA: "Book a call". Secondary CTA: "Watch a talk".
+
+Design system:
+- Dark theme, background #0A0A0A, surfaces #141414
+- Accent gradient from #164E63 to #FBBF24
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white
+- centered-hero layout with a full-width dashboard mockup below the fold
+
+Sections:
+1. Sticky glass nav with "Podium" wordmark + 3 nav links (Speaking, Coaching, Book) + primary CTA
+2. hero: headline on one side, a full-width upcoming-events dashboard mockup (built in CSS only, no real image) below the hero text, showing booked keynotes and coaching cohorts
+3. Has spoken for: Has spoken for — TEDx, SaaStr, Web Summit, Fortune Brainstorm, Inc. 5000, YPO Chapter Events
+4. Bento grid: 4 service cards with custom inline SVG line icons (no emoji, no stock):
+   - 15 years operating experience (Actually led the teams and decisions being talked about, not just studied them)
+   - Custom keynote for your audience (Every talk is rebuilt around your industry and actual challenges)
+   - 1:1 executive coaching (Ongoing coaching for leaders navigating a real inflection point)
+   - Virtual & in-person available (Full AV-ready keynotes or intimate in-person workshops)
+5. Metrics strip: 120+ keynotes delivered | 4.9★ event organizer rating | 15yr operating experience
+6. Testimonial card: "Got the highest post-event survey scores of any speaker we've booked in five years. - Conference Organizer, Event Director" with a generated SVG monogram avatar
+7. Booking rates:
+      - Virtual Keynote: $8000 starting — 30-45 minute talk; Live Q&A included; Recording rights
+      - In-Person Keynote (highlighted, "Most popular"-style badge): $18000 starting — Travel included; Custom content; Meet & greet available
+      - Executive Coaching: $2500 starting — 1:1 monthly sessions; Between-session support; 6-month minimum
+   as flat, upfront rates with no monthly/annual toggle (this is a freelance or independent creative practice, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- The hero visual has to signal what this business is at a single glance, even shrunk to a small thumbnail. For a software/service business, use a bold gradient-filled icon badge (custom inline SVG line icon) floating on the corner of the app-style mockup. For a business selling a physical product, skip the fake app screen entirely &mdash; show a large-format, photorealistic AI-generated studio product photo of the actual product (not a generic icon, not a stock photo, not an illustration) floating on a soft accent-colored glow with a blurred shadow beneath it, captioned with a short status tag and the product name. Include 1-2 smaller alternate-angle or alternate-colorway product photos as clickable swatches below the main shot.
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

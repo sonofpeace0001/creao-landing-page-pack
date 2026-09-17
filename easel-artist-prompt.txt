@@ -1,0 +1,50 @@
+Research the top 5 premium fine artist studio sites &mdash; look at Saatchi Art featured artists, Artsy artist pages grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Easel, Fine Artist Portfolio: Easel is the studio of a painter working in oil and cold wax - original works and limited-edition prints, shipped worldwide.
+
+Audience: art collectors and people commissioning custom work.
+Hero headline: "Paintings that started as a feeling, not a plan."
+Subheadline: "Easel is the studio of a painter working in oil and cold wax - original works and limited-edition prints, shipped worldwide."
+Primary CTA: "View available work". Secondary CTA: "Commission a piece".
+
+Design system:
+- Light (warm off-white) theme, background #FAFAF7, surfaces #FFFFFF
+- Accent gradient from #7C2D12 to #DB2777
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% black
+- centered-hero layout with a full-width dashboard mockup below the fold
+
+Sections:
+1. Sticky glass nav with "Easel" wordmark + 3 nav links (Gallery, Exhibitions, Shop) + primary CTA
+2. hero: headline on one side, a full-width studio-availability dashboard mockup (built in CSS only, no real image) below the hero text, showing available originals and open commission slots
+3. Exhibited at: Exhibited at — Local Arts Council, Regional Museum, Art Basel Satellite, Saatchi Art Featured, Artsy Featured, Gallery Represented
+4. Bento grid: 4 service cards with custom inline SVG line icons (no emoji, no stock):
+   - Original paintings, ready to ship (Professionally packed and insured, worldwide shipping)
+   - Limited edition prints (Archival giclée prints, hand-signed and numbered)
+   - Custom commissions (Work directly with the artist on a piece made for your space)
+   - Studio visits by appointment (See work in progress and browse the full archive in person)
+5. Metrics strip: 4.9★ 180+ collector reviews | 300+ pieces sold | 12yr practicing
+6. Testimonial card: "Commissioned a piece for our new home and it's the first thing everyone asks about. Worth every conversation. - Grace Lin, Collector" with a generated SVG monogram avatar
+7. Available work:
+      - Limited Edition Print: $180 starting — Archival giclée; Hand-signed & numbered; Ships worldwide
+      - Original Painting (highlighted, "Most popular"-style badge): $1200 starting — One of one; Certificate of authenticity; Professional packing
+      - Custom Commission: $2400 starting — Direct collaboration; Made for your space; 6-8 week turnaround
+   as flat, upfront rates with no monthly/annual toggle (this is a freelance or independent creative practice, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- The hero visual has to signal what this business is at a single glance, even shrunk to a small thumbnail. For a software/service business, use a bold gradient-filled icon badge (custom inline SVG line icon) floating on the corner of the app-style mockup. For a business selling a physical product, skip the fake app screen entirely &mdash; show a large-format, photorealistic AI-generated studio product photo of the actual product (not a generic icon, not a stock photo, not an illustration) floating on a soft accent-colored glow with a blurred shadow beneath it, captioned with a short status tag and the product name. Include 1-2 smaller alternate-angle or alternate-colorway product photos as clickable swatches below the main shot.
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

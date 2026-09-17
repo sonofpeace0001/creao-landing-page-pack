@@ -1,0 +1,50 @@
+Research the top 5 premium freelance strategy consulting practice sites &mdash; look at top fractional-exec personal sites, Stripe alumni advisor pages grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Solo, Freelance Consultant: Solo is an independent consultant helping startups with growth strategy, ops, and the stuff that falls through the cracks between departments.
+
+Audience: startup founders and operators hiring an independent consultant.
+Hero headline: "One person, doing the work of a whole team."
+Subheadline: "Solo is an independent consultant helping startups with growth strategy, ops, and the stuff that falls through the cracks between departments."
+Primary CTA: "Book a call". Secondary CTA: "See case studies".
+
+Design system:
+- Dark theme, background #0A0A0A, surfaces #141414
+- Accent gradient from #171717 to #10B981
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white
+- centered-hero layout with a full-width dashboard mockup below the fold
+
+Sections:
+1. Sticky glass nav with "Solo" wordmark + 3 nav links (Work, Approach, Contact) + primary CTA
+2. hero: headline on one side, a full-width engagement-tracker dashboard mockup (built in CSS only, no real image) below the hero text, showing current project milestones
+3. Worked with: Worked with — Nimbus, Loop, Circuit, Quill, Haven, Orbit
+4. Bento grid: 4 service cards with custom inline SVG line icons (no emoji, no stock):
+   - You work with me, directly (No account manager, no junior associate doing the actual work)
+   - Fixed-scope engagements (Clear deliverables and timeline, agreed before we start)
+   - 15 years operating experience (Actually ran the functions I now advise on, not just consulted on them)
+   - Fast, focused sprints (Most engagements run 4-8 weeks with a clear handoff)
+5. Metrics strip: 15yr operating experience | 40+ startups advised | 4.9★ client rating
+6. Testimonial card: "Got more done in six weeks with Solo than four months with our last agency. And I could actually reach him. - Theo Marks, Founder" with a generated SVG monogram avatar
+7. Engagement rates:
+      - Strategy Session: $650 starting — 2-hour deep dive; Written recommendations; No ongoing commitment
+      - Project Engagement (highlighted, "Most popular"-style badge): $9000 starting — 4-8 week scope; Clear deliverables; Team handoff included
+      - Fractional / Ongoing: $5500 starting — Ongoing advisory; Weekly check-ins; Priority availability
+   as flat, upfront rates with no monthly/annual toggle (this is a freelance or independent creative practice, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- The hero visual has to signal what this business is at a single glance, even shrunk to a small thumbnail. For a software/service business, use a bold gradient-filled icon badge (custom inline SVG line icon) floating on the corner of the app-style mockup. For a business selling a physical product, skip the fake app screen entirely &mdash; show a large-format, photorealistic AI-generated studio product photo of the actual product (not a generic icon, not a stock photo, not an illustration) floating on a soft accent-colored glow with a blurred shadow beneath it, captioned with a short status tag and the product name. Include 1-2 smaller alternate-angle or alternate-colorway product photos as clickable swatches below the main shot.
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

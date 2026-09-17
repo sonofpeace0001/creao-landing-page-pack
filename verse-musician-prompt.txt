@@ -1,0 +1,50 @@
+Research the top 5 premium independent musician and band sites &mdash; look at official Bandcamp and artist landing pages, Bon Iver, Phoebe Bridgers grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Verse, Musician & Band: Verse is an indie four-piece writing songs about leaving small towns and meaning it. New album "Low Static" streaming everywhere.
+
+Audience: fans and concert-goers following an indie band.
+Hero headline: "New record out now. Tour starts in March."
+Subheadline: "Verse is an indie four-piece writing songs about leaving small towns and meaning it. New album "Low Static" streaming everywhere."
+Primary CTA: "Listen now". Secondary CTA: "See tour dates".
+
+Design system:
+- Dark theme, background #0A0A0A, surfaces #141414
+- Accent gradient from #18181B to #EF4444
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white
+- centered-hero layout with a full-width dashboard mockup below the fold
+
+Sections:
+1. Sticky glass nav with "Verse" wordmark + 3 nav links (Music, Tour, Merch) + primary CTA
+2. hero: headline on one side, a full-width track-listing dashboard mockup (built in CSS only, no real image) below the hero text, showing the new album's tracklist
+3. As heard on: As heard on — Spotify Editorial, Apple Music, KEXP, NPR Music, Rolling Stone, Pitchfork
+4. Bento grid: 4 service cards with custom inline SVG line icons (no emoji, no stock):
+   - New album streaming now ("Low Static" out on every platform, 11 tracks)
+   - Spring tour, 18 cities (Tickets on sale now for the full spring run)
+   - Merch drops monthly (Limited runs, never restocked once they're gone)
+   - Fan club access (Early tickets, unreleased demos, and studio updates)
+5. Metrics strip: 2.4M+ monthly listeners | 18 city spring tour | 3 albums released
+6. Testimonial card: "Saw them open for a band we actually came to see and left only talking about Verse. - Local music blog, Concert Review" with a generated SVG monogram avatar
+7. Tickets & merch:
+      - Digital Album: $9 starting — 11 tracks; Instant download; Includes bonus track
+      - Tour Ticket (highlighted, "Most popular"-style badge): $28 starting — General admission; 18 city stops; VIP upgrade available
+      - Fan Club: $6 starting — Early ticket access; Unreleased demos; Studio updates
+   as flat, upfront rates with no monthly/annual toggle (this is a freelance or independent creative practice, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- The hero visual has to signal what this business is at a single glance, even shrunk to a small thumbnail. For a software/service business, use a bold gradient-filled icon badge (custom inline SVG line icon) floating on the corner of the app-style mockup. For a business selling a physical product, skip the fake app screen entirely &mdash; show a large-format, photorealistic AI-generated studio product photo of the actual product (not a generic icon, not a stock photo, not an illustration) floating on a soft accent-colored glow with a blurred shadow beneath it, captioned with a short status tag and the product name. Include 1-2 smaller alternate-angle or alternate-colorway product photos as clickable swatches below the main shot.
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.
