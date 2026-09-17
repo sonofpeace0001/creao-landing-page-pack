@@ -7,6 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <script>
 (function(){
   try{
@@ -74,6 +77,11 @@ header .stats span{font-size:13px;color:var(--muted);text-transform:uppercase;le
 .toolbar input:focus{border-color:rgba(99,102,241,.5)}
 .toolbar select{background:var(--surface);border:var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:inherit;font-size:14px;outline:none;cursor:pointer}
 .toolbar .count{color:var(--muted);font-size:13px;white-space:nowrap}
+.toolbar .brand{display:flex;align-items:center;margin-right:6px;flex-shrink:0}
+.toolbar .brand img{height:22px;width:auto;display:block}
+.toolbar .brand .logo-light{display:none}
+html[data-theme="light"] .toolbar .brand .logo-dark{display:none}
+html[data-theme="light"] .toolbar .brand .logo-light{display:block}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;padding:48px 0 80px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden;
   transition:transform .3s cubic-bezier(.4,0,.2,1),border-color .3s,box-shadow .3s;opacity:0;transform:translateY(20px)}
@@ -130,6 +138,10 @@ footer a{color:var(--accent);text-decoration:none}
   </div>
 </header>
 <div class="toolbar"><div class="wrap inner">
+  <a class="brand" href="https://agent.creao.ai" target="_blank" rel="noopener" aria-label="CREAO">
+    <img class="logo-dark" src="logo-white.png" alt="CREAO">
+    <img class="logo-light" src="logo-black.png" alt="CREAO">
+  </a>
   <input id="search" type="text" placeholder="Search niche or product (e.g. fitness, CRM, dark)&hellip;">
   <select id="themeFilter"><option value="">All themes</option><option value="dark">Dark</option><option value="light">Light</option></select>
   <span class="count" id="count">100 pages</span>
