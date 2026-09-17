@@ -1,0 +1,50 @@
+Research the top 5 premium local service business sites &mdash; look at Compass, The Agency, Corcoran grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Haus, Residential Real Estate: Haus pairs you with a local agent who actually knows the block, shows you off-market listings first, and never pressures a bid.
+
+Audience: buyers and sellers looking for a local, knowledgeable agent.
+Hero headline: "Find the home that finds you back."
+Subheadline: "Haus pairs you with a local agent who actually knows the block, shows you off-market listings first, and never pressures a bid."
+Primary CTA: "Browse listings". Secondary CTA: "Talk to an agent".
+
+Design system:
+- Light (warm off-white) theme, background #FAFAF7, surfaces #FFFFFF
+- Accent gradient from #292524 to #A16207
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% black
+- split-hero layout (even two-column split, wider text column)
+
+Sections:
+1. Sticky glass nav with "Haus" wordmark + 3 nav links (Listings, Agents, Sell) + primary CTA
+2. hero: headline on one side, floating listing-alert UI mockup (built in CSS only, no real image) on the other, showing a new off-market match
+3. Certifications strip: Recognized by — Zillow Premier Agent, Redfin Partner, NAR Member, BBB A+, Google 5&#9733;, Realtor.com Featured
+4. Bento grid: 4 service cards with custom inline SVG line icons (no emoji, no stock):
+   - Off-market access first (See listings 48 hours before they hit the public market)
+   - No pressure, ever (Your agent works for you, not a commission deadline)
+   - Neighborhood-level expertise (Every agent specializes in 2-3 neighborhoods, not the whole city)
+   - Free home valuation (Get a real market estimate before you list, no obligation)
+5. Metrics strip: 1,200+ homes sold | 4.9★ 800+ reviews | 12 avg. days on market
+6. Testimonial card: "Our agent knew about the house before it was even listed. We closed in 3 weeks. - Alicia Monroe, Buyer" with a generated SVG monogram avatar
+7. Services & pricing:
+      - Buyer Representation: $0 — Full-service search; Off-market access; No cost to you
+      - Listing Your Home (highlighted, "Most popular"-style badge): 4.5% — Professional photography; Marketing included; Negotiation support
+      - Home Valuation: $0 — No-obligation estimate; Market comps included; 24-hour turnaround
+   as flat, upfront prices with no monthly/annual toggle (this is a local service business, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- The hero visual has to signal what this business is at a single glance, even shrunk to a small thumbnail. For a software/service business, use a bold gradient-filled icon badge (custom inline SVG line icon) floating on the corner of the app-style mockup. For a business selling a physical product, skip the fake app screen entirely &mdash; show a large-format, photorealistic AI-generated studio product photo of the actual product (not a generic icon, not a stock photo, not an illustration) floating on a soft accent-colored glow with a blurred shadow beneath it, captioned with a short status tag and the product name. Include 1-2 smaller alternate-angle or alternate-colorway product photos as clickable swatches below the main shot.
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

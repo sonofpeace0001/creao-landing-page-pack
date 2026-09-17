@@ -1,0 +1,50 @@
+Research the top 5 premium local service business sites &mdash; look at Vacasa owner pages, RentSpree, Buildium client sites grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Keystone, Property Management: Keystone handles leasing, maintenance, and rent collection for your properties - with an owner portal that actually shows you everything.
+
+Audience: landlords and property owners tired of self-managing.
+Hero headline: "Your rental, managed like it's ours."
+Subheadline: "Keystone handles leasing, maintenance, and rent collection for your properties - with an owner portal that actually shows you everything."
+Primary CTA: "Get a proposal". Secondary CTA: "Owner login".
+
+Design system:
+- Dark theme, background #0A0A0A, surfaces #141414
+- Accent gradient from #0F172A to #38BDF8
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white
+- asymmetric-hero layout
+
+Sections:
+1. Sticky glass nav with "Keystone" wordmark + 3 nav links (Services, Owners, Portal) + primary CTA
+2. hero: headline on one side, floating owner-portal UI mockup (built in CSS only, no real image) on the other, showing rent deposited into the owner's account
+3. Certifications strip: Trusted & certified — NARPM Certified, Google Guaranteed, BBB A+, Zillow Rental Manager, Apartments.com Partner, Rent-Report Member
+4. Bento grid: 4 service cards with custom inline SVG line icons (no emoji, no stock):
+   - 24/7 maintenance dispatch (Tenants report issues through the app; vetted vendors respond same-day)
+   - Rent collected on time (98% on-time collection rate with automatic deposits)
+   - Real-time owner portal (See every statement, invoice, and lease document, live)
+   - Rigorous tenant screening (Credit, background, and eviction history checked on every applicant)
+5. Metrics strip: 2,400+ units managed | 98% on-time rent collection | 4.8★ 1,100+ owner reviews
+6. Testimonial card: "Switched from self-managing after a bad tenant experience. Keystone found a better tenant in 9 days and I haven't thought about the property since. - Devon Marsh, Property Owner" with a generated SVG monogram avatar
+7. Services & pricing:
+      - Single-Family: 8% — Full leasing & maintenance; Tenant screening; Monthly statements
+      - Multi-Family (highlighted, "Most popular"-style badge): 6% — Everything in Single-Family; Dedicated property manager; 24/7 maintenance dispatch
+      - Leasing Only: 50% — Marketing & showings; Tenant screening; Lease drafting
+   as flat, upfront prices with no monthly/annual toggle (this is a local service business, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- The hero visual has to signal what this business is at a single glance, even shrunk to a small thumbnail. For a software/service business, use a bold gradient-filled icon badge (custom inline SVG line icon) floating on the corner of the app-style mockup. For a business selling a physical product, skip the fake app screen entirely &mdash; show a large-format, photorealistic AI-generated studio product photo of the actual product (not a generic icon, not a stock photo, not an illustration) floating on a soft accent-colored glow with a blurred shadow beneath it, captioned with a short status tag and the product name. Include 1-2 smaller alternate-angle or alternate-colorway product photos as clickable swatches below the main shot.
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

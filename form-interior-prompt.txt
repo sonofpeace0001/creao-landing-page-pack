@@ -1,0 +1,50 @@
+Research the top 5 premium local service business sites &mdash; look at Studio McGee, Havenly pro pages, The Expert grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Form, Interior Design Studio: Form designs full rooms and homes end to end - sourcing, floor plans, and installation day - so you're not living with paint swatches for a year.
+
+Audience: homeowners who want a fully finished, styled space without doing it themselves.
+Hero headline: "A home that finally looks finished."
+Subheadline: "Form designs full rooms and homes end to end - sourcing, floor plans, and installation day - so you're not living with paint swatches for a year."
+Primary CTA: "Book a consult". Secondary CTA: "View portfolio".
+
+Design system:
+- Light (warm off-white) theme, background #FAFAF7, surfaces #FFFFFF
+- Accent gradient from #581C87 to #C084FC
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% black
+- split-hero layout (even two-column split, wider text column)
+
+Sections:
+1. Sticky glass nav with "Form" wordmark + 3 nav links (Portfolio, Services, Book) + primary CTA
+2. hero: headline on one side, floating mood-board UI mockup (built in CSS only, no real image) on the other, showing a client-approved room concept
+3. Certifications strip: Sourced from — Article, Design Within Reach, CB2, Rejuvenation, West Elm Trade, RH Trade
+4. Bento grid: 4 service cards with custom inline SVG line icons (no emoji, no stock):
+   - Full-service sourcing (We source, order, and track every piece so nothing sits in a warehouse)
+   - 3D concept renders (See your actual room before committing to a single piece)
+   - One-day installation (Your whole room is styled and installed in a single day)
+   - Trade pricing passed through (Access to trade-only pricing at the brands you already love)
+5. Metrics strip: 4.9★ 260+ reviews | 220+ rooms designed | 1-day avg. install
+6. Testimonial card: "Went from a room full of moving boxes to a finished, styled space in one day. Still can't believe it happened that fast. - Nina Farrow, Client" with a generated SVG monogram avatar
+7. Services & pricing:
+      - Single Room: $2800 starting — Concept & sourcing; 3D renders; Installation day
+      - Full Home (highlighted, "Most popular"-style badge): $14000 starting — Whole-home concept; Room-by-room sourcing; Phased installation
+      - E-Design (Virtual): $650 starting — Virtual consultation; Shoppable mood board; Self-installation guide
+   as flat, upfront prices with no monthly/annual toggle (this is a local service business, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- The hero visual has to signal what this business is at a single glance, even shrunk to a small thumbnail. For a software/service business, use a bold gradient-filled icon badge (custom inline SVG line icon) floating on the corner of the app-style mockup. For a business selling a physical product, skip the fake app screen entirely &mdash; show a large-format, photorealistic AI-generated studio product photo of the actual product (not a generic icon, not a stock photo, not an illustration) floating on a soft accent-colored glow with a blurred shadow beneath it, captioned with a short status tag and the product name. Include 1-2 smaller alternate-angle or alternate-colorway product photos as clickable swatches below the main shot.
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.
