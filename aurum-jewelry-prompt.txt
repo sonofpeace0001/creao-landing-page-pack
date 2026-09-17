@@ -14,11 +14,11 @@ Design system:
 - Generous whitespace, 120px section padding, 1200px max width
 - Faint noise texture overlay + a slow animated mesh gradient behind the hero
 - Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white
-- centered-hero layout with a full-width dashboard mockup below the fold
+- centered-hero layout with a large full-width product showcase below the fold
 
 Sections:
 1. Sticky glass nav with "Aurum" wordmark + 3 nav links (Shop, Craftsmanship, Reviews) + primary CTA
-2. hero: headline on one side, a full-width order-status dashboard mockup (built in CSS only, no real image) below the hero text, showing engraving and shipping progress
+2. hero: headline on one side, a large-format custom SVG line-art illustration of a ring with a gem silhouette (not a fake app/dashboard screen) floating on a soft accent-colored glow with a blurred shadow beneath it, captioned with a small status tag and the product name
 3. Press mentions: As featured in — Vogue, GQ, Town &amp; Country, Robb Report, W Magazine, Architectural Digest
 4. Bento grid: 4 product cards with custom inline SVG line icons (no emoji, no stock):
    - Recycled 14k gold (Every gram traced to recycled sources, never newly mined)
@@ -43,6 +43,7 @@ Motion:
 
 Rules:
 - No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- The hero visual has to signal what this business is at a single glance, even shrunk to a small thumbnail. For a software/service business, use a bold gradient-filled icon badge (custom inline SVG line icon) floating on the corner of the app-style mockup. For a business selling a physical product, skip the fake app screen entirely &mdash; show a large-format custom SVG line-art illustration of the actual product (not a generic icon, not a stock photo) floating on a soft accent-colored glow with a blurred shadow beneath it, captioned with a short status tag and the product name.
 - Mobile responsive with a sticky mobile CTA bar
 - Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
 - Production-grade, editorial, refined. Looks like an 8k-dollar agency build.

@@ -800,6 +800,27 @@
         }
     
 
+.hero-icon-badge { position: absolute; top: -26px; left: 32px; width: 76px; height: 76px; border-radius: 22px;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2)); display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 18px 34px -10px rgba(0,0,0,0.45); z-index: 6; }
+.hero-icon-badge svg { width: 36px; height: 36px; stroke: #fff; fill: none; stroke-width: 1.75; }
+.dashboard-mockup-wrapper { position: relative; }
+
+.product-showcase { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem;
+  min-height: 420px; position: relative; overflow: hidden; box-shadow: 0 25px 60px -20px rgba(0,0,0,0.2); text-align: center; }
+.product-showcase::before { content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 32%, color-mix(in srgb, var(--accent-1) 22%, transparent), transparent 70%); }
+.product-showcase-plinth { position: absolute; bottom: 18%; left: 50%; width: 62%; height: 28px; transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--accent-1) 30%, transparent) 0%, transparent 75%); filter: blur(2px); z-index: 0; }
+.product-showcase-icon { width: 240px; height: 200px; display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 1; animation: hover-mockup 6s ease-in-out infinite alternate; filter: drop-shadow(0 20px 24px rgba(0,0,0,0.25)); }
+.product-showcase-icon svg { width: 100%; height: 100%; }
+.product-showcase-caption { position: relative; z-index: 1; }
+.product-showcase-caption .tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.5rem; }
+.product-showcase-caption .name { font-family: var(--font-serif); font-size: 1.5rem; color: var(--text-primary); }
+.product-showcase-wide { min-height: 320px; }
+
 .hero-centered { text-align: center; padding-top: calc(var(--section-padding) + 4rem); position: relative; overflow: hidden; }
 .hero-centered .hero-mesh { opacity: 0.35; }
 .hero-centered h1 { font-size: clamp(3rem, 7vw, 5.5rem); margin: 0 auto 1.5rem; max-width: 900px; }
@@ -854,19 +875,11 @@
                         <a href="#demo" class="btn btn-secondary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>View lookbook</a>
                     </div>
                 </div>
-                <div class="dashboard-mockup reveal" style="transition-delay: 0.2s;">
-                    <div class="dash-sidebar">
-                        <div class="dash-sidebar-item" style="width:60%"></div>
-                        <div class="dash-sidebar-item"></div>
-                        <div class="dash-sidebar-item" style="width:70%"></div>
-                        <div class="dash-sidebar-item" style="width:40%;margin-top:1.5rem"></div>
-                        <div class="dash-sidebar-item" style="width:80%"></div>
-                        <div class="dash-sidebar-item" style="width:55%"></div>
-                    </div>
-                    <div class="dash-main">
-                        <div class="dash-toolbar"><div class="dash-dot"></div><div class="dash-dot"></div><div class="dash-dot"></div></div>
-                        <div class="dash-section-title">New arrivals &bull; 12 pieces</div>
-                        <div class="dash-row"><div class="dash-row-left"><div class="dash-check"></div>The Linen Shirt</div><div class="dash-badge">Restocks Fri</div></div><div class="dash-row hl"><div class="dash-row-left"><div class="dash-check"></div>The Wide-Leg Trouser</div><div class="dash-badge">3 colors</div></div><div class="dash-row"><div class="dash-row-left"><div class="dash-check"></div>The Merino Crew</div><div class="dash-badge">Low stock</div></div>
+                <div class="product-showcase product-showcase-wide reveal" style="transition-delay: 0.2s;">
+                    <div class="product-showcase-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4l-4 3 2 3 2-1v11h8V9l2 1 2-3-4-3-2 2h-4z"></path></svg></div>
+                    <div class="product-showcase-caption">
+                        <div class="tag">New arrivals</div>
+                        <div class="name">The Wide-Leg Trouser</div>
                     </div>
                 </div>
             </div>

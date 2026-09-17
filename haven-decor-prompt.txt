@@ -18,7 +18,7 @@ Design system:
 
 Sections:
 1. Sticky glass nav with "Haven" wordmark + 3 nav links (Shop, Rooms, About) + primary CTA
-2. hero: headline on one side, floating cart UI mockup (built in CSS only, no real image) on the other, showing a handmade product badge
+2. hero: headline on one side, a large-format custom SVG line-art illustration of a table lamp silhouette (not a fake app/dashboard screen) floating on a soft accent-colored glow with a blurred shadow beneath it, captioned with a small status tag and the product name
 3. Featured makers: Featured makers — Junko Ito Ceramics, Pale Fox Textiles, Ember Glassworks, North &amp; Vine, Salt Studio, Lark &amp; Loom
 4. Bento grid: 4 product cards with custom inline SVG line icons (no emoji, no stock):
    - Independent makers only (Every piece is made by a named artisan, never mass-produced)
@@ -43,6 +43,7 @@ Motion:
 
 Rules:
 - No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- The hero visual has to signal what this business is at a single glance, even shrunk to a small thumbnail. For a software/service business, use a bold gradient-filled icon badge (custom inline SVG line icon) floating on the corner of the app-style mockup. For a business selling a physical product, skip the fake app screen entirely &mdash; show a large-format custom SVG line-art illustration of the actual product (not a generic icon, not a stock photo) floating on a soft accent-colored glow with a blurred shadow beneath it, captioned with a short status tag and the product name.
 - Mobile responsive with a sticky mobile CTA bar
 - Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
 - Production-grade, editorial, refined. Looks like an 8k-dollar agency build.

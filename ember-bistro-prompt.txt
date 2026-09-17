@@ -43,6 +43,7 @@ Motion:
 
 Rules:
 - No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- The hero visual has to signal what this business is at a single glance, even shrunk to a small thumbnail. For a software/service business, use a bold gradient-filled icon badge (custom inline SVG line icon) floating on the corner of the app-style mockup. For a business selling a physical product, skip the fake app screen entirely &mdash; show a large-format custom SVG line-art illustration of the actual product (not a generic icon, not a stock photo) floating on a soft accent-colored glow with a blurred shadow beneath it, captioned with a short status tag and the product name.
 - Mobile responsive with a sticky mobile CTA bar
 - Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
 - Production-grade, editorial, refined. Looks like an 8k-dollar agency build.

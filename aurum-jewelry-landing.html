@@ -800,6 +800,27 @@
         }
     
 
+.hero-icon-badge { position: absolute; top: -26px; left: 32px; width: 76px; height: 76px; border-radius: 22px;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2)); display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 18px 34px -10px rgba(0,0,0,0.45); z-index: 6; }
+.hero-icon-badge svg { width: 36px; height: 36px; stroke: #fff; fill: none; stroke-width: 1.75; }
+.dashboard-mockup-wrapper { position: relative; }
+
+.product-showcase { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem;
+  min-height: 420px; position: relative; overflow: hidden; box-shadow: 0 25px 60px -20px rgba(0,0,0,0.2); text-align: center; }
+.product-showcase::before { content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 50% 32%, color-mix(in srgb, var(--accent-1) 22%, transparent), transparent 70%); }
+.product-showcase-plinth { position: absolute; bottom: 18%; left: 50%; width: 62%; height: 28px; transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--accent-1) 30%, transparent) 0%, transparent 75%); filter: blur(2px); z-index: 0; }
+.product-showcase-icon { width: 240px; height: 200px; display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 1; animation: hover-mockup 6s ease-in-out infinite alternate; filter: drop-shadow(0 20px 24px rgba(0,0,0,0.25)); }
+.product-showcase-icon svg { width: 100%; height: 100%; }
+.product-showcase-caption { position: relative; z-index: 1; }
+.product-showcase-caption .tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.5rem; }
+.product-showcase-caption .name { font-family: var(--font-serif); font-size: 1.5rem; color: var(--text-primary); }
+.product-showcase-wide { min-height: 320px; }
+
 .hero-centered { text-align: center; padding-top: calc(var(--section-padding) + 4rem); position: relative; overflow: hidden; }
 .hero-centered .hero-mesh { opacity: 0.35; }
 .hero-centered h1 { font-size: clamp(3rem, 7vw, 5.5rem); margin: 0 auto 1.5rem; max-width: 900px; }
@@ -854,19 +875,11 @@
                         <a href="#demo" class="btn btn-secondary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>Book a fitting</a>
                     </div>
                 </div>
-                <div class="dashboard-mockup reveal" style="transition-delay: 0.2s;">
-                    <div class="dash-sidebar">
-                        <div class="dash-sidebar-item" style="width:60%"></div>
-                        <div class="dash-sidebar-item"></div>
-                        <div class="dash-sidebar-item" style="width:70%"></div>
-                        <div class="dash-sidebar-item" style="width:40%;margin-top:1.5rem"></div>
-                        <div class="dash-sidebar-item" style="width:80%"></div>
-                        <div class="dash-sidebar-item" style="width:55%"></div>
-                    </div>
-                    <div class="dash-main">
-                        <div class="dash-toolbar"><div class="dash-dot"></div><div class="dash-dot"></div><div class="dash-dot"></div></div>
-                        <div class="dash-section-title">Your order &bull; Engraving in progress</div>
-                        <div class="dash-row"><div class="dash-row-left"><div class="dash-check"></div>Signet Ring &mdash; Engraving "M.K."</div><div class="dash-badge">In progress</div></div><div class="dash-row hl"><div class="dash-row-left"><div class="dash-check"></div>14k Gold, Size 7</div><div class="dash-badge">Ships in 5 days</div></div><div class="dash-row"><div class="dash-row-left"><div class="dash-check"></div>Lifetime warranty</div><div class="dash-badge">Registered</div></div>
+                <div class="product-showcase product-showcase-wide reveal" style="transition-delay: 0.2s;">
+                    <div class="product-showcase-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="16" r="5"></circle><polygon points="8.5 9 15.5 9 18 13 12 16.5 6 13"></polygon></svg></div>
+                    <div class="product-showcase-caption">
+                        <div class="tag">Best seller</div>
+                        <div class="name">The Signet Ring</div>
                     </div>
                 </div>
             </div>
