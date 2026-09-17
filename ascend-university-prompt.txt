@@ -1,0 +1,50 @@
+Research the top 5 premium local service business sites &mdash; look at Southern New Hampshire University, Arizona State Online grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Ascend, University & Continuing Education: Ascend offers accredited undergraduate, graduate, and certificate programs built with employers, taught by people who still work in the field.
+
+Audience: prospective undergraduate, graduate, and certificate students.
+Hero headline: "A degree that actually opens doors."
+Subheadline: "Ascend offers accredited undergraduate, graduate, and certificate programs built with employers, taught by people who still work in the field."
+Primary CTA: "Apply now". Secondary CTA: "Request info".
+
+Design system:
+- Dark theme, background #0A0A0A, surfaces #141414
+- Accent gradient from #7F1D1D to #1E3A8A
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% white
+- centered-hero layout with a full-width dashboard mockup below the fold
+
+Sections:
+1. Sticky glass nav with "Ascend" wordmark + 3 nav links (Programs, Admissions, Apply) + primary CTA
+2. hero: headline on one side, a full-width application-status dashboard mockup (built in CSS only, no real image) below the hero text, showing admissions checklist progress
+3. Certifications strip: Accredited & recognized — Regional Accreditation, U.S. News Ranked, Employer Partner Network, VA Approved, FAFSA Eligible, AACSB Accredited
+4. Bento grid: 4 service cards with custom inline SVG line icons (no emoji, no stock):
+   - Industry-taught faculty (Every program includes instructors currently working in the field)
+   - Flexible online & on-campus (Take classes how your life actually works, not the other way around)
+   - Employer partnership network (Direct pipeline to internships and hiring at 200+ partner companies)
+   - Transfer credit friendly (Most transfer credits accepted, evaluated before you even apply)
+5. Metrics strip: 94% job placement, 6 months | 200+ employer partners | 60yr accredited
+6. Testimonial card: "Had a job offer from one of the program's partner companies before I even graduated. - Sam Okafor, Class of 2025" with a generated SVG monogram avatar
+7. Services & pricing:
+      - Undergraduate: $420 starting — Full & part-time options; Transfer credits accepted; Financial aid eligible
+      - Graduate Programs (highlighted, "Most popular"-style badge): $610 starting — Evening & online options; Employer partnerships; Career services included
+      - Certificates: $1200 starting — 8-12 week programs; No degree required; Stackable toward a degree
+   as flat, upfront prices with no monthly/annual toggle (this is a local service business, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- The hero visual has to signal what this business is at a single glance, even shrunk to a small thumbnail. For a software/service business, use a bold gradient-filled icon badge (custom inline SVG line icon) floating on the corner of the app-style mockup. For a business selling a physical product, skip the fake app screen entirely &mdash; show a large-format, photorealistic AI-generated studio product photo of the actual product (not a generic icon, not a stock photo, not an illustration) floating on a soft accent-colored glow with a blurred shadow beneath it, captioned with a short status tag and the product name. Include 1-2 smaller alternate-angle or alternate-colorway product photos as clickable swatches below the main shot.
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

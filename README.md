@@ -1,8 +1,8 @@
-# CREAO Premium Landing Page Pack — 81 Niches
+# CREAO Premium Landing Page Pack — 89 Niches
 
-81 production-ready premium landing pages across different niches and styles — **dark and light**, three layouts — each generated from **one master prompt framework** using [CREAO](https://agent.creao.ai). Every page ships with the exact prompt that built it, so anyone can copy, edit, and make it their own.
+89 production-ready premium landing pages across different niches and styles — **dark and light**, three layouts — each generated from **one master prompt framework** using [CREAO](https://agent.creao.ai). Every page ships with the exact prompt that built it, so anyone can copy, edit, and make it their own.
 
-51 are SaaS products, 12 are local service businesses (plumbing/HVAC, dental, restaurant, gym, salon, spa, auto repair, law firm, photography, cleaning, landscaping, wedding planning), 9 are retail/e-commerce brands (furniture, sneakers, electronics, apparel, beauty, jewelry, decor, a hardware launch, a subscription box), and 6 are real estate & property (residential agency, property management, vacation rentals, commercial brokerage, architecture, interior design) — all on the same design system. Working toward 100, shipped in themed batches. The gallery itself has a light/dark toggle, and every hero visual is either a bold niche-specific icon badge or, for product brands, a large illustration of the actual product.
+51 are SaaS products, 12 are local service businesses (plumbing/HVAC, dental, restaurant, gym, salon, spa, auto repair, law firm, photography, cleaning, landscaping, wedding planning), 9 are retail/e-commerce brands (furniture, sneakers, electronics, apparel, beauty, jewelry, decor, a hardware launch, a subscription box), 6 are real estate & property (residential agency, property management, vacation rentals, commercial brokerage, architecture, interior design), and 8 are institutions & community (church, K-12 school, university, medical clinic, veterinary clinic, daycare, nonprofit, coworking space) — all on the same design system. Working toward 100, shipped in themed batches. The gallery itself has a light/dark toggle, and every hero visual is either a bold niche-specific icon badge or, for product brands, a large illustration of the actual product.
 
 ## Live demo
 
@@ -13,11 +13,11 @@ Catalog gallery with search, theme filter, and one-click "copy prompt":
 ## What's inside
 
 - **`index.html`** — the catalog gallery. Crisp screenshot thumbnails, search, dark/light filter for the pages, a light/dark toggle for the gallery itself, and copy-prompt buttons.
-- **`<slug>-landing.html`** — 81 standalone, self-contained landing pages (inline CSS + JS, Google Fonts via link). No build step.
+- **`<slug>-landing.html`** — 89 standalone, self-contained landing pages (inline CSS + JS, Google Fonts via link). No build step.
 - **`<slug>-prompt.txt`** — the exact prompt that built each page. Copy, swap the bracketed values, paste into CREAO.
 - **`<slug>-thumb.jpg`** — preview thumbnail of the page hero.
 
-## The 81 niches
+## The 89 niches
 
 **SaaS (51):** AI writing, fitness, finance, productivity, courses, CRM, newsletter, e-commerce, meal planning, meditation, habits, AI video editing, podcast hosting, social scheduler, email marketing, analytics, HR onboarding, project management, design tool, notes, AI calendar, bookkeeping, invoicing, time tracking, helpdesk, live chat, knowledge base, API docs, API monitoring, error tracking, feature flags, A/B testing, user feedback, surveys, forms, page builder, website builder, web hosting, domains, VPN, password manager, cloud storage, file sharing, video hosting, image CDN, AI image generation, chatbot builder, AI meeting notes, automation, billing, portfolio.
 
@@ -29,7 +29,9 @@ Catalog gallery with search, theme filter, and one-click "copy prompt":
 
 **Real estate & property (6):** residential agency, property management, vacation rentals, commercial brokerage, architecture firm, interior design studio.
 
-**Coming next (toward 100):** institutions & community (church, school, hospital, etc.) and portfolio/creative — shipped in themed batches.
+**Institutions & community (8):** church & faith community, K-12 school, university & continuing education, medical clinic, veterinary clinic, daycare & preschool, nonprofit organization, coworking space.
+
+**Coming next (toward 100):** portfolio & creative — shipped in themed batches.
 
 ## How to use
 

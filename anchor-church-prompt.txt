@@ -1,0 +1,50 @@
+Research the top 5 premium local service business sites &mdash; look at Life.Church, Elevation Church, Hillsong regional pages grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Anchor, Church & Faith Community: Anchor is a community church with services every Sunday, small groups all week, and a door that's genuinely open to anyone showing up for the first time.
+
+Audience: people looking for a welcoming church community, including first-time visitors.
+Hero headline: "A place to belong, not just attend."
+Subheadline: "Anchor is a community church with services every Sunday, small groups all week, and a door that's genuinely open to anyone showing up for the first time."
+Primary CTA: "Plan a visit". Secondary CTA: "Watch online".
+
+Design system:
+- Light (warm off-white) theme, background #FAFAF7, surfaces #FFFFFF
+- Accent gradient from #7C2D12 to #F59E0B
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% black
+- centered-hero layout with a full-width dashboard mockup below the fold
+
+Sections:
+1. Sticky glass nav with "Anchor" wordmark + 3 nav links (Services, Ministries, Give) + primary CTA
+2. hero: headline on one side, a full-width service-schedule dashboard mockup (built in CSS only, no real image) below the hero text, showing this Sunday's services
+3. Certifications strip: Part of & partnered with — Local Food Bank Partner, Habitat for Humanity, Red Cross Host Site, City Interfaith Council, Nat'l Assoc. of Evangelicals, BBB Nonprofit
+4. Bento grid: 4 service cards with custom inline SVG line icons (no emoji, no stock):
+   - Small groups all week (Find a group that meets near you, any night of the week)
+   - Kids & youth ministry (Safe, background-checked care for every age, every service)
+   - Online & in-person (Can't make it in person? Every service streams live)
+   - Local outreach every month (We serve our actual neighborhood, not just ourselves)
+5. Metrics strip: 1,200+ weekly attendance | 40+ small groups | 25yr serving this community
+6. Testimonial card: "Walked in not knowing anyone. Three months later I had a small group that felt like family. - Jordan Alvarez, Member since 2024" with a generated SVG monogram avatar
+7. Services & pricing:
+      - Sunday Service: $0 — Two services weekly; Kids ministry included; Online streaming
+      - Join a Small Group (highlighted, "Most popular"-style badge): $0 — Meets weekly; All ages & stages; New groups every season
+      - Volunteer: $0 — Serve on Sundays; Community outreach; Training provided
+   as flat, upfront prices with no monthly/annual toggle (this is a local service business, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- The hero visual has to signal what this business is at a single glance, even shrunk to a small thumbnail. For a software/service business, use a bold gradient-filled icon badge (custom inline SVG line icon) floating on the corner of the app-style mockup. For a business selling a physical product, skip the fake app screen entirely &mdash; show a large-format, photorealistic AI-generated studio product photo of the actual product (not a generic icon, not a stock photo, not an illustration) floating on a soft accent-colored glow with a blurred shadow beneath it, captioned with a short status tag and the product name. Include 1-2 smaller alternate-angle or alternate-colorway product photos as clickable swatches below the main shot.
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.

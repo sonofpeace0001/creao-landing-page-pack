@@ -1,0 +1,50 @@
+Research the top 5 premium local service business sites &mdash; look at Modern Animal, Small Door Veterinary grade for what premium looks like in this space.
+Break down what makes them feel premium: hero hook, whitespace, motion, social proof, CTA.
+Then build me a complete, production-ready single-page landing page for Clover, Veterinary Clinic: Clover is a fear-free certified vet clinic - same-week appointments, a team that actually gets on the floor with your pet, and no surprise bills.
+
+Audience: pet owners looking for a fear-free, unhurried veterinary clinic.
+Hero headline: "Care that actually calms them down."
+Subheadline: "Clover is a fear-free certified vet clinic - same-week appointments, a team that actually gets on the floor with your pet, and no surprise bills."
+Primary CTA: "Book a visit". Secondary CTA: "Meet our vets".
+
+Design system:
+- Light (warm off-white) theme, background #FAFAF7, surfaces #FFFFFF
+- Accent gradient from #059669 to #6EE7B7
+- Body font: Inter (Google Fonts). Headline font: Instrument Serif for elegance
+- Generous whitespace, 120px section padding, 1200px max width
+- Faint noise texture overlay + a slow animated mesh gradient behind the hero
+- Glassmorphism sticky nav, subtle grain, 1px hairline borders at 8% black
+- centered-hero layout with a full-width dashboard mockup below the fold
+
+Sections:
+1. Sticky glass nav with "Clover" wordmark + 3 nav links (Services, Our Vets, Book) + primary CTA
+2. hero: headline on one side, a full-width visit-status dashboard mockup (built in CSS only, no real image) below the hero text, showing the pet's exam progress
+3. Certifications strip: Certified & trusted by — Fear Free Certified, AAHA Accredited, Google Guaranteed, BBB A+, VCA Partner Network, AVMA Member
+4. Bento grid: 4 service cards with custom inline SVG line icons (no emoji, no stock):
+   - Fear-free certified team (Every staff member trained in low-stress handling techniques)
+   - Same-week appointments (Real availability this week, not a three-week wait)
+   - Transparent pricing upfront (A written estimate before any procedure, always)
+   - On-site lab & pharmacy (Most results and medications same-day, no separate trip)
+5. Metrics strip: 4.9★ 3,400+ reviews | Fear Free certified team | Same-week appointments, always
+6. Testimonial card: "My anxious rescue dog actually walked into the exam room on his own for the first time. Never seen that before. - Marcus Webb, Pet Parent" with a generated SVG monogram avatar
+7. Services & pricing:
+      - Wellness Exam: $65 starting — Annual checkup; Vaccine review; Weight & nutrition check
+      - Sick Visit (highlighted, "Most popular"-style badge): $85 starting — Same-week availability; On-site diagnostics; Written treatment plan
+      - Dental Cleaning: $350 starting — Full anesthesia monitoring; X-rays included; Same-day discharge
+   as flat, upfront prices with no monthly/annual toggle (this is a local service business, not a subscription product)
+8. Final CTA band with gradient glow
+9. Minimal footer
+
+Motion:
+- Scroll-reveal fade-in-up on each section via IntersectionObserver
+- Hover glow + lift on cards and CTA buttons
+- Smooth animated gradient on the hero mesh background
+- Respect prefers-reduced-motion
+
+Rules:
+- No emoji icons, no stock illustrations, no stock photos, no generic AI-slop styling
+- The hero visual has to signal what this business is at a single glance, even shrunk to a small thumbnail. For a software/service business, use a bold gradient-filled icon badge (custom inline SVG line icon) floating on the corner of the app-style mockup. For a business selling a physical product, skip the fake app screen entirely &mdash; show a large-format, photorealistic AI-generated studio product photo of the actual product (not a generic icon, not a stock photo, not an illustration) floating on a soft accent-colored glow with a blurred shadow beneath it, captioned with a short status tag and the product name. Include 1-2 smaller alternate-angle or alternate-colorway product photos as clickable swatches below the main shot.
+- Mobile responsive with a sticky mobile CTA bar
+- Single-file HTML with all CSS and JS inlined (Google Fonts via link is fine)
+- Production-grade, editorial, refined. Looks like an 8k-dollar agency build.
+- Use plain text, real layout. No lorem ipsum. Match the niche's tone.
